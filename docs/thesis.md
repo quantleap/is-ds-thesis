@@ -491,3 +491,16 @@ A.  Op Insolventiekenmerken
 
 # Data Pipeline 
 check Python Luigi en PETL packages
+
+
+# Entity resolution
+## theory
+
+https://www.slideshare.net/BenjaminBengfort/a-primer-on-entity-resolution
+
+creation of high(est) quality data set
+- deduplication, 
+- record linkage, 
+- referencing (entity disambiguation: match noisy records to clean)
+- canonicalization: compute representative
+- data normalizationb (lower case, remove whitespace, expand abbreviations etc.)
