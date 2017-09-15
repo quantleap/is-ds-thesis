@@ -2,4 +2,7 @@
 \.idea
 \.ipynb*
 \abbyy_cloud_ocr
+\data
+
+.ipynb_checkpoints
 
