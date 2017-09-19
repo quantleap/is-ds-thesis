@@ -1,5 +1,7 @@
 \venv
 \.idea
+*.json
+__pycache__
 
 # ignored for now
 \abbyy_cloud_ocr
@@ -8,3 +10,8 @@
 # notebooks
 .ipynb_checkpoints
 
+# pytest
+.cache
+
+# scrapy
+.scrapy
