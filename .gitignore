@@ -3,10 +3,6 @@
 *.json
 __pycache__
 
-# ignored for now
-\abbyy_cloud_ocr
-\data
-
 # notebooks
 .ipynb_checkpoints
 
@@ -15,3 +11,8 @@ __pycache__
 
 # scrapy
 .scrapy
+
+# ignored folders for now
+\abbyy_cloud_ocr
+\data
+\literatuur
