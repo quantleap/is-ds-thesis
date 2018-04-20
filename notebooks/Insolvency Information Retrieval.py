@@ -3,7 +3,7 @@
 
 # # Setup
 
-# In[1]:
+# In[ ]:
 
 
 get_ipython().magic('matplotlib inline')
@@ -26,13 +26,12 @@ db = {'username': os.environ['USERNAME_11323671'],
 
 con = 'postgresql://{username}:{password}@{host}/{catalog}'.format(**db)
 engine = create_engine(con, echo=True)
-
-print(con)
+print('CONNECTION ESTABLISHED')
 
 
 # # Insolvents
 
-# In[3]:
+# In[ ]:
 
 
 sql = """select count(distinct case_number) 
@@ -42,7 +41,7 @@ no_insolvents = pd.read_sql(sql, con).iloc[0][0]
 print('the total number of insolvents cases in the database is {}'.format(no_insolvents))
 
 
-# In[4]:
+# In[ ]:
 
 
 sql = """select start_date_insolvency is not null as known, count(*)
@@ -54,7 +53,7 @@ print('fraction of known start date')
 df_known_start_date
 
 
-# In[5]:
+# In[ ]:
 
 
 df_known_start_date.plot.pie(y='count', labels=df_known_start_date['known'])
@@ -62,7 +61,7 @@ df_known_start_date.plot.pie(y='count', labels=df_known_start_date['known'])
 
 # # Judges
 
-# In[6]:
+# In[ ]:
 
 
 sql = """select count(supervisory_judge) as no_cases, supervisory_judge
@@ -100,11 +99,12 @@ pd.read_sql(sql, con)
 # 7. strip leading and trailing spaces
 # 
 
-# In[7]:
+# In[ ]:
 
 
 sql = """select distinct supervisory_judge
          from company_insolvents
+         where supervisory_judge notnull
          order by 1"""
 
 non_normalized_name = pd.read_sql(sql, con)
@@ -113,7 +113,7 @@ def normalize_judge_name(name):
     return name.replace(r"\(.*\)","")
     
 
-non_normalized_name['supervisory_judge'].apply(normalize_judge_name)
+non_normalized_name['supervisory_judge'].apply(normalize_judge_name)[0:10]
 
 
 # In[ ]:
@@ -137,9 +137,22 @@ rechters_df[rechters_df['set'] == 'Rechtbank Amsterdam']
 
 # # Reports
 
+# ## praktijk van het rapporteren met/zonder financiele bijlage
+
+# In[49]:
+
+
+sql = """select * from progess_financial_report_cooccurence;"""
+df = pd.read_sql(sql, con)
+df = df.transpose()
+df.columns = ['count']
+df['pct'] = df['count']/df['count'].sum()*100
+df
+
+
 # ## steekproef van niet OCR eindverslagen van januari 2018
 
-# In[8]:
+# In[ ]:
 
 
 sql = '''SELECT identification, publication_date, is_end_report, is_ocr, content, start_date_insolvency
@@ -152,8 +165,8 @@ sql = '''SELECT identification, publication_date, is_end_report, is_ocr, content
          ORDER BY publication_date DESC
          LIMIT 20;'''
 
-df_end_reports_last_week = pd.read_sql(sql, con)
-df_end_reports_last_week
+df_reports = pd.read_sql(sql, con)
+df_reports
 
 
 # ## Data field wish list from the PDF report
@@ -195,7 +208,7 @@ df_end_reports_last_week
 # 
 # 
 
-# ### Bevindingen
+# ### Bevindingen / Issues
 # - Bij insolventen van verslagen 13_ams_15_478_F_V_06 en 10_rot_12_90_F_V_16 zijn geen enkele financiele verslagen ook curator salaris wordt niet genoemd. Vraag: wie levert geen financieel verslag en waarom?
 # - Bij eindverslag 10_rot_14_1054_F_V_10 staat curator salaris alleen in de financiele bijlage. Er lijkt ook sprake van een schikking - regeling bestuurder: 22.000 - wegens rechtmatigheidsissue. 
 # - bij 11_rot_12_41_F_V_15 staan bedragen doorgestreept, textconversie pakt dat niet
@@ -203,19 +216,21 @@ df_end_reports_last_week
 # verslagperiode eindigen.' (11_rot_12_41_F_V_15)
 # - uurtarief bij 11_rot_12_41_F_V_15 komt op 280,-
 # - 10_rot_14_1054_F_V_10, 01_obr_13_293_F_V_09 omzetting pdf>txt verliest letters/gegevens/structuur met PDFMiner. Welke converter pakt dit goed aan ?
+# - strikethrough in PDF komt niet terug in de tekstconversie
 
-# In[19]:
+# In[ ]:
 
 
 report_id = '01_obr_13_293_F_V_09'
-content = df_end_reports_last_week[df_end_reports_last_week['identification'] == report_id]['content'].iloc[0]
+reports = df_end_reports_last_week[df_end_reports_last_week['identification'] == report_id]
+report = reports.iloc[0]
+content = report['content']
 print(content)
-# strikethrough komt niet terug in de tekstconversie vb 8.4
 
 
 # ## Extracting structured text from PDF reports
 
-# In[18]:
+# In[ ]:
 
 
 # Personeel gemiddeld aantal
@@ -228,14 +243,12 @@ def first_match_group():
 
 def match_block_personeel_gemiddeld_aantal(pattern, content):
     match = re.search(pattern, content, flags)
-    return match.group(0) if match else None
+    return match
     
 
 def match_personeel_gemiddeld_aantal(content):
     patterns = [r'gemiddeld\s+aantal\s+personeel(.*?)verslagperiode',
-                r'personeel\s+gemiddeld\s+aantal(.*?)saldo\s+einde\s+verslagperiode'
-                r'PersoneelSaldo  ei nde verslagperiode
-               ]
+                r'personeel\s+gemiddeld\s+aantal(.*?)saldo\s+einde\s+verslagperiode']
     
     
     for pattern in patterns:
@@ -245,10 +258,11 @@ def match_personeel_gemiddeld_aantal(content):
             return block
     return None
 
-#print(match_personeel_gemiddeld_aantal(content))
+match = match_personeel_gemiddeld_aantal(content)
+print(match.group(0))
 
-content = df_end_reports_last_week['content'].apply(match_personeel_gemiddeld_aantal)
-content
+#content = df_end_reports_last_week['content'].apply(match_personeel_gemiddeld_aantal)
+#content
 
 
 # In[ ]:

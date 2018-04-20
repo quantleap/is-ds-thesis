@@ -11781,7 +11781,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline  
@@ -11811,8 +11811,7 @@ div#notebook {
 
 <span class="n">con</span> <span class="o">=</span> <span class="s1">&#39;postgresql://</span><span class="si">{username}</span><span class="s1">:</span><span class="si">{password}</span><span class="s1">@</span><span class="si">{host}</span><span class="s1">/</span><span class="si">{catalog}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">db</span><span class="p">)</span>
 <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">con</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;CONNECTION ESTABLISHED&#39;</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -11830,7 +11829,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select count(distinct case_number) </span>
@@ -11844,28 +11843,10 @@ div#notebook {
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>the total number of insolvents cases in the database is 49883
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select start_date_insolvency is not null as known, count(*)</span>
@@ -11881,247 +11862,16 @@ div#notebook {
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>fraction of known start date
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[4]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>known</th>
-      <th>count</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>False</td>
-      <td>3873</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>True</td>
-      <td>46010</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_known_start_date</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">pie</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">df_known_start_date</span><span class="p">[</span><span class="s1">&#39;known&#39;</span><span class="p">])</span>
 </pre></div>
 
 </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[5]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x105f83550&gt;</pre>
-</div>
-
-</div>
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-
-
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-gg==
-"
->
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -12136,7 +11886,7 @@ gg==
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select count(supervisory_judge) as no_cases, supervisory_judge</span>
@@ -12150,111 +11900,6 @@ gg==
 </pre></div>
 
 </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>top 10 judges by number of cases
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[6]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>no_cases</th>
-      <th>supervisory_judge</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1114</td>
-      <td>mr. A.E. Zweers</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1085</td>
-      <td>mr. C. Schollen-den Besten</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>998</td>
-      <td>mr. J.S.W. Lucassen</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>909</td>
-      <td>mr. A.M.P.T. Blokhuis</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>887</td>
-      <td>mr. P.J. Neijt</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>877</td>
-      <td>mr. A.E. de Vos</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>801</td>
-      <td>mr. M Pellikaan</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>768</td>
-      <td>mr. I.M. Bilderbeek</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>741</td>
-      <td>mr. S.J.O. de Vries</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>705</td>
-      <td>mr. M.H.F. van Vugt</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -12292,11 +11937,12 @@ normalized: "wj geurts-de veld"</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select distinct supervisory_judge</span>
 <span class="s2">         from company_insolvents</span>
+<span class="s2">         where supervisory_judge notnull</span>
 <span class="s2">         order by 1&quot;&quot;&quot;</span>
 
 <span class="n">non_normalized_name</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">)</span>
@@ -12305,51 +11951,10 @@ normalized: "wj geurts-de veld"</p>
     <span class="k">return</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\(.*\)&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
     
 
-<span class="n">non_normalized_name</span><span class="p">[</span><span class="s1">&#39;supervisory_judge&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">normalize_judge_name</span><span class="p">)</span>
+<span class="n">non_normalized_name</span><span class="p">[</span><span class="s1">&#39;supervisory_judge&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">normalize_judge_name</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
 </pre></div>
 
 </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-7-d1cf7316eca6&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      9</span> 
-<span class="ansi-green-intense-fg ansi-bold">     10</span> 
-<span class="ansi-green-fg">---&gt; 11</span><span class="ansi-red-fg"> </span>non_normalized_name<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;supervisory_judge&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>apply<span class="ansi-blue-fg">(</span>normalize_judge_name<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/Dropbox/datascience/_thesis/is-ds-thesis/venv/lib/python3.6/site-packages/pandas/core/series.py</span> in <span class="ansi-cyan-fg">apply</span><span class="ansi-blue-fg">(self, func, convert_dtype, args, **kwds)</span>
-<span class="ansi-green-intense-fg ansi-bold">   2353</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">   2354</span>                 values <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>asobject
-<span class="ansi-green-fg">-&gt; 2355</span><span class="ansi-red-fg">                 </span>mapped <span class="ansi-blue-fg">=</span> lib<span class="ansi-blue-fg">.</span>map_infer<span class="ansi-blue-fg">(</span>values<span class="ansi-blue-fg">,</span> f<span class="ansi-blue-fg">,</span> convert<span class="ansi-blue-fg">=</span>convert_dtype<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">   2356</span> 
-<span class="ansi-green-intense-fg ansi-bold">   2357</span>         <span class="ansi-green-fg">if</span> len<span class="ansi-blue-fg">(</span>mapped<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">and</span> isinstance<span class="ansi-blue-fg">(</span>mapped<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> Series<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-green-fg">pandas/_libs/src/inference.pyx</span> in <span class="ansi-cyan-fg">pandas._libs.lib.map_infer (pandas/_libs/lib.c:66645)</span><span class="ansi-blue-fg">()</span>
-
-<span class="ansi-green-fg">&lt;ipython-input-7-d1cf7316eca6&gt;</span> in <span class="ansi-cyan-fg">normalize_judge_name</span><span class="ansi-blue-fg">(name)</span>
-<span class="ansi-green-intense-fg ansi-bold">      6</span> 
-<span class="ansi-green-intense-fg ansi-bold">      7</span> <span class="ansi-green-fg">def</span> normalize_judge_name<span class="ansi-blue-fg">(</span>name<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">----&gt; 8</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> name<span class="ansi-blue-fg">.</span>replace<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">r&#34;\(.*\)&#34;</span><span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">&#34;&#34;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      9</span> 
-<span class="ansi-green-intense-fg ansi-bold">     10</span> 
-
-<span class="ansi-red-fg">AttributeError</span>: &#39;NoneType&#39; object has no attribute &#39;replace&#39;</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -12406,27 +12011,21 @@ normalized: "wj geurts-de veld"</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="steekproef-van-niet-OCR-eindverslagen-van-januari-2018">steekproef van niet OCR eindverslagen van januari 2018<a class="anchor-link" href="#steekproef-van-niet-OCR-eindverslagen-van-januari-2018">&#182;</a></h2>
+<h2 id="praktijk-van-het-rapporteren-met/zonder-financiele-bijlage">praktijk van het rapporteren met/zonder financiele bijlage<a class="anchor-link" href="#praktijk-van-het-rapporteren-met/zonder-financiele-bijlage">&#182;</a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[49]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;SELECT identification, publication_date, is_end_report, is_ocr, content, start_date_insolvency</span>
-<span class="s1">         FROM reports rep</span>
-<span class="s1">             JOIN company_insolvents ins ON rep.insolvent_id = ins.id</span>
-<span class="s1">         WHERE ins.person_legal_personality = &#39;rechtspersoon&#39;</span>
-<span class="s1">             AND rep.is_end_report = TRUE</span>
-<span class="s1">             AND is_ocr is FALSE</span>
-<span class="s1">             AND publication_date BETWEEN &#39;2018-02-01&#39; AND &#39;2018-03-31&#39;</span>
-<span class="s1">         ORDER BY publication_date DESC</span>
-<span class="s1">         LIMIT 20;&#39;&#39;&#39;</span>
-
-<span class="n">df_end_reports_last_week</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">)</span>
-<span class="n">df_end_reports_last_week</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select * from progess_financial_report_cooccurence;&quot;&quot;&quot;</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+<span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;pct&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span><span class="o">/</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">*</span><span class="mi">100</span>
+<span class="n">df</span>
 </pre></div>
 
 </div>
@@ -12439,7 +12038,7 @@ normalized: "wj geurts-de veld"</p>
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[8]:</div>
+<div class="prompt output_prompt">Out[49]:</div>
 
 
 
@@ -12462,194 +12061,35 @@ normalized: "wj geurts-de veld"</p>
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>identification</th>
-      <th>publication_date</th>
-      <th>is_end_report</th>
-      <th>is_ocr</th>
-      <th>content</th>
-      <th>start_date_insolvency</th>
+      <th>count</th>
+      <th>pct</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>0</th>
-      <td>05_gel_16_674_F_V_05</td>
-      <td>2018-03-29 16:56:24</td>
-      <td>True</td>
-      <td>False</td>
-      <td>advocatuur\n\nwww.editadvoatuuuil\n\nFAILLISSE...</td>
-      <td>2016-07-19</td>
+      <th>zero_financial_reports</th>
+      <td>12850</td>
+      <td>33.970444</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>05_gel_16_666_F_V_05</td>
-      <td>2018-03-29 16:53:40</td>
-      <td>True</td>
-      <td>False</td>
-      <td>advocatuur\n\nwww.editadvoatuuuil\n\nFAILLISSE...</td>
-      <td>2016-10-18</td>
+      <th>zero_progress_reports</th>
+      <td>36</td>
+      <td>0.095170</td>
     </tr>
     <tr>
-      <th>2</th>
-      <td>16_mne_16_568_F_V_01</td>
-      <td>2018-03-29 16:48:46</td>
-      <td>True</td>
-      <td>False</td>
-      <td>advocatuur\n\nwww.editadvoatuuuil\n\nFAILLISSE...</td>
-      <td>2016-10-18</td>
+      <th>more_progress_reports</th>
+      <td>12864</td>
+      <td>34.007455</td>
     </tr>
     <tr>
-      <th>3</th>
-      <td>05_gel_16_660_F_V_05</td>
-      <td>2018-03-29 16:46:56</td>
-      <td>True</td>
-      <td>False</td>
-      <td>advocatuur\n\nwww.editadvoatuuuil\n\nFAILLISSE...</td>
-      <td>2016-10-18</td>
+      <th>more_financial_report</th>
+      <td>781</td>
+      <td>2.064663</td>
     </tr>
     <tr>
-      <th>4</th>
-      <td>01_obr_13_1204_F_V_04</td>
-      <td>2018-03-28 16:27:46</td>
-      <td>True</td>
-      <td>False</td>
-      <td>VANIERSEL\nLUCHTMAN\nADVOCATEN\n\nOpenbaar  fa...</td>
-      <td>2013-12-24</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>01_obr_13_293_F_V_09</td>
-      <td>2018-03-26 15:05:16</td>
-      <td>True</td>
-      <td>False</td>
-      <td>FAILLISSEMENTSVERSLAG\n\nNummer:9\n\nDatum:  2...</td>
-      <td>2013-03-26</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>01_obr_15_189_F_V_07</td>
-      <td>2018-03-22 16:50:29</td>
-      <td>True</td>
-      <td>False</td>
-      <td>F\nA\nI\nL\nL\nI\nS\nS\nE\nM\nE\nN\nT\nS\nV\nE...</td>
-      <td>2015-03-10</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>01_obr_15_188_F_V_08</td>
-      <td>2018-03-22 16:50:02</td>
-      <td>True</td>
-      <td>False</td>
-      <td>F\nA\nI\nL\nL\nI\nS\nS\nE\nM\nE\nN\nT\nS\nV\nE...</td>
-      <td>2015-03-10</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>13_ams_14_651_F_V_06</td>
-      <td>2018-03-21 18:34:06</td>
-      <td>True</td>
-      <td>False</td>
-      <td>Openbaar faillissementsverslag rechtspersoon (...</td>
-      <td>2014-11-25</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>13_ams_14_497_F_V_07</td>
-      <td>2018-03-21 18:32:11</td>
-      <td>True</td>
-      <td>False</td>
-      <td>Openbaar faillissementsverslag rechtspersoon (...</td>
-      <td>2014-09-09</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>01_obr_13_1107_F_V_08</td>
-      <td>2018-03-16 11:26:48</td>
-      <td>True</td>
-      <td>False</td>
-      <td>VANIERSEL\nLUCHTMAN\nADVOCATEN\n\nOPENBAAR  FA...</td>
-      <td>2013-11-26</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>10_rot_11_359_F_V_15</td>
-      <td>2018-03-08 09:32:44</td>
-      <td>True</td>
-      <td>False</td>
-      <td>Van den  Herik\nc2 Ve rh u lst\n\n1\D\./OC,\lE...</td>
-      <td>2011-05-24</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>18_nne_15_225_F_V_11</td>
-      <td>2018-03-07 13:29:44</td>
-      <td>True</td>
-      <td>False</td>
-      <td>ORIGINEEL EXEMPLAAR GELIJK AAN DIGITAAL EXEMPL...</td>
-      <td>2015-06-23</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>10_rot_14_725_F_V_11</td>
-      <td>2018-02-28 17:25:31</td>
-      <td>True</td>
-      <td>False</td>
-      <td>De inhoud van dit papieren verslag is identiek...</td>
-      <td>2014-08-15</td>
-    </tr>
-    <tr>
-      <th>14</th>
-      <td>10_rot_14_693_F_V_08</td>
-      <td>2018-02-28 11:05:13</td>
-      <td>True</td>
-      <td>False</td>
-      <td>\n\n \n \n\nNummer: 7 (slot) \n\nDe papieren ...</td>
-      <td>2014-08-05</td>
-    </tr>
-    <tr>
-      <th>15</th>
-      <td>13_ams_15_42_F_V_06</td>
-      <td>2018-02-22 09:26:19</td>
-      <td>True</td>
-      <td>False</td>
-      <td>\n\n \n\n \n\nZESDE OPENBARE FAILLISSEMENTSVE...</td>
-      <td>2015-01-27</td>
-    </tr>
-    <tr>
-      <th>16</th>
-      <td>13_ams_13_6_F_V_14</td>
-      <td>2018-02-16 15:43:38</td>
-      <td>True</td>
-      <td>False</td>
-      <td>Openbaar faiUissementsverslag rechtspersoon (e...</td>
-      <td>None</td>
-    </tr>
-    <tr>
-      <th>17</th>
-      <td>13_ams_15_15_F_V_09</td>
-      <td>2018-02-13 11:46:10</td>
-      <td>True</td>
-      <td>False</td>
-      <td>florent\n\nOPENBAAR EINDVERSLAG EX ARTIKEL 73a...</td>
-      <td>2015-01-13</td>
-    </tr>
-    <tr>
-      <th>18</th>
-      <td>13_ams_09_386_F_V_18</td>
-      <td>2018-02-13 10:23:43</td>
-      <td>True</td>
-      <td>False</td>
-      <td>florent\n\nEENENTW?NTIGSTE OPENBAAR VERSLAG EX...</td>
-      <td>None</td>
-    </tr>
-    <tr>
-      <th>19</th>
-      <td>10_rot_12_592_F_V_12</td>
-      <td>2018-02-13 09:14:12</td>
-      <td>True</td>
-      <td>False</td>
-      <td>[WIN\n\nDe inhoud van de aan de rechtbank toeg...</td>
-      <td>2012-08-21</td>
+      <th>equal_no_of_reports</th>
+      <td>11296</td>
+      <td>29.862268</td>
     </tr>
   </tbody>
 </table>
@@ -12658,6 +12098,38 @@ normalized: "wj geurts-de veld"</p>
 
 </div>
 
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="steekproef-van-niet-OCR-eindverslagen-van-januari-2018">steekproef van niet OCR eindverslagen van januari 2018<a class="anchor-link" href="#steekproef-van-niet-OCR-eindverslagen-van-januari-2018">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;SELECT identification, publication_date, is_end_report, is_ocr, content, start_date_insolvency</span>
+<span class="s1">         FROM reports rep</span>
+<span class="s1">             JOIN company_insolvents ins ON rep.insolvent_id = ins.id</span>
+<span class="s1">         WHERE ins.person_legal_personality = &#39;rechtspersoon&#39;</span>
+<span class="s1">             AND rep.is_end_report = TRUE</span>
+<span class="s1">             AND is_ocr is FALSE</span>
+<span class="s1">             AND publication_date BETWEEN &#39;2018-02-01&#39; AND &#39;2018-03-31&#39;</span>
+<span class="s1">         ORDER BY publication_date DESC</span>
+<span class="s1">         LIMIT 20;&#39;&#39;&#39;</span>
+
+<span class="n">df_reports</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">)</span>
+<span class="n">df_reports</span>
+</pre></div>
+
+</div>
 </div>
 </div>
 
@@ -12701,7 +12173,7 @@ normalized: "wj geurts-de veld"</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Bevindingen">Bevindingen<a class="anchor-link" href="#Bevindingen">&#182;</a></h3><ul>
+<h3 id="Bevindingen-/-Issues">Bevindingen / Issues<a class="anchor-link" href="#Bevindingen-/-Issues">&#182;</a></h3><ul>
 <li>Bij insolventen van verslagen 13_ams_15_478_F_V_06 en 10_rot_12_90_F_V_16 zijn geen enkele financiele verslagen ook curator salaris wordt niet genoemd. Vraag: wie levert geen financieel verslag en waarom?</li>
 <li>Bij eindverslag 10_rot_14_1054_F_V_10 staat curator salaris alleen in de financiele bijlage. Er lijkt ook sprake van een schikking - regeling bestuurder: 22.000 - wegens rechtmatigheidsissue. </li>
 <li>bij 11_rot_12_41_F_V_15 staan bedragen doorgestreept, textconversie pakt dat niet</li>
@@ -12709,6 +12181,7 @@ normalized: "wj geurts-de veld"</p>
 verslagperiode eindigen.' (11_rot_12_41_F_V_15)</li>
 <li>uurtarief bij 11_rot_12_41_F_V_15 komt op 280,-</li>
 <li>10_rot_14_1054_F_V_10, 01_obr_13_293_F_V_09 omzetting pdf&gt;txt verliest letters/gegevens/structuur met PDFMiner. Welke converter pakt dit goed aan ?</li>
+<li>strikethrough in PDF komt niet terug in de tekstconversie</li>
 </ul>
 
 </div>
@@ -12716,537 +12189,17 @@ verslagperiode eindigen.' (11_rot_12_41_F_V_15)</li>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">report_id</span> <span class="o">=</span> <span class="s1">&#39;01_obr_13_293_F_V_09&#39;</span>
-<span class="n">content</span> <span class="o">=</span> <span class="n">df_end_reports_last_week</span><span class="p">[</span><span class="n">df_end_reports_last_week</span><span class="p">[</span><span class="s1">&#39;identification&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">report_id</span><span class="p">][</span><span class="s1">&#39;content&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">reports</span> <span class="o">=</span> <span class="n">df_end_reports_last_week</span><span class="p">[</span><span class="n">df_end_reports_last_week</span><span class="p">[</span><span class="s1">&#39;identification&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">report_id</span><span class="p">]</span>
+<span class="n">report</span> <span class="o">=</span> <span class="n">reports</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">content</span> <span class="o">=</span> <span class="n">report</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
-<span class="c1"># strikethrough komt niet terug in de tekstconversie vb 8.4</span>
 </pre></div>
 
 </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>FAILLISSEMENTSVERSLAG
-
-Nummer:9
-
-Datum:  26 maart  2018
-
-Gegevens  onderneming
-
-Faillissementsnummer
-
-Datum  uitspraak
-
-Rechter-commissaris
-
-Curator
-
-D.A.H.  Brusselers  Holdinq  B.V.
-statutair  gevestigd  te&#39;s-Hertogenbosch  en feitelijk
-gevestigd  te Drunen  aan  de Laan van Tasmanië (5152
-HW).
-
-clo&#39;v131293F
-
-26 maart2013
-
-mr. S.J.O.  de Vries
-
-mr. K.T.W.H.  van den Dungen
-
-Voor zover de tekst in dit verslag afw¡jkt van hetgeen  in het vorige  verslag  is vermeld,  is die
-tekst vetged  ru kt weergegeven.
-
-Activiteiten ondernem  ing
-
-De omschrijving  van de activiteiten  van gefailleerde in het handelsregister is:
-&#34;Het  beheren  en beleggen  van vermogen,  alsmede het optreden  als houdster  van aandelen in andere
-vennootschappen.&#34;
-Deze  gebruikelijke  omschrijving  voor houdstervennootschappen  sluit in dit geval redelijk  aan op de
-werkelijkheid. Er is echter  geen  sprake  geweest  van beleggingen,  maar  uitsluitend  van verrichtingen
-ter bestuur  van werkmaatschappij Metselbedrijf  Brusselers  B.V. en ter beheer  van de aandelen  van
-laatstgenoemde  dochtervennootschap. Deze dochter is twee jaar geleden,  op 1 februari  2011,  failliet
-verklaard.
-
-Omzetgegevens
-
-Personeel
-
-Saldo  ei nde verslagperiode
-
-Verslagperiode
-
-Bestede  uren  in verslagperiode
-
-Bestede  uren  in totaal
-
-ln 2010 bedroeg  de netto-omzet€.70.260,-
-ln2011  bedroeg  de netto-omzet  €  0,-.
-
-n.v.t.
-
-€  0,00
-
-2l oktober  2017 tlm einde  faillissement
-
-5,88  uren
-
-51,74 uren
-
-bed r¡jf sa dvocate n . n I
-
-lnventarisatie
-
-1. 
-1.1 Directie  en organisatie:
-
-Enig aandeelhouder  en zelfstandig bevoegd  bestuurder  van gefailleerde is de heer
-D.A.H.  Brusselers.
-1.2 Winst  en verlies:
-
-ln 2010 was het resultaat  vóór belastingen  - €  270.000,- (verlies).
-ln 2O11  was het resultaat  vóór belastingen  €  41 I .000,-.
-
-1.3  Balanstotaal:
-
-Het balanstotaal  per einde  2010  bedroeg:  €  95.994,00
-Het balanstotaal  per einde  2011  bedroeg:  €  43.678,00
-
-1.4 Lopendeprocedures:
-
-Vooralsnog is niet gebleken  van lopende procedures
-
-1.5 Verzekeringen:
-
-Vooralsnog  is niet gebleken  dat er sprake is van enige lopende  verzekering  van gefailleerde
-
-1.6 Huur:
-
-Er is geen sprake  van een lopende huurovereenkomst.
-
-1.7 Oorzaakfaillissement:
-
-De bestuurder  wijst de volgende  omstandigheden aan als oorzaak van het faillissement:
-
-De enige inkomsten  die gefailleerde in het verleden  genoot  zijn de managementfee  en de
-gebruikersvergoeding  die Metselbedrijf  Brusselers  B.V. aan  haar verschuldigd  waren.
-(De gebruikersvergoeding had betrekking  op de toen nog aanwezige  roerende  zaken  van
-gefailleerde  die voor de bedrijfsactiviteiten  van voornoemde  dochtervennootschap  werden
-ingezet.)
-Na de uitspraak  van het faillissement van deze dochtervennootschap in 2011  had  D.A.H.
-Brusselers  Holding  B.V. aldus geen inkomsten meer,  ofschoon  er wel sprake  was van
-doorlopende betalingsverplichtingen.  Er is geen  sprake  van andere  activa  die op enige  wijze
-liquiditeiten  kunnen  opleveren,  zodat  de lopende betalingsverplichtingen  uiteindelijk niet meer
-konden  worden  voldaan.
-
-Vooralsnog is niet gebleken  van andere  oorzaken  van het faillissement.
-
-2.
-
-2.1
-
-2.2
-
-2.3
-
-Personeel
-
-Aantal ten tijde van faillissement:
-
-Aantal in jaar voor faillissement:
-
-Datu m ontslagaanzegging:
-
-Bijzonderheden:
-
-n.v.t.
-
-1
-
-n.v.t.
-
-n.v.t.
-
-bed rijf sa dvocate n . n I
-
-2
-
-3.  Activa
-
-Onroerende  zaken
-3.1 Beschrijving: 
-3.2 Verkoopopbrengst: 
-3.3  Hoogte hypotheek: 
-3.4 Boedelbijdrage: 
-
-Werkzaamheden: 
-
-Bedriifsmiddelen
-3.5 Beschrijving: 
-3.6 Verkoopopbrengst: 
-3.7 Boedelbijdrage: 
-3.8 Bodemvoorrecht  fiscus: 
-
-Voorraden  / onderhanden  werk
-3.9 Beschrijving: 
-3.10 Verkoopopbrengst: 
-3.11 Boedelbijdrage: 
-
-Werkzaamheden: 
-
-Andere activa
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-3.12 Beschrijving:
-
-Er ziin nog enkele roerende zaken van gefailleerde  opgeslagen in een container in Kerkdriel;
-een oude  (computer-)server,  een eveneens  gedateerde monitor,  een iPad 1, een spelcomputer
-en een fitnessbank met losse  gewichten.
-
-ING Bank N.V. heeft deze zaken al getaxeerd.  Volgens dat taxatierapport  weegt de te
-verwachten  verkoopopbrengst niet op tegen  de benodigde  verkoopinspanningen.
-
-3.13 Verkoopopbrengst: 
-
-Werkzaamheden: 
-
-n.v.t.
-
-n.v.t.
-
-bedr¡jfsadvocaten.nl
-
-3
-
-4.  Debiteuren
-4.1 Omvang  debiteuren:
-
-Er is sprake  van twee  debiteuren met een totale  omvang  van €  80.090,96.
-Gefailleerde  heeft een vordering  op Metselbedrijf  Brusselers  B.V. van €  41 .794,96.  Nu deze
-vennootschap  in staat van faillissement verkeert,  wordt deze vordering  als oninbaar
-aangemerkt.
-De andere  debiteur  is de bestuurder,  de heer  D.A.H.  Brusselers.  Deze vordering komt voort uit
-de rekening-courantverhouding  en bedraagt  €  38.296,00.  De heer  Brusselers  heeft aangegeven
-deze vordering niet te kunnen  voldoen. Hij heeft opgemerkt  zijn faillissement te zullen
-aanvragen.
-
-De heer  Brusselers  is niet overgegaan  tot aanvraag  van zijn faillissement.
-De buitengerechtelijke  inspanningen  van - of namens  - ondergetekende hebben  niet geleid  tot
-ontvangst  van enige betaling  of van enig betalingsvoorstel  van de bestuurder.
-
-Nadat daartoe  toestemming  van de rechter-commissaris is verkregen,  zijn maatregelen
-strekkende  tot inleiding  van de gerechtelijke procedure  tegen  de heer  Brusselers  genomen
-De heer  Brusselers  heeft ondergetekende medegedeeld  om ten aanzien van voornoemde
-schuld  aan  de boedeltot  een betalingsregeling  te willen komen. Aan hem is vervolgens
-medegedeeld  onder  welke  voorwaarden  die betalingsregeling  aan de orde zou kunnen  zijn
-Door de heer  Brusselers  is daarop niet meer  gereageerd.
-
-Nu inmiddels  gebleken is dat de heer  Brusselers  nagenoeg  geen  verhaal biedt,  is besloten  om
-vooralsnog  af te zien van voornoemde gerechtelijke procedure.  Momenteel  wordt met derden
-overleg  gevoerd  over de eventuele  aanvraag  van het faillissement van de heer  Brusselers.
-
-De heer  Brusselers  heeft  niet alsnog  een deel van zijn schuld  aan gefailleerde betaald.  Tot
-dusver  zijn  geen  verhaalsmogelijkheden  aangetroffen en heeft zich nog niet de mogelijkheid
-voorgedaan  om op een effectieve  wijze  tot een  aanvraag  van zijn faillissement te komen.
-Voorlopig  wordt gewacht  tot zich  een wijziging in tenminste één van laatstgenoemde  drie
-omstand  igheden  voordoet.
-
-De komende  verslagperiode  wordt  opnieuw bezien  of de heer Brusselers  inmiddels  enige
-verhaalsmogelijkheden biedt en of naar aanvraag  van zijn faillissement dient te worden
-gestreefd.
-
-Geconstateerd is dat de rekening-courantvordering  op de heer  Brusselers  is verpand  aan ING
-Bank  N.V.  De bank  is een gerechtelijke procedure  gestart  tegen  de heer Brusselers  en heeft  in
-deze procedure  de aan  haar verpande  vordering  op de heer  Brusselers  beperkt  tot een bedrag
-van €  12.500,-.  De bank  heeft zich het recht voorbehouden op het meerdere.  Afgelopen
-verslagperiode heeft de kantonrechter  deze vordering toegewezen. De bank is inmiddels  een
-redelijke  termijn  ex artikel  58 lid I Fw van vier maanden  gesteld  om tot inning van het
-resterende  gedeelte  van de rekening-courantvordering  over te gaan.
-
-De aan de bank  gestelde redelijke termijn is verstreken  zodat de vordering in beginsel
-ten gunste van de boedel kan worden  geincasseerd.  ln dat verband  is wederom  bezien  of
-sprake is van verhaalsmogelijkheden  jegens  de heer Brusselers.  Daarvan  is helaas  niet
-gebleken. Ook ING bank is er vooralsnog niet in geslaagd om de vordering uit hoofde
-van het vonnis van de kantonrechter  bij de heer Brusselers  te innen.
-Er is ook geen  aanleiding  om te veronderstellen  dat er binnen afzienbare tijd alsnog
-
-bed r¡jf sadvocaten.  n I
-
-4
-
-verhaalsmogelijkheden  zullen ontstaan.  Daarom  is besloten om niet langer  te wachten
-met de afronding  van dit faillissement.
-
-4.2 Opbrengst
-
-4.3  Boedelbijdrage:
-
-Werkzaamheden:
-
-vooralsnog n.v.t.
-n.v.t-
-
-n.v.t.
-
-zie onderdeel4.1.
-Er liggen geen  bijzondere werkzaamheden in het
-verschiet.
-
-5.  Bank/Zekerheden
-5.1 Vorderingbank(en):
-
-ING Bank  N.V. heeft een vordering ingediend  van €  176.932,68.
-
-5.2 Leasecontracten: 
-5.3 Beschrijvingzekerheden:
-
-n.v.t.
-
-ING Bank  N.V. heeft een pandrecht  op de bedrijfsuitrusting,  de voorraden  en de debiteuren.  Zie
-onderdeel  4.1.
-
-n.v.t.
-
-5.4 Separatistenpositie: 
-5.5 Boedelbijdragen: 
-n.v.t.
-5.6 Eigendomsvoorbehoud:  n.v.t.
-5.7 Reclamerechten: 
-5.8 Retentierechten: 
-Werkzaamheden: 
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-6.  Doorstart / voortzetten
-
-Voortzetten
-
-Een doorstart is niet aan de orde.
-6.1 Exploitatie/zekerheden:  n.v.t.
-6.2  Financiële  verslaglegging: 
-
-n.v.t.
-
-Werkzaamheden: 
-
-Doorstart
-6.3 Beschrijving: 
-
-n.v.t.
-
-n.v.t.
-
-bedr¡jfsadvocaten.nl
-
-5
-
-6.4
-
-6.5
-
-Verantwoording:
-
-Opbrengst:
-
-6.6
-
-Boedelbijdrage:
-
-Werkzaamheden
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-7.  Rechtmatigheid
-7.1  Boekhoudplicht:
-
-De grootboekkaarten  van2011  en2012  zijn overgelegd alsmede  de kolommenbalans  van
-2012.  Ook zijn de jaarrekeningen van 2010 en 2011  ontvangen.
-Er is geen  reden  om te concluderen  dat de boekhoudplicht  geschonden is.
-
-7.2 Depotjaarrekeningen:
-
-7.3
-
-7.4
-
-De verkorte balans over  2011 is gepubliceerd
-Goedkeurende  verklaring  accountant: 
-
-n.v.t.
-
-Volstortingsverpl  ichting  aandelen :
-Vooralsnog is niet gebleken dat de aandelen  van gefailleerde  zijn volgestort.  Van belang  is dat,
-indien zou blijken  dat de aandelen niet zijn volgestort, de vordering  tot nakoming  van de
-volstortingsverplichting  verjaard is.
-
-7.5 Onbehoorlijkbestuur:
-
-Er is tot dusver geen  aanleiding  om te veronderstellen  dat het bestuur  haar taak
-onbehoorlijk heeft  vervu  ld.
-
-7.6  Paulianeushandelen:
-
-Tot dusver is niet gebleken van rechtshandelingen  die krachtens arl.42 e.v. Fw vernietigbaar
-zijn.
-
-Werkzaamheden
-
-n.v.t.
-
-Crediteuren
-
-Boedelvorderingen:
-
-n.v.t.
-
-Preferente  vordering van de fiscus:
-
-€  18.546,00
-
-Preferente  vordering  van het UWV
-
-Andere preferente  crediteuren:
-
-Aantal  concurrente  crediteuren:
-
-Bedrag  concurrente  crediteuren  :
-N.V.)
-
-n.v.t.
-
-n.v.t.
-
-2
-
-€  177.074,16  (inclusief  de vordering  van ING Bank
-
-8.
-
-8.1
-
-8.2
-
-8.3
-
-8.4
-
-8.5
-
-8.6
-
-bedr¡jfsadvocaten.nl
-
-6
-
-8.7  Veruvachte  wijze  van afwikkeling
-
-Mogelijk  zal het uiteindelijke  boedelactief  niet voldoende  zijn om de faillissementskosten te
-voldoen.  De rechter-commissaris  zal in dat geval  te zijner  tijd verzocht  worden om de rechtbank
-voor te stellen het faillissement op te heffen wegens de toestand  van de boedel.
-
-Er is geen boedelactief gerealiseerd.  De rechter-commissaris  wordt verzocht  om de
-rechtbank voor te stellen  het faillissement  op te heffen  wegens de toestand  van de
-boedel.
-
-9.
-Ll
-
-9.2
-
-9.3
-
-Procedures
-
-Naam wederpartij(en)
-
-Aard procedure:
-
-Stand  procedure:
-
-Werkzaamheden:
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-10. Overig
-10.1 Termijn añrikkeling faillissement:
-
-Mogelijk  zal dit faillissement binnen  6 maanden  afgewikkeld kunnen  worden
-Dit faillissement kan binnen enkele  maanden  worden  afgewikkeld.
-
-10.2  Plan van aanpak:
-Zie onderdeel4.l
-n.v.t.
-
-10.3 lndiening  volgend  verslag:
-
-n.v.t.
-
-K.T.W.H.  van den Dungen
-
-bedrijfsadvocaten.nl
-
-7
-
-
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -13261,7 +12214,7 @@ bedrijfsadvocaten.nl
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Personeel gemiddeld aantal</span>
@@ -13274,14 +12227,12 @@ bedrijfsadvocaten.nl
 
 <span class="k">def</span> <span class="nf">match_block_personeel_gemiddeld_aantal</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
     <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">flags</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">match</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">match</span>
     
 
 <span class="k">def</span> <span class="nf">match_personeel_gemiddeld_aantal</span><span class="p">(</span><span class="n">content</span><span class="p">):</span>
     <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s1">&#39;gemiddeld\s+aantal\s+personeel(.*?)verslagperiode&#39;</span><span class="p">,</span>
-                <span class="sa">r</span><span class="s1">&#39;personeel\s+gemiddeld\s+aantal(.*?)saldo\s+einde\s+verslagperiode&#39;</span>
-                <span class="sa">r</span><span class="s1">&#39;PersoneelSaldo  ei nde verslagperiode</span>
-               <span class="p">]</span>
+                <span class="sa">r</span><span class="s1">&#39;personeel\s+gemiddeld\s+aantal(.*?)saldo\s+einde\s+verslagperiode&#39;</span><span class="p">]</span>
     
     
     <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">patterns</span><span class="p">:</span>
@@ -13291,53 +12242,14 @@ bedrijfsadvocaten.nl
             <span class="k">return</span> <span class="n">block</span>
     <span class="k">return</span> <span class="kc">None</span>
 
-<span class="c1">#print(match_personeel_gemiddeld_aantal(content))</span>
+<span class="n">match</span> <span class="o">=</span> <span class="n">match_personeel_gemiddeld_aantal</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
 
-<span class="n">content</span> <span class="o">=</span> <span class="n">df_end_reports_last_week</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">match_personeel_gemiddeld_aantal</span><span class="p">)</span>
-<span class="n">content</span>
+<span class="c1">#content = df_end_reports_last_week[&#39;content&#39;].apply(match_personeel_gemiddeld_aantal)</span>
+<span class="c1">#content</span>
 </pre></div>
 
 </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[18]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>0     Gemiddeld aantal personeel:\n\nnihil\nalle vie...
-1     Gemiddeld aantal personeel:\n\nnihil\nalle vie...
-2     Gemiddeld aantal personeel:\n\nnihil\nalle vie...
-3     Gemiddeld aantal personeel:\n\nnihil\nalle vie...
-4     Personeel  gemiddeld  aantal  12\n\nSaldo eind...
-5                                                  None
-6                                                  None
-7                                                  None
-8                                                  None
-9                                                  None
-10                                                 None
-11                                                 None
-12                                                 None
-13                                                 None
-14    Personeel gemiddeld aantal \n \n \nSaldo einde...
-15                                                 None
-16    Personeel gemiddeld aantal\n\nSaldo einde vers...
-17                                                 None
-18                                                 None
-19    Personeel gemiddeld aantal:\n\nTotal Cleaning ...
-Name: content, dtype: object</pre>
-</div>
-
-</div>
-
 </div>
 </div>
 
