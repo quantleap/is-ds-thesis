@@ -6,9 +6,13 @@
 # In[ ]:
 
 
+#import pdb; pdb.set_trace()
+
 get_ipython().magic('matplotlib inline')
 import pandas as pd
 import os
+import re
+import json
 
 
 # In[ ]:
@@ -135,11 +139,41 @@ rechters_df
 rechters_df[rechters_df['set'] == 'Rechtbank Amsterdam']
 
 
-# # Reports
+# # Verslagen
 
-# ## praktijk van het rapporteren met/zonder financiele bijlage
+# ## Split voortgangs vs financiele rapportages
 
-# In[49]:
+# In[ ]:
+
+
+sql = """select 
+           count(*), 
+           count(*)::decimal/(select count(*) from reports)*100 as pct, 
+           right(identification, 1) = 'B' as is_financial_report
+         from reports
+         group by 3;"""
+pd.read_sql(sql, con)
+
+
+# ## Split PDF was scanned vs converted
+
+# In[ ]:
+
+
+sql = """select 
+           count(*), 
+           count(*)::decimal/(select count(*) from reports)*100 as pct, 
+           is_ocr as was_scanned
+         from reports
+         group by 3;"""
+pd.read_sql(sql, con)
+
+
+# todo: run new classifier over all pdfs on S3 for unknowns
+
+# ## praktijk van het rapporteren voortgangsverslagen met/zonder financiele bijlage
+
+# In[ ]:
 
 
 sql = """select * from progess_financial_report_cooccurence;"""
@@ -150,23 +184,49 @@ df['pct'] = df['count']/df['count'].sum()*100
 df
 
 
-# ## steekproef van niet OCR eindverslagen van januari 2018
+# ## rapportages over tijd
 
 # In[ ]:
 
 
-sql = '''SELECT identification, publication_date, is_end_report, is_ocr, content, start_date_insolvency
+sql = """
+with
+financial as (
+      select to_char(publication_date, 'YYYY-MM') as month,
+             count(*) as financial_count
+      from reports
+      where right(identification, 1) = 'B'
+      group by 1),
+progress as (
+      select to_char(publication_date, 'YYYY-MM') as month,
+             count(*) as progres_count
+      from reports
+      where right(identification, 1) != 'B'
+      group by 1)
+select prog.month as maand, progres_count as voortgangsverslag, coalesce(financial_count, 0) as financieelverslag
+  from financial fin
+    full outer join progress prog on fin.month = prog.month
+  order by prog.month;
+"""
+df = pd.read_sql(sql, con, index_col="maand")
+df.plot.bar(stacked=True, figsize=(20, 5), title='publicaties per maand')
+
+
+# ## steekproef van niet OCR eindverslagen
+
+# In[ ]:
+
+
+sql = '''SELECT identification, publication_date, is_end_report, content, start_date_insolvency
          FROM reports rep
              JOIN company_insolvents ins ON rep.insolvent_id = ins.id
-         WHERE ins.person_legal_personality = 'rechtspersoon'
-             AND rep.is_end_report = TRUE
+         WHERE rep.is_end_report = TRUE
              AND is_ocr is FALSE
-             AND publication_date BETWEEN '2018-02-01' AND '2018-03-31'
          ORDER BY publication_date DESC
-         LIMIT 20;'''
+         LIMIT 1000;'''
 
-df_reports = pd.read_sql(sql, con)
-df_reports
+df_reports = pd.read_sql(sql, con, index_col='identification')
+df_reports.head()
 
 
 # ## Data field wish list from the PDF report
@@ -218,57 +278,163 @@ df_reports
 # - 10_rot_14_1054_F_V_10, 01_obr_13_293_F_V_09 omzetting pdf>txt verliest letters/gegevens/structuur met PDFMiner. Welke converter pakt dit goed aan ?
 # - strikethrough in PDF komt niet terug in de tekstconversie
 
-# In[ ]:
-
-
-report_id = '01_obr_13_293_F_V_09'
-reports = df_end_reports_last_week[df_end_reports_last_week['identification'] == report_id]
-report = reports.iloc[0]
-content = report['content']
-print(content)
-
-
 # ## Extracting structured text from PDF reports
 
+# ### Kandidaat sectie headers
+
 # In[ ]:
 
 
-# Personeel gemiddeld aantal
-import re
+# Step 1: extract sections from progress reports
+# Sub step: extract candidate sections from model report
+model_content = open('model-verslag-faillissement-rechtspersoon.txt', 'r').read()
 
-flags = re.DOTALL | re.IGNORECASE
-
-def first_match_group():
-    pass
-
-def match_block_personeel_gemiddeld_aantal(pattern, content):
-    match = re.search(pattern, content, flags)
+def match_headings(content, level=2):
+    """ returns level 2 (e.g. 1.1) heading matches as tuple (heading number, heading title)"""
+    flags = re.MULTILINE
+    if level == 2:
+        pattern = r"^\s*(\d{1,2}\.\d{1,2})\s*(.*)$"
+    elif level == 1:
+        pattern = r"^\s*(\d{1,2}\.\d{0,2})\s*(.*)$"
+    else:
+        raise NotImplementedError
+    match = re.findall(pattern, content, flags)
     return match
-    
 
-def match_personeel_gemiddeld_aantal(content):
-    patterns = [r'gemiddeld\s+aantal\s+personeel(.*?)verslagperiode',
-                r'personeel\s+gemiddeld\s+aantal(.*?)saldo\s+einde\s+verslagperiode']
-    
-    
-    for pattern in patterns:
-        block = match_block_personeel_gemiddeld_aantal(pattern, content)
-        import pdb; pdb.set_trace
-        if block:
-            return block
-    return None
-
-match = match_personeel_gemiddeld_aantal(content)
-print(match.group(0))
-
-#content = df_end_reports_last_week['content'].apply(match_personeel_gemiddeld_aantal)
-#content
+model_headings = match_headings(model_content, level=1)
+model_heading_numbers = list(zip(*model_headings))[0]
+model_headings
 
 
 # In[ ]:
 
 
+report_content = df_reports['content']['01_obr_13_1204_F_V_04']
+print(report_content)
 
+
+# In[ ]:
+
+
+report_headings = match_headings(report_content, level=1)
+report_heading_numbers = list(zip(*report_headings))[0]
+
+
+
+# In[172]:
+
+
+# BREADTH FIRST SEARCH: eerst van zoveel mogelijk rapporten een zo weid mogelijk net uitgooien, dan inzoomen
+# 0. eigenlijk eerst full text search op gehele content
+# 1. search op sections
+# 2. search op parameter values
+
+# SECTIONS
+# check hoeveel er exact matchen(ignore case)
+# check hoeveel er op heading nummers matchen
+# for stop anchor point we need to level 1 headings too
+
+# ZOU MATCH OP HEADING NUMMER AL GENOEG KUNNEN ZIJN ? :
+# check of heading nummers oplopen
+# check of heading nummers in kandidatenlijst voorkomen
+
+# level 1 pattern with .? yields many false positives (in first examined case)
+
+def is_strictly_increasing_heading_numbers(heading_numbers):
+    """ checks if all level 2 headings 1.1, 1.2, 3.1 etc in list are strictly increasing. """
+    if heading_numbers is not None:
+        return all([float(a) < float(b) for (a, b) in zip(heading_numbers, heading_numbers[1:])])
+    else:
+        return False
+    
+def only_model_headings(report_heading_numbers):
+    if report_heading_numbers is not None:
+        report_headings_not_in_model = set(report_heading_numbers).difference(set(model_heading_numbers))
+        return len(report_headings_not_in_model) == 0
+    else:
+        return False
+
+
+def get_heading_numbers(content):
+    headings = match_headings(content)
+    if headings:
+        heading_numbers, _ = list(zip(*headings))
+        return heading_numbers
+    else:
+        return None
+  
+
+
+print('is strictly increasing: {}'.format(is_strictly_increasing_heading_numbers(report_heading_numbers)))
+print('all headings report in model: {}'.format(all_report_headings_in_model(report_heading_numbers, model_heading_numbers)))
+
+
+# In[ ]:
+
+
+# store matched headers as json strings
+df_reports['headings'] = df_reports['content'].apply(lambda x: json.dumps(match_headings(x)))
+df_reports['headings']
+
+
+# In[ ]:
+
+
+df_reports['heading_numbers'] = df_reports['content'].apply(lambda x: json.dumps(get_heading_numbers(x)))
+df_reports['heading_numbers']
+
+
+# In[ ]:
+
+
+df_reports['strictly_increasing'] = df_reports['heading_numbers'].apply(
+    lambda x: is_strictly_increasing_heading_numbers(json.loads(x)))
+df_reports['strictly_increasing']
+
+
+# In[115]:
+
+
+# report percentage strictly increasing
+df_reports['strictly_increasing'][df_reports['strictly_increasing'] == True].count() / df_reports['strictly_increasing'].count() * 100
+
+
+# In[ ]:
+
+
+df_reports['only_model_headings'] = df_reports['heading_numbers'].apply(
+    lambda x: is_strictly_increasing_heading_numbers(json.loads(x)))
+df_reports['strictly_increasing']
+
+
+# In[ ]:
+
+
+df_reports['only_model_headings'] = df_reports['heading_numbers'].apply(
+    lambda x: only_model_headings(json.loads(x)))
+df_reports['only_model_headings']
+
+
+# In[114]:
+
+
+# report percentage only model headings
+df_reports['only_model_headings'][df_reports['only_model_headings'] == True].count() / df_reports['only_model_headings'].count() * 100
+
+
+# In[174]:
+
+
+# inspect not strictly increasing
+df_not_increasing = df_reports[df_reports.only_model_headings & (~df_reports.strictly_increasing)]
+index = 20
+print(df_not_increasing.index[index])
+heading_numbers = list(zip(*json.loads(df_not_increasing.headings[index])))[0]
+is_strictly_increasing_heading_numbers(heading_numbers)
+for a, b in zip(heading_numbers, heading_numbers[1:]):
+    print(float(a), float(b), float(a)<float(b))
+    
+# finding: in many reports 3.10 became 3.1 even though the PDF shows 3.10, PDFMiner issue ?
 
 
 # In[ ]:

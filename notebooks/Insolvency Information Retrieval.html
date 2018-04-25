@@ -11784,9 +11784,13 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline  
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#import pdb; pdb.set_trace()</span>
+
+<span class="o">%</span><span class="k">matplotlib</span> inline  
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">json</span>
 </pre></div>
 
 </div>
@@ -12003,7 +12007,7 @@ normalized: "wj geurts-de veld"</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Reports">Reports<a class="anchor-link" href="#Reports">&#182;</a></h1>
+<h1 id="Verslagen">Verslagen<a class="anchor-link" href="#Verslagen">&#182;</a></h1>
 </div>
 </div>
 </div>
@@ -12011,13 +12015,76 @@ normalized: "wj geurts-de veld"</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="praktijk-van-het-rapporteren-met/zonder-financiele-bijlage">praktijk van het rapporteren met/zonder financiele bijlage<a class="anchor-link" href="#praktijk-van-het-rapporteren-met/zonder-financiele-bijlage">&#182;</a></h2>
+<h2 id="Split-voortgangs-vs-financiele-rapportages">Split voortgangs vs financiele rapportages<a class="anchor-link" href="#Split-voortgangs-vs-financiele-rapportages">&#182;</a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[49]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select </span>
+<span class="s2">           count(*), </span>
+<span class="s2">           count(*)::decimal/(select count(*) from reports)*100 as pct, </span>
+<span class="s2">           right(identification, 1) = &#39;B&#39; as is_financial_report</span>
+<span class="s2">         from reports</span>
+<span class="s2">         group by 3;&quot;&quot;&quot;</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Split-PDF-was-scanned-vs-converted">Split PDF was scanned vs converted<a class="anchor-link" href="#Split-PDF-was-scanned-vs-converted">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select </span>
+<span class="s2">           count(*), </span>
+<span class="s2">           count(*)::decimal/(select count(*) from reports)*100 as pct, </span>
+<span class="s2">           is_ocr as was_scanned</span>
+<span class="s2">         from reports</span>
+<span class="s2">         group by 3;&quot;&quot;&quot;</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>todo: run new classifier over all pdfs on S3 for unknowns</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="praktijk-van-het-rapporteren-voortgangsverslagen-met/zonder-financiele-bijlage">praktijk van het rapporteren voortgangsverslagen met/zonder financiele bijlage<a class="anchor-link" href="#praktijk-van-het-rapporteren-voortgangsverslagen-met/zonder-financiele-bijlage">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select * from progess_financial_report_cooccurence;&quot;&quot;&quot;</span>
@@ -12032,81 +12099,12 @@ normalized: "wj geurts-de veld"</p>
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[49]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>count</th>
-      <th>pct</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>zero_financial_reports</th>
-      <td>12850</td>
-      <td>33.970444</td>
-    </tr>
-    <tr>
-      <th>zero_progress_reports</th>
-      <td>36</td>
-      <td>0.095170</td>
-    </tr>
-    <tr>
-      <th>more_progress_reports</th>
-      <td>12864</td>
-      <td>34.007455</td>
-    </tr>
-    <tr>
-      <th>more_financial_report</th>
-      <td>781</td>
-      <td>2.064663</td>
-    </tr>
-    <tr>
-      <th>equal_no_of_reports</th>
-      <td>11296</td>
-      <td>29.862268</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="steekproef-van-niet-OCR-eindverslagen-van-januari-2018">steekproef van niet OCR eindverslagen van januari 2018<a class="anchor-link" href="#steekproef-van-niet-OCR-eindverslagen-van-januari-2018">&#182;</a></h2>
+<h2 id="rapportages-over-tijd">rapportages over tijd<a class="anchor-link" href="#rapportages-over-tijd">&#182;</a></h2>
 </div>
 </div>
 </div>
@@ -12115,18 +12113,57 @@ normalized: "wj geurts-de veld"</p>
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;SELECT identification, publication_date, is_end_report, is_ocr, content, start_date_insolvency</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">with</span>
+<span class="s2">financial as (</span>
+<span class="s2">      select to_char(publication_date, &#39;YYYY-MM&#39;) as month,</span>
+<span class="s2">             count(*) as financial_count</span>
+<span class="s2">      from reports</span>
+<span class="s2">      where right(identification, 1) = &#39;B&#39;</span>
+<span class="s2">      group by 1),</span>
+<span class="s2">progress as (</span>
+<span class="s2">      select to_char(publication_date, &#39;YYYY-MM&#39;) as month,</span>
+<span class="s2">             count(*) as progres_count</span>
+<span class="s2">      from reports</span>
+<span class="s2">      where right(identification, 1) != &#39;B&#39;</span>
+<span class="s2">      group by 1)</span>
+<span class="s2">select prog.month as maand, progres_count as voortgangsverslag, coalesce(financial_count, 0) as financieelverslag</span>
+<span class="s2">  from financial fin</span>
+<span class="s2">    full outer join progress prog on fin.month = prog.month</span>
+<span class="s2">  order by prog.month;</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s2">&quot;maand&quot;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">stacked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;publicaties per maand&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="steekproef-van-niet-OCR-eindverslagen">steekproef van niet OCR eindverslagen<a class="anchor-link" href="#steekproef-van-niet-OCR-eindverslagen">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;SELECT identification, publication_date, is_end_report, content, start_date_insolvency</span>
 <span class="s1">         FROM reports rep</span>
 <span class="s1">             JOIN company_insolvents ins ON rep.insolvent_id = ins.id</span>
-<span class="s1">         WHERE ins.person_legal_personality = &#39;rechtspersoon&#39;</span>
-<span class="s1">             AND rep.is_end_report = TRUE</span>
+<span class="s1">         WHERE rep.is_end_report = TRUE</span>
 <span class="s1">             AND is_ocr is FALSE</span>
-<span class="s1">             AND publication_date BETWEEN &#39;2018-02-01&#39; AND &#39;2018-03-31&#39;</span>
 <span class="s1">         ORDER BY publication_date DESC</span>
-<span class="s1">         LIMIT 20;&#39;&#39;&#39;</span>
+<span class="s1">         LIMIT 1000;&#39;&#39;&#39;</span>
 
-<span class="n">df_reports</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">)</span>
-<span class="n">df_reports</span>
+<span class="n">df_reports</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;identification&#39;</span><span class="p">)</span>
+<span class="n">df_reports</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
 </div>
@@ -12187,23 +12224,6 @@ verslagperiode eindigen.' (11_rot_12_41_F_V_15)</li>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">report_id</span> <span class="o">=</span> <span class="s1">&#39;01_obr_13_293_F_V_09&#39;</span>
-<span class="n">reports</span> <span class="o">=</span> <span class="n">df_end_reports_last_week</span><span class="p">[</span><span class="n">df_end_reports_last_week</span><span class="p">[</span><span class="s1">&#39;identification&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">report_id</span><span class="p">]</span>
-<span class="n">report</span> <span class="o">=</span> <span class="n">reports</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">content</span> <span class="o">=</span> <span class="n">report</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -12212,41 +12232,38 @@ verslagperiode eindigen.' (11_rot_12_41_F_V_15)</li>
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Kandidaat-sectie-headers">Kandidaat sectie headers<a class="anchor-link" href="#Kandidaat-sectie-headers">&#182;</a></h3>
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Personeel gemiddeld aantal</span>
-<span class="kn">import</span> <span class="nn">re</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Step 1: extract sections from progress reports</span>
+<span class="c1"># Sub step: extract candidate sections from model report</span>
+<span class="n">model_content</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;model-verslag-faillissement-rechtspersoon.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
-<span class="n">flags</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span>
-
-<span class="k">def</span> <span class="nf">first_match_group</span><span class="p">():</span>
-    <span class="k">pass</span>
-
-<span class="k">def</span> <span class="nf">match_block_personeel_gemiddeld_aantal</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
-    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">flags</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">match_headings</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; returns level 2 (e.g. 1.1) heading matches as tuple (heading number, heading title)&quot;&quot;&quot;</span>
+    <span class="n">flags</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span>
+    <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^\s*(\d{1,2}\.\d{1,2})\s*(.*)$&quot;</span>
+    <span class="k">elif</span> <span class="n">level</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^\s*(\d{1,2}\.\d{0,2})\s*(.*)$&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">flags</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">match</span>
-    
 
-<span class="k">def</span> <span class="nf">match_personeel_gemiddeld_aantal</span><span class="p">(</span><span class="n">content</span><span class="p">):</span>
-    <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s1">&#39;gemiddeld\s+aantal\s+personeel(.*?)verslagperiode&#39;</span><span class="p">,</span>
-                <span class="sa">r</span><span class="s1">&#39;personeel\s+gemiddeld\s+aantal(.*?)saldo\s+einde\s+verslagperiode&#39;</span><span class="p">]</span>
-    
-    
-    <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">patterns</span><span class="p">:</span>
-        <span class="n">block</span> <span class="o">=</span> <span class="n">match_block_personeel_gemiddeld_aantal</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
-        <span class="kn">import</span> <span class="nn">pdb</span><span class="p">;</span> <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span>
-        <span class="k">if</span> <span class="n">block</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">block</span>
-    <span class="k">return</span> <span class="kc">None</span>
-
-<span class="n">match</span> <span class="o">=</span> <span class="n">match_personeel_gemiddeld_aantal</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
-
-<span class="c1">#content = df_end_reports_last_week[&#39;content&#39;].apply(match_personeel_gemiddeld_aantal)</span>
-<span class="c1">#content</span>
+<span class="n">model_headings</span> <span class="o">=</span> <span class="n">match_headings</span><span class="p">(</span><span class="n">model_content</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">model_heading_numbers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">model_headings</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">model_headings</span>
 </pre></div>
 
 </div>
@@ -12259,10 +12276,301 @@ verslagperiode eindigen.' (11_rot_12_41_F_V_15)</li>
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">report_content</span> <span class="o">=</span> <span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">][</span><span class="s1">&#39;01_obr_13_1204_F_V_04&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">report_content</span><span class="p">)</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">report_headings</span> <span class="o">=</span> <span class="n">match_headings</span><span class="p">(</span><span class="n">report_content</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">report_heading_numbers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">report_headings</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[172]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># BREADTH FIRST SEARCH: eerst van zoveel mogelijk rapporten een zo weid mogelijk net uitgooien, dan inzoomen</span>
+<span class="c1"># 0. eigenlijk eerst full text search op gehele content</span>
+<span class="c1"># 1. search op sections</span>
+<span class="c1"># 2. search op parameter values</span>
+
+<span class="c1"># SECTIONS</span>
+<span class="c1"># check hoeveel er exact matchen(ignore case)</span>
+<span class="c1"># check hoeveel er op heading nummers matchen</span>
+<span class="c1"># for stop anchor point we need to level 1 headings too</span>
+
+<span class="c1"># ZOU MATCH OP HEADING NUMMER AL GENOEG KUNNEN ZIJN ? :</span>
+<span class="c1"># check of heading nummers oplopen</span>
+<span class="c1"># check of heading nummers in kandidatenlijst voorkomen</span>
+
+<span class="c1"># level 1 pattern with .? yields many false positives (in first examined case)</span>
+
+<span class="k">def</span> <span class="nf">is_strictly_increasing_heading_numbers</span><span class="p">(</span><span class="n">heading_numbers</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; checks if all level 2 headings 1.1, 1.2, 3.1 etc in list are strictly increasing. &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">heading_numbers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">all</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">float</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">heading_numbers</span><span class="p">,</span> <span class="n">heading_numbers</span><span class="p">[</span><span class="mi">1</span><span class="p">:])])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    
+<span class="k">def</span> <span class="nf">only_model_headings</span><span class="p">(</span><span class="n">report_heading_numbers</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">report_heading_numbers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">report_headings_not_in_model</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">report_heading_numbers</span><span class="p">)</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">model_heading_numbers</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">report_headings_not_in_model</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">def</span> <span class="nf">get_heading_numbers</span><span class="p">(</span><span class="n">content</span><span class="p">):</span>
+    <span class="n">headings</span> <span class="o">=</span> <span class="n">match_headings</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">headings</span><span class="p">:</span>
+        <span class="n">heading_numbers</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">headings</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">heading_numbers</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+  
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;is strictly increasing: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">is_strictly_increasing_heading_numbers</span><span class="p">(</span><span class="n">report_heading_numbers</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;all headings report in model: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">all_report_headings_in_model</span><span class="p">(</span><span class="n">report_heading_numbers</span><span class="p">,</span> <span class="n">model_heading_numbers</span><span class="p">)))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>is strictly increasing: True
+all headings report in model: True
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># store matched headers as json strings</span>
+<span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;headings&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">match_headings</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+<span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;headings&#39;</span><span class="p">]</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;heading_numbers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">get_heading_numbers</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+<span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;heading_numbers&#39;</span><span class="p">]</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;strictly_increasing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;heading_numbers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">is_strictly_increasing_heading_numbers</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+<span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;strictly_increasing&#39;</span><span class="p">]</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[115]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># report percentage strictly increasing</span>
+<span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;strictly_increasing&#39;</span><span class="p">][</span><span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;strictly_increasing&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">/</span> <span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;strictly_increasing&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[115]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>22.400000000000002</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;only_model_headings&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;heading_numbers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">is_strictly_increasing_heading_numbers</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+<span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;strictly_increasing&#39;</span><span class="p">]</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;only_model_headings&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;heading_numbers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">only_model_headings</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+<span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;only_model_headings&#39;</span><span class="p">]</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[114]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># report percentage only model headings</span>
+<span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;only_model_headings&#39;</span><span class="p">][</span><span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;only_model_headings&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">/</span> <span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;only_model_headings&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[114]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>50.700000000000003</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[174]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># inspect not strictly increasing</span>
+<span class="n">df_not_increasing</span> <span class="o">=</span> <span class="n">df_reports</span><span class="p">[</span><span class="n">df_reports</span><span class="o">.</span><span class="n">only_model_headings</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">df_reports</span><span class="o">.</span><span class="n">strictly_increasing</span><span class="p">)]</span>
+<span class="n">index</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_not_increasing</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+<span class="n">heading_numbers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">df_not_increasing</span><span class="o">.</span><span class="n">headings</span><span class="p">[</span><span class="n">index</span><span class="p">])))[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">is_strictly_increasing_heading_numbers</span><span class="p">(</span><span class="n">heading_numbers</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">heading_numbers</span><span class="p">,</span> <span class="n">heading_numbers</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">&lt;</span><span class="nb">float</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+    
+<span class="c1"># finding: in many reports 3.10 became 3.1 even though the PDF shows 3.10, PDFMiner issue ?</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>10_rot_14_762_F_V_09
+1.1 1.2 True
+1.2 1.3 True
+1.3 1.5 True
+1.5 1.7 True
+1.7 2.1 True
+2.1 2.3 True
+2.3 5.1 True
+5.1 5.2 True
+5.2 5.4 True
+5.4 5.6 True
+5.6 5.8 True
+5.8 7.1 True
+7.1 7.2 True
+7.2 7.4 True
+7.4 8.1 True
+8.1 8.3 True
+8.3 8.5 True
+8.5 7.6 False
+7.6 10.1 True
+10.1 10.3 True
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
