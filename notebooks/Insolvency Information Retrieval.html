@@ -11781,7 +11781,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[175]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#import pdb; pdb.set_trace()</span>
@@ -11800,7 +11800,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[176]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># connection to the database</span>
@@ -11822,6 +11822,24 @@ div#notebook {
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>CONNECTION ESTABLISHED
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
@@ -11833,7 +11851,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[177]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select count(distinct case_number) </span>
@@ -11847,10 +11865,28 @@ div#notebook {
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>the total number of insolvents cases in the database is 49956
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[178]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select start_date_insolvency is not null as known, count(*)</span>
@@ -11866,16 +11902,246 @@ div#notebook {
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>fraction of known start date
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[178]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>known</th>
+      <th>count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>False</td>
+      <td>3878</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>True</td>
+      <td>46078</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[179]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_known_start_date</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">pie</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">df_known_start_date</span><span class="p">[</span><span class="s1">&#39;known&#39;</span><span class="p">])</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[179]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x10e207e10&gt;</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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
+"
+>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -11890,7 +12156,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[180]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select count(supervisory_judge) as no_cases, supervisory_judge</span>
@@ -11904,6 +12170,111 @@ div#notebook {
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>top 10 judges by number of cases
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[180]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>no_cases</th>
+      <th>supervisory_judge</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1115</td>
+      <td>mr. A.E. Zweers</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1086</td>
+      <td>mr. C. Schollen-den Besten</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>998</td>
+      <td>mr. J.S.W. Lucassen</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>912</td>
+      <td>mr. A.M.P.T. Blokhuis</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>887</td>
+      <td>mr. P.J. Neijt</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>879</td>
+      <td>mr. A.E. de Vos</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>803</td>
+      <td>mr. M Pellikaan</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>768</td>
+      <td>mr. I.M. Bilderbeek</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>751</td>
+      <td>mr. S.J.O. de Vries</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>705</td>
+      <td>mr. M.H.F. van Vugt</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -11941,7 +12312,7 @@ normalized: "wj geurts-de veld"</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[181]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select distinct supervisory_judge</span>
@@ -11962,10 +12333,40 @@ normalized: "wj geurts-de veld"</p>
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[181]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0                         A.E. Vos
+1                    A.K. Korteweg
+2    A.M.P.T. Blokhuis (RB Arnhem)
+3               A.M. van Kalmthout
+4          B.J.G.M. Ides - Peeters
+5                     C.P. Bleeker
+6                      C.P. Lunter
+7           C. Schollen-den Besten
+8                     C.T.M. Luyks
+9       dhr. mr. A.C.A. Wildenburg
+Name: supervisory_judge, dtype: object</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[182]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># rechters_df = pd.read_html(&#39;http://ors.openstate.eu/relations&#39;)[0]</span>
@@ -11979,7 +12380,7 @@ normalized: "wj geurts-de veld"</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[183]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">rechters_df</span>
@@ -11989,16 +12390,840 @@ normalized: "wj geurts-de veld"</p>
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[183]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>set</th>
+      <th>uri</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>mw. mr. J.F. Aalders</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>mw. mr. L.Z. Achouak El Idrissi</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>dhr. mr. M.J. Alink</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>mw. mr. L.C. Bachrach</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>dhr. mr. J.J. Bade</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>mw. mr. L. Baggerman</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>dhr. mr. M. Bakhuis</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>mw. mr. K. Oldekamp-Bakker</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>mw. mr. C. Bakker</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>mw. mr.dr. H.J.M. Baldinger</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>dhr. mr. F.G. Bauduin</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>dhr. mr. J.H. Beestman</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>mw. mr. M.A.H. Van Dalen-van Bekkum</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>mw. mr. A.D. Belcheva</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>mw. mr. W.H. van Benthem</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>dhr. mr. J.R. Berculo</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>mw. mr.drs. W.M.C. van den Berg</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>dhr. mr. W.M. van den Bergh</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>mw. mr. M.J. van den Bergh</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>mw. mr. C.M. Berkhout</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>mw. mr. L. van Berkum</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>dhr. mr. A.J. Beukenhorst</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>mw. mr. G.M. Beunk</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>dhr. mr. B.T. Beuving</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>mw. mr. C.W. Bianchi</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>mw. mr. I.M. Bilderbeek</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>mw. mr. L. Biller</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>dhr. mr. N.C.H. Blankevoort</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>mw. mr. C.P. Bleeker</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>dhr. mr. W.B. van Bockel</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>4099</th>
+      <td>dhr. mr. G. Snijders</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4100</th>
+      <td>mw. mr. A.M.J. van Buchem-Spapens</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4101</th>
+      <td>dhr. prof.mr. J. Spier</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4102</th>
+      <td>mw. prof.mr. T.N.B.M. Spronken</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4103</th>
+      <td>dhr. mr. J. Storm</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4104</th>
+      <td>dhr. mr. C.A. Streefkerk</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4105</th>
+      <td>dhr. mr. R.P. Streng</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4106</th>
+      <td>mw. mr. A.L.J. van Strien</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4107</th>
+      <td>dhr. mr. S. Tang</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4108</th>
+      <td>dhr. prof.mr. L. Timmerman</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4109</th>
+      <td>mw. mr. I.G.C. Bij de Vaate</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4110</th>
+      <td>dhr. mr. P.C. Vegter</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4111</th>
+      <td>dhr. mr. W.H. Vellinga</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4112</th>
+      <td>mw. mr. M. Beusmans-Verwijs</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4113</th>
+      <td>mw. mr. K.I.J. Visser</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4114</th>
+      <td>dhr. mr. D. Visser</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4115</th>
+      <td>dhr. prof.mr. P. Vlas</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4116</th>
+      <td>dhr. mr. D.G. van Vliet</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4117</th>
+      <td>mw. mr. E.L.M. Vos</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4118</th>
+      <td>dhr. mr. I.J. de Vré</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4119</th>
+      <td>dhr. mr. B.P.L. de Vries</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4120</th>
+      <td>mw. mr. N.N. Kirkels-Vrijman</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4121</th>
+      <td>mw. mr. F.A. Te Water Mulder</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4122</th>
+      <td>dhr. prof.mr. P.J. Wattel</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4123</th>
+      <td>dhr. mr. C.T.C. Welters</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4124</th>
+      <td>mw. mr. G.J.M. van Wijk</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4125</th>
+      <td>dhr. prof.mr. M.H. Wissink</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4126</th>
+      <td>dhr. mr. J. Wortel</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4127</th>
+      <td>dhr. mr. J.B.M.M. Wuisman</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+    <tr>
+      <th>4128</th>
+      <td>mw. mr. S. Crijns-Zuidwijk</td>
+      <td>Hoge Raad</td>
+      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
+    </tr>
+  </tbody>
+</table>
+<p>4129 rows × 3 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[184]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">rechters_df</span><span class="p">[</span><span class="n">rechters_df</span><span class="p">[</span><span class="s1">&#39;set&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Rechtbank Amsterdam&#39;</span><span class="p">]</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[184]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>set</th>
+      <th>uri</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>mw. mr. J.F. Aalders</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>mw. mr. L.Z. Achouak El Idrissi</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>dhr. mr. M.J. Alink</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>mw. mr. L.C. Bachrach</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>dhr. mr. J.J. Bade</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>mw. mr. L. Baggerman</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>dhr. mr. M. Bakhuis</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>mw. mr. K. Oldekamp-Bakker</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>mw. mr. C. Bakker</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>mw. mr.dr. H.J.M. Baldinger</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>dhr. mr. F.G. Bauduin</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>dhr. mr. J.H. Beestman</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>mw. mr. M.A.H. Van Dalen-van Bekkum</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>mw. mr. A.D. Belcheva</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>mw. mr. W.H. van Benthem</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>dhr. mr. J.R. Berculo</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>mw. mr.drs. W.M.C. van den Berg</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>dhr. mr. W.M. van den Bergh</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>mw. mr. M.J. van den Bergh</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>mw. mr. C.M. Berkhout</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>mw. mr. L. van Berkum</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>dhr. mr. A.J. Beukenhorst</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>mw. mr. G.M. Beunk</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>dhr. mr. B.T. Beuving</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>mw. mr. C.W. Bianchi</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>mw. mr. I.M. Bilderbeek</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>mw. mr. L. Biller</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>dhr. mr. N.C.H. Blankevoort</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>mw. mr. C.P. Bleeker</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>dhr. mr. W.B. van Bockel</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>263</th>
+      <td>mw. mr. E.T. Vreugdenhil</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>264</th>
+      <td>dhr. mr. R.H. De Vries</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>265</th>
+      <td>mw. mr. J.A.A.G. de Vries</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>266</th>
+      <td>mw. mr. W.M. de Vries</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>267</th>
+      <td>dhr. mr. J.W. Vriethoff</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>268</th>
+      <td>mw. mr. P. Vrugt</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>269</th>
+      <td>dhr. mr. C.L.J.M. de Waal</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>270</th>
+      <td>dhr. mr. A.Th. de Walle</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>271</th>
+      <td>mw. mr. L.H. Waller</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>272</th>
+      <td>mw. mr. M. van Walraven</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>273</th>
+      <td>dhr. mr. R. van de Water</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>274</th>
+      <td>mw. mr. N.M. van Waterschoot</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>275</th>
+      <td>dhr. mr. M.R.J. van Wel</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>276</th>
+      <td>dhr. mr.drs. E.J. Weller</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>277</th>
+      <td>dhr. mr. A.J. Wesdorp</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>278</th>
+      <td>mw. mr.drs. A.P. Schoonbrood-Wessels</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>279</th>
+      <td>dhr. mr. F.M. Wieland</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>280</th>
+      <td>mw. mr. C.A.E. Wijnker</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>281</th>
+      <td>mw. mr. A.B.M. Wijnveldt</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>282</th>
+      <td>dhr. prof.mr. H.G. van der Wilt</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>283</th>
+      <td>mw. mr.drs. J.J.C.M. Wirken</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>284</th>
+      <td>mw. mr. L.R. Wisse</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>285</th>
+      <td>mw. mr. A.M.C. de Wit</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>286</th>
+      <td>dhr. mr. D.H. De Witte</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>287</th>
+      <td>mw. mr. M. Woerdman</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>288</th>
+      <td>dhr. mr.dr. M.J.F. van der Wolf</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>289</th>
+      <td>dhr. mr. J.C. Zevenberg</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>290</th>
+      <td>mw. mr. J.Th.H. Zimmerman</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>291</th>
+      <td>mw. mr. V. Zuiderbaan</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+    <tr>
+      <th>292</th>
+      <td>mw. mr. A.H. van Zutphen</td>
+      <td>Rechtbank Amsterdam</td>
+      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+    </tr>
+  </tbody>
+</table>
+<p>293 rows × 3 columns</p>
+</div>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -12021,7 +13246,7 @@ normalized: "wj geurts-de veld"</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[185]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select </span>
@@ -12037,6 +13262,63 @@ normalized: "wj geurts-de veld"</p>
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[185]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>count</th>
+      <th>pct</th>
+      <th>is_financial_report</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>201795</td>
+      <td>64.034868</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>113338</td>
+      <td>35.965132</td>
+      <td>True</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
@@ -12048,7 +13330,7 @@ normalized: "wj geurts-de veld"</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[186]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select </span>
@@ -12061,6 +13343,69 @@ normalized: "wj geurts-de veld"</p>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[186]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>count</th>
+      <th>pct</th>
+      <th>was_scanned</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>130253</td>
+      <td>41.332707</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>82627</td>
+      <td>26.219723</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>102253</td>
+      <td>32.447570</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -12084,7 +13429,7 @@ normalized: "wj geurts-de veld"</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[187]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select * from progess_financial_report_cooccurence;&quot;&quot;&quot;</span>
@@ -12099,6 +13444,75 @@ normalized: "wj geurts-de veld"</p>
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[187]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>count</th>
+      <th>pct</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>zero_financial_reports</th>
+      <td>12850</td>
+      <td>33.940835</td>
+    </tr>
+    <tr>
+      <th>zero_progress_reports</th>
+      <td>36</td>
+      <td>0.095087</td>
+    </tr>
+    <tr>
+      <th>more_progress_reports</th>
+      <td>12885</td>
+      <td>34.033281</td>
+    </tr>
+    <tr>
+      <th>more_financial_report</th>
+      <td>790</td>
+      <td>2.086635</td>
+    </tr>
+    <tr>
+      <th>equal_no_of_reports</th>
+      <td>11299</td>
+      <td>29.844163</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
@@ -12110,7 +13524,7 @@ normalized: "wj geurts-de veld"</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[188]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
@@ -12140,6 +13554,368 @@ normalized: "wj geurts-de veld"</p>
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[188]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x10e23ae10&gt;</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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
+vfZaY//dfffdfOhDH2KXXXbhwx/+MI8++uha46yH4qe2JEmSOmta/3bKlzQ2DkmSepiJEydyyimn
+cOKJpQuTZs6cyZQpU7jxxhu5//77eemll9h9993Za6+9+J//+R/mzp27RjnAnDlzmDdvHkOHDqWl
+pYV58+Yxd+5cAGbNmkVLSwvz58/nxRdfZKedduJzn/scACeddBKnnnoqAEcffTTXXHMNn/jEJ4DS
+iJ+7776b6667ju985zvcfPPNnH322QwYMID58+czb948dt55ZwDmzp3LokWLmDdvHlC6XG7TTTfl
+7bff5qmnnmLo0KHMmDGDiRMnsmzZMr785S9z1VVXMXDgQGbMmME3v/lNLrywdAHW22+/vSrJM2rU
+KG644QYGDRrEa6+9tsb+GzZsGLfffju9e/fm5ptv5hvf+AZXXnllu3HWgyOOJEmSJElSXeyyyy68
++OKLPPvss9x///0MGDCAuXPnctRRR7Heeuux5ZZb8tGPfpR77rmHO+64I7ccYOzYsQwdOjT3Pe64
+4w4OP/xwevXqxVZbbcU+++yzatmtt97KHnvswahRo/jjH//IQw89tGrZP/7jPwKw22670dLSsqqt
+I488EoCRI0fygQ98AIDtt9+eJ598ki9/+ctcf/31bLLJJgAcccQRq0ZGtSaOHn30UebNm8e+++7L
+zjvvzPTp01m4cOGq9504ceKq5+PGjWPSpEmcf/75rFixYo1tW7JkCYcffjgjR47kq1/96qr424uz
+HkwcSZIkSZKkujn88MOZNWvWqsRKR/Tr16/qdZYuXcoJJ5zArFmzePDBB/niF7/I0qVLVy3fYIMN
+AFhvvfVYvnz5WtsaMGAA999/P3vvvTfnnnsuX/jCF4BSEmjmzJk89thjRAQ77LADKSVGjBjB3Llz
+mTt3Lg8++CA33nhj7race+65TJ8+nWeeeYbddtuNl19+ebX3/fa3v80+++zDvHnz+O///u/V4m8U
+E0eSJEmSJKluJk6cyOWXX86sWbM4/PDD2XPPPZkxYwYrVqxg8eLF3HbbbYwdO7bd8nIbb7wxr7/+
++qrX48aN48orr2TlypW88MILzJ49G2BVkmWLLbbgjTfeWDXv0dqMGzeOmTNnAjB//nwefPBBAF56
+6SVWrlzJP/3TPzF9+nTmzJkDwHvf+17WW289vvvd765Kir3//e9n8eLF3HnnnQAsW7ZstZFObT3x
+xBPssccenH766QwcOJBnnnlmteVLlixh0KBBAPz6179eZ5z14BxHkiRJkiT1EC0/OKjh7zlixAhe
+f/11Bg0axNZbb81hhx3GnXfeyejRo4kIfvSjH7HVVlu1W/7II4+s1t7mm2/OuHHjGDlyJAcccAA/
+/OEPueWWWxg+fDjbbrstu+66K/3792fTTTfli1/8IiNHjmSrrbZi9913X2esJ5xwAscccwzDhw9n
+2LBhjBgxgv79+7No0SKOPfZYVq5cCcD3v//9VetMnDiRyZMn89RTTwGw/vrrM2vWLE4++WSWLFnC
+8uXLOeWUUxgxYsQa7zd58mQWLFhASonx48czevRo/vSnP61a/rWvfY1jjjmG6dOnc9BB73x27cVZ
+D9E6o3gRjRkzJtVrVnBJktSDODm2JKmHevjhh9lpp526Ooy6e+ONN9hoo414+eWXGTt2LH/+85/Z
+aqutqm5nxYoVLFu2jL59+/LEE0/w8Y9/nEcffZT111+/DlF3XDVx5vWBiLgvpTSmkvdyxJEkSZIk
+SWpqBx98MK+99hpvv/023/72tzuUNILSbe732Wcfli1bRkqJs88+u3BJI2hsnCaOJEmSJElSU2ud
+16izNt54Y5rhyqdGxunk2JIkSZIkScpl4kiSJEmSJEm5TBxJkiRJkiQpl4kjSZIkSZIk5XJybEmS
+JEmSeopp/Wvc3pJ1VjnrrLM455xzeP7555kyZQpTp06tbQw5nn32WU4++WRmzZrVofU32mgj3njj
+jRpH9Y69996bn/zkJ4wZM6Zu71ErJo4kSZIkSVLdnH322dx8880MHjy4Ye+5zTbbdDhpVCvLly+n
+d+/mT7t4qZokSZIkSaqLL33pSzz55JMccMABnHnmmZx00kkATJo0iZNPPpkPf/jDbL/99quSPG+8
+8Qbjx49n1113ZdSoUVx11VUAtLS0sNNOO/HFL36RESNGMGHCBP7+978D8Pjjj/Pxj3+c0aNHs+uu
+u/LEE0/Q0tLCyJEjAVixYgWTJ09m99135wMf+AD/+Z//uSq+H//4x6vKTzvttDXiP/LII7n22mtX
+vZ40aRKzZs1qt83Zs2ez5557csghhzB8+HD+9re/cdBBBzF69GhGjhzJjBkz1niPf/7nf2bMmDGM
+GDFitRiuu+46hg0bxm677cbJJ5/MwQcf3KnPoqOaP/UlSZKk6uRdplDBpQaSJFXr3HPP5frrr+fW
+W2/lmmuuWW3Zc889xx133MEjjzzCIYccwic/+Un69u3L7373OzbZZBNeeuklPvjBD3LIIYcAsGDB
+Ai677DLOP/98jjjiCK688ko+85nP8OlPf5qpU6dy2GGHsXTpUlauXMmLL7646n0uuOAC+vfvzz33
+3MNbb73FuHHjmDBhAgsWLGDBggXcfffdpJQ45JBDuO2229hrr71WrTtx4kRmzpzJQQcdxNtvv80t
+t9zCOeec026bAHPmzGHevHkMHTqUK6+8km222WZV8mnJkjWPt2eccQabbbYZK1asYPz48TzwwAPs
+uOOOHH/88dx2220MHTqUo446quafTaVMHEmSJEmSpIb7h3/4B3r16sXw4cN54YUXAEgp8Y1vfIPb
+bruNXr16sWjRolXLhg4dys477wzAbrvtRktLC6+//jqLFi3isMMOA6Bv375rvM+NN97IAw88sGpU
+05IlS1iwYAE33ngjN954I7vssgtQGu20YMGC1RJHBxxwAF/5yld46623uP7669lrr73YcMMN221z
+/fXXZ+zYsQwdOhSAUaNG8a//+q9MmTKFgw8+mD333HON+GbOnMl5553H8uXLee6555g/fz4rV65k
+++23X9XOUUcdxXnnndf5nd4BJo4kSZIkSVLDbbDBBquep5QA+O1vf8vixYu577776NOnD0OGDGHp
+0qVr1F9vvfVWXaq2Likl/uM//oP99ttvtfIbbriBr3/96xx//PHtrtu3b1/23ntvbrjhBmbMmMGR
+Rx651jZnz55Nv379Vr3ecccdmTNnDtdddx3f+ta3GD9+PKeeeuqq5U899RQ/+clPuOeeexgwYACT
+Jk1atb1F4RxHkiRJkiSpEJYsWcK73/1u+vTpw6233srTTz+91vobb7wxgwcP5ve//z0Ab731Fm++
++eZqdfbbbz/OOeccli1bBsBjjz3G3/72N/bbbz8uvPDCVXdPW7Ro0WqXuLWaOHEiv/rVr7j99tvZ
+f//919pmuWeffZZ3vetdfOYzn2Hy5MnMmTNnteV//etf6devH/379+eFF17gD3/4AwDvf//7efLJ
+J2lpaQHInRupURxxJEmSJElST1HwOe0+/elP84lPfIJRo0YxZswYhg0bts51fvOb33D88cdz6qmn
+0qdPH6644gp69XpnnMwXvvAFWlpa2HXXXUkpMXDgQH7/+98zYcIEHn74YT70oQ8BsNFGG3HJJZfw
+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
+McYYY8xE/guAh3lnlkdKfwAAAABJRU5ErkJggg==
+"
+>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
@@ -12151,7 +13927,7 @@ normalized: "wj geurts-de veld"</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[189]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;SELECT identification, publication_date, is_end_report, content, start_date_insolvency</span>
@@ -12167,6 +13943,94 @@ normalized: "wj geurts-de veld"</p>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[189]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>publication_date</th>
+      <th>is_end_report</th>
+      <th>content</th>
+      <th>start_date_insolvency</th>
+    </tr>
+    <tr>
+      <th>identification</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>01_obr_13_608_F_V_11</th>
+      <td>2018-04-17 12:10:08</td>
+      <td>True</td>
+      <td>VANIERSEL\nLUCHTMAN\nCAT E N\n\nOPENBAAR  FAIL...</td>
+      <td>2013-06-18</td>
+    </tr>
+    <tr>
+      <th>01_obr_13_400_F_V_11</th>
+      <td>2018-04-17 12:08:10</td>
+      <td>True</td>
+      <td>VANIERSEL\nLUCHTMAN\nADVOCATEN\n\nOPEN BAAR FA...</td>
+      <td>2013-04-23</td>
+    </tr>
+    <tr>
+      <th>01_obr_13_399_F_V_10</th>
+      <td>2018-04-17 12:06:21</td>
+      <td>True</td>
+      <td>VANIERSEL\nLUCHTMAN\nADVOCATEN\n\nOPE  N BAAR ...</td>
+      <td>2013-04-23</td>
+    </tr>
+    <tr>
+      <th>01_obr_15_133_F_V_07</th>
+      <td>2018-04-17 12:01:37</td>
+      <td>True</td>
+      <td>VANIERSEL\nLUCHTMAN\nADVOCATEN\n\nOpenbaar  fa...</td>
+      <td>2015-02-24</td>
+    </tr>
+    <tr>
+      <th>01_obr_14_973_F_V_08</th>
+      <td>2018-04-17 12:00:46</td>
+      <td>True</td>
+      <td>VANIERSEL\nLUCHTMAN\nADVOCATEN\n\nOpenbaar  fa...</td>
+      <td>2014-12-16</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -12242,7 +14106,7 @@ verslagperiode eindigen.' (11_rot_12_41_F_V_15)</li>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[190]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Step 1: extract sections from progress reports</span>
@@ -12270,10 +14134,111 @@ verslagperiode eindigen.' (11_rot_12_41_F_V_15)</li>
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[190]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[(&#39;1.&#39;, &#39;Inventarisatie&#39;),
+ (&#39;1.1&#39;, &#39;Directie en organisatie&#39;),
+ (&#39;1.2&#39;, &#39;Winst en verlies&#39;),
+ (&#39;1.3&#39;, &#39;Balanstotaal&#39;),
+ (&#39;1.4&#39;, &#39;Lopende procedures&#39;),
+ (&#39;1.5&#39;, &#39;Verzekeringen&#39;),
+ (&#39;1.6&#39;, &#39;Huur&#39;),
+ (&#39;1.7&#39;, &#39;Oorzaak faillissement&#39;),
+ (&#39;2.&#39;, &#39;Personeel&#39;),
+ (&#39;2.1&#39;, &#39;Aantal ten tijde van faillissement&#39;),
+ (&#39;2.2&#39;, &#39;Aantal in jaar voor faillissement&#39;),
+ (&#39;2.3&#39;, &#39;Datum ontslagaanzegging&#39;),
+ (&#39;2.4&#39;, &#39;Werkzaamheden&#39;),
+ (&#39;3.&#39;, &#39;Activa&#39;),
+ (&#39;3.1&#39;, &#39;Beschrijving&#39;),
+ (&#39;3.2&#39;, &#39;Verkoopopbrengst&#39;),
+ (&#39;3.3&#39;, &#39;Hoogte hypotheek&#39;),
+ (&#39;3.4&#39;, &#39;Boedelbijdrage&#39;),
+ (&#39;3.5&#39;, &#39;Werkzaamheden&#39;),
+ (&#39;3.6&#39;, &#39;Beschrijving&#39;),
+ (&#39;3.7&#39;, &#39;Verkoopopbrengst&#39;),
+ (&#39;3.8&#39;, &#39;Boedelbijdrage&#39;),
+ (&#39;3.9&#39;, &#39;Bodemvoorrecht fiscus&#39;),
+ (&#39;3.10&#39;, &#39;Werkzaamheden&#39;),
+ (&#39;3.11&#39;, &#39;Beschrijving&#39;),
+ (&#39;3.12&#39;, &#39;Verkoopopbrengst&#39;),
+ (&#39;3.13&#39;, &#39;Boedelbijdrage&#39;),
+ (&#39;3.14&#39;, &#39;Werkzaamheden&#39;),
+ (&#39;3.15&#39;, &#39;Beschrijving&#39;),
+ (&#39;3.16&#39;, &#39;Verkoopopbrengst&#39;),
+ (&#39;3.17&#39;, &#39;Werkzaamheden&#39;),
+ (&#39;4.&#39;, &#39;Debiteuren&#39;),
+ (&#39;4.1&#39;, &#39;Omvang debiteuren&#39;),
+ (&#39;4.2&#39;, &#39;Opbrengst&#39;),
+ (&#39;4.3&#39;, &#39;Boedelbijdrage&#39;),
+ (&#39;4.4&#39;, &#39;Werkzaamheden&#39;),
+ (&#39;5.&#39;, &#39;Bank / Zekerheden&#39;),
+ (&#39;5.1&#39;, &#39;Vordering van bank(en)&#39;),
+ (&#39;5.2&#39;, &#39;Leasecontracten&#39;),
+ (&#39;5.3&#39;, &#39;Beschrijving zekerheden&#39;),
+ (&#39;5.4&#39;, &#39;Separatistenpositie&#39;),
+ (&#39;5.5&#39;, &#39;Boedelbijdragen&#39;),
+ (&#39;5.6&#39;, &#39;Eigendomsvoorbehoud&#39;),
+ (&#39;5.7&#39;, &#39;Retentierechten&#39;),
+ (&#39;5.8&#39;, &#39;Reclamerechten&#39;),
+ (&#39;5.9&#39;, &#39;Werkzaamheden&#39;),
+ (&#39;6.&#39;, &#39;Doorstart / voortzetten onderneming&#39;),
+ (&#39;6.1&#39;, &#39;Exploitatie / zekerheden&#39;),
+ (&#39;6.2&#39;, &#39;Financiële verslaglegging&#39;),
+ (&#39;6.3&#39;, &#39;Werkzaamheden&#39;),
+ (&#39;6.4&#39;, &#39;Beschrijving&#39;),
+ (&#39;6.5&#39;, &#39;Verantwoording&#39;),
+ (&#39;6.6&#39;, &#39;Opbrengst&#39;),
+ (&#39;6.7&#39;, &#39;Boedelbijdrage&#39;),
+ (&#39;6.8&#39;, &#39;Werkzaamheden&#39;),
+ (&#39;7.&#39;, &#39;Rechtmatigheid&#39;),
+ (&#39;7.1&#39;, &#39;Boekhoudplicht&#39;),
+ (&#39;7.2&#39;, &#39;Depot jaarrekeningen&#39;),
+ (&#39;7.3&#39;, &#39;Goedk. Verkl. Accountant&#39;),
+ (&#39;7.4&#39;, &#39;Stortingsverpl. aandelen&#39;),
+ (&#39;7.5&#39;, &#39;Onbehoorlijk bestuur&#39;),
+ (&#39;7.6&#39;, &#39;Paulianeus handelen&#39;),
+ (&#39;7.7&#39;, &#39;Werkzaamheden&#39;),
+ (&#39;8.&#39;, &#39;Crediteuren&#39;),
+ (&#39;8.1&#39;, &#39;Boedelvorderingen&#39;),
+ (&#39;8.2&#39;, &#39;Pref. vord. van de fiscus&#39;),
+ (&#39;8.3&#39;, &#39;Pref. vord. van het UWV&#39;),
+ (&#39;8.4&#39;, &#39;Andere pref. crediteuren&#39;),
+ (&#39;8.5&#39;, &#39;Aantal concurrente crediteuren&#39;),
+ (&#39;8.6&#39;, &#39;Bedrag concurrente crediteuren&#39;),
+ (&#39;8.7&#39;, &#39;Verwachte wijze van afwikkeling&#39;),
+ (&#39;8.8&#39;, &#39;Werkzaamheden&#39;),
+ (&#39;9.&#39;, &#39;Procedures&#39;),
+ (&#39;9.1&#39;, &#39;Naam wederpartij(en)&#39;),
+ (&#39;9.2&#39;, &#39;Aard procedure&#39;),
+ (&#39;9.3&#39;, &#39;Stand procedure&#39;),
+ (&#39;9.4&#39;, &#39;Werkzaamheden&#39;),
+ (&#39;10.&#39;, &#39;Overig&#39;),
+ (&#39;10.1&#39;, &#39;Termijn afwikkeling faillissement&#39;),
+ (&#39;10.2&#39;, &#39;Plan van aanpak&#39;),
+ (&#39;10.3&#39;, &#39;Indiening volgend verslag&#39;),
+ (&#39;10.4&#39;, &#39;Werkzaamheden&#39;)]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[191]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">report_content</span> <span class="o">=</span> <span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">][</span><span class="s1">&#39;01_obr_13_1204_F_V_04&#39;</span><span class="p">]</span>
@@ -12284,10 +14249,338 @@ verslagperiode eindigen.' (11_rot_12_41_F_V_15)</li>
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>VANIERSEL
+LUCHTMAN
+ADVOCATEN
+
+Openbaar  faillissementsverslag rechtspersoon  ex art. 73a  Fw.
+
+(digitale  en papieren versie zijn identiek)
+
+Datum: 27 maarl2018
+
+EINDVERSLAG
+
+Nummer:3
+
+Gegevens  onderneming
+
+de naamloze vennootschap  naar het recht van Curaçao
+INTERACTIVE  DESIGN  CHRYSTAL N.V., hierna te noemen:  &#34;de
+vennootschap&#34;, gevestigd en kantoorhoudende aan De Run 2180 te
+(5503 LE) Veldhoven, ingeschreven bij de Kamer  van Koophandel  te
+Brabant  onder nummer 17111379.
+
+Faillissementsnummer
+
+F.01.1311204
+
+Datum uitspraak
+Curator
+Rechter-commissaris
+
+24 december 2013
+mr. R.G.  Roeffen
+mr. C. Schollen-den Besten
+
+Activiteiten ondernem  ing
+
+De vennootschap hield zich volgens  het uittreksel  uit het
+handelsregister  van de Kamer  van Koophandel  onder meer bezig
+met het verlenen van diensten op het gebied van informatie-  en
+communicatietechnologie  alsmede met het ondersteunen  van
+activiteiten  ten behoeve  van de ontwikkeling  van SD technologie.
+
+Omzetgegevens
+
+2013:  €  41 .332,95  (W&amp;V  2013)
+2012: €  269.050,24  (W&amp;V  2012)
+2011: €  621.534,05  (W&amp;V 201 1)
+201 0: €  1 .412.257  (jaarrekening)
+
+Personeel  gemiddeld  aantal  12
+
+Saldo einde  verslagperiode
+Verslagperiode
+Bestede  uren in verslagperiode
+Bestede uren  in totaal
+
+€0
+18 maart  2015 -27 maart201ï
+0 uren
+103,9 uren
+
+ln dit verslag  is de door  Recofa voorgeschreven  nummering voor faillissementsverslagen  gehanteerd.  Daar waar
+nummers  zijn overgeslagen zijn de daarop betrekking  hebbende  ondenrverpen  niet van toepassing  in dit
+faillissement.
+
+Dit verslag is mede  gebaseerd  op inlichtingen  en informatie  die de curator heeft  verkregen/ontvangen  van de
+be.stuurders van de gefailleerde vennootschap. Die informatie is nog  niet in volle omvang op ¡uistneid en
+volledigheid  getoetst.  De nieuwe  tekst in de volgende  faillissementsverslagen  zal in vet ìettórtype  worden
+weergegeven.
+
+I 
+1.1 Directie en organisatie
+
+lnventarisatie
+
+De vennootschap is opgericht op I januari  1999.
+
+Mevrouw  l. Pesuwarissa  is bestuurder van de vennootschap.  Volgens  haar  houdt de naamloze
+vennootschap  naar het recht  van Curaçao lnterdesign N.V. 100% van de aandelen in het kapitaal
+van de vennootschap.  De heer R. Jansen zou op zijn beurt  alle aandelen  houden in het kapitaal
+van lnterdesign N.V.
+
+1.2  Winst  en verlies
+
+2O13: €  55.210,11  (-l-)
+2012: €  422.435,97  (-l-)
+2011:  €.  1.997,37  (-l-)
+2010: €73.285
+1.3 Balanstotaal
+
+2013: €  200.408,53
+2012:  €  325.486,98
+2011: €  219.262,15
+2010:€  395.497,00
+1.4 Lopende  procedures
+
+Er liep ten tijde van het faillissement een beroepsprocedure  bij de rechtbank  Zeeland-West
+Brabant,  sector bestuursrecht,  team belastingrecht,  in verband met door de fiscus  opgelegde
+naheffingsaanslagen LH en OB. Deze  procedure  is niet door de curator  voortgezet.
+
+1.5 Verzekeringen
+
+De curator  zegt  de verzekeringen voor  zover nodig op.
+
+1.6 Huur
+
+De vennootschap  huurde een kantoorruimte  te Veldhoven aan het adres  De Run 2180.  De
+curator heeft  met toestemming van de rechter-commissaris  de huurovereenkomst  opgezegd.
+
+1.7 Oorzaakfaillissement
+
+De vennootschap  hield  zich volgens de bestuurder  primair bezig met het ondersteunen  van
+(buitenlandse)  concernvennootschappen die zich bezighielden met softwareontwikkeling.
+
+Volgens  de bestuurder houdt deze ondersteunende  rol van de vennootschap in: customer
+support en met het geven  van trainingen (mede) ten behoeve  van klanten van de diverse
+buitenlandse  concernvennootschappen.  Klanten  konden  volgens  de bestuurder  ook direct  een
+opdracht  verstrekken  aan de vennootschap, waarna de vennootschap op haar  beurt een
+opdracht  verstrekte  aan één van de buitenlandse  concernvennootschappen.
+
+Een  aantal  werknemers  van de vennootschap  hebben  aangegeven  dat de vennootschap  zich
+primair bezighield  met het aansturen  van de buitenlandse  concernvennootschappen.  Volgens
+deze  werknemers was de ondersteunende rol van de vennootschap  van ondergeschikt belang.
+
+Het concern bestaat volgens de bestuurder uit diverse (buitenlandse) vennootschappen die zich
+richten op het ontwerp en verkoop van complexe technische  &#39;5D&#39;-software.  Deze software  wordt
+hoofdzakelijk  in het buitenland  ontwikkeld,  met name in China,  Taiwan en Verenigde  Staten,
+aldus  de bestuurder.
+
+Pagina 2 van  5
+
+Volgens  de bestuurder  kan er met deze  &#39;5D&#39;-software  een virtueel  ontwerp  worden gemaakt,
+bijvoorbeeld  voor het bouwen van een fabriek of een machine.  De bestuurder  gaf aan dat de
+software ook kan worden  gebruikt als applicatie  voor een online shop. Samsung,  TSMC en
+Philips  zouden  volgens de bestuurder  de software daarvoor  gebruiken.
+
+Ten tijde van het faillissement  lagen  de activiteiten van de vennootschap  stil. Volgens  de
+bestuurder  waren er op datum  faillissement geen opdrachten meer.
+
+De werknemers  hebben  sinds juni 2013 geen salaris ontvangen. Zij hebben  zich daarom
+genoodzaakt  gezien het faillissement van de vennootschap aan te vragen.
+
+2 
+2.1 Aantal  ten tijde van het faillissement
+
+Personeel
+
+12
+
+2.2 Aantal in jaar  voor faillissement
+
+15
+
+2.3 Datumontslagaanzegging
+
+31 december2Ol3
+
+3  Activa
+Zie verslag 1: Er zijn geen activa  aangetroffen.
+
+Wel bleek  er een dollarrekening  bij ING te bestaan. Het saldo (omgerekend  naar Euro&#39;s €  8.250,64)  is
+overgemaakt naar de boedelrekening (zie financieel verslag onder  A1 sub 6).
+
+4  Debiteuren
+Zie verslag 1: Er zijn geen debiteuren aangetroffen.  De oud-werknemers  hebben  verklaard dat het ook
+
+niet erg waarschijnlijk  is dat de vennootschap debiteuren heeft.
+
+5 
+5.1  Vordering(en)  van bank(en)/ financiers
+
+Bank/zekerheden
+
+De vennootschap  werd niet gefinancierd  door een bank  (opgave bestuurder).  Wel  zou
+financiering hebben plaatsgevonden  door middel  van een  rekening-courantverhouding  met de
+naamloze vennootschap  naar het recht van Curaçao  lnterfinance  N.V. (een vennootschap  waar
+de heer Janssen volgens de bestuurder  de contactpersoon is). Deze  rekening-courantverhouding
+is niet schriftelijk vastgelegd,  maar zou wel blijken uit de jaarrekeningen  en financiële
+administratie (opgave  bestuurder_ heeft de vennootschap middels een lening -  welke niet
+administratie.  Volgens  de bestuurder  heeft lnterfinance  N.V. circa €  13 miljoen te vorderen van
+de vennootschap.
+
+5.2 Er is de curator niets gebleken van een zekerheidspositie
+
+Pagina 3 van 5
+
+6
+
+7
+7.1
+
+Doorstart  / voortzetten
+De onderneming is niet voortgezet. De activiteiten  waren  al gestaakt.
+Een doorstart heeft  niet plaatsgevonden.
+
+Bestu  u rdersaansprakel  ijkheid
+Boekhoudplicht
+Onder¿oek  heeft plaatsgevonden,  maar werd verder niet opportuun geacht  in verband  met
+het ontbreken  van verhaalsmogelijkheden.
+
+7.2 Depotjaarrekeningen
+
+2O12: niel gedeponeerd
+2011: 10 april 2013
+2010:8 februari2012
+2009:1  feb¡uari2011
+De jaarrekeningen  zijn nader  onderzocht.
+
+7.3 Goedkeurende verklaring  accountant
+
+Niet van toepassing
+
+7.4 Stortingsverplichting aandelen
+
+De vennootschap  is opgericht  in 1999. Voor zover  de aandelen  niet op rechtmatige wijze zijn
+volgestort  is de rechtsvordering uit hoofde  daarvan inmiddels  verjaard.
+
+7.5 Onbehoorlijk  bestuur/  paulianeus handelen
+
+Ondezoek  heeft plaatsgevonden,  maar werd verder  niet opportuun geacht  in verband  met
+het ontbreken  van verhaalsmogelijkheden.
+
+I
+8.1
+
+Grediteuren
+Boedelvorderingen
+Het UWV heeft  boedelvorderingen ingediend  tot een bedrag  ad €  93.035,50
+
+8.2 Preferente vorderingen van de fiscus
+
+De fiscus heeft vorderingen  ingediend tot een bedrag  ad €  661 .273,00  voornamelijk  met
+betrekking  tot loonheffingen over  de jaren 2008-2013.
+
+8.3 Preferente vorderingen van het Ulil\
+
+Het UWV heeft  preferente  vorderingen ingediend  tot een bedrag  van in totaal€  122.016,16
+
+8.4 Andere preferente crediteuren
+
+Werknemers  hebben  vorderingen ingediend  met  betrekking  tot achterstallig salaris  tot een bedrag
+van in totaal€  393.503,41
+
+8.5 Aantal concurrente crediteuren
+
+Tot op heden hebben tien concurrente crediteuren  een vordering ter verificatie  ingediend bij de
+curator. lnterfinance N.V. (zie paragraaf 5.1)  heeft  geen  vorderingen ingediend.
+
+8.6 Bedrag concurrente crediteuren
+
+€31.124,69
+
+8.7  Venuachte  wijze  van afwikkelen
+
+ln overleg met de rechter-commissaris  zal het faillissement worden opgeheven  vanwege
+gebrek aan baten
+
+Pagina  4 van 5
+
+B.B Werkzaamheden
+
+I
+
+Procedures
+Er liep een beroepsprocedure  bij de rechtbank Zeeland-West-Brabant,  sector  bestuursrecht,
+team belastingrecht,  in verband  met  door  de fiscus opgelegde  naheffingsaanslagen  LH en OB.
+Aangezien  er geen middelen  waren om deze procedure  voort te zetten, is de procedure  niet
+voortgezet.
+
+10
+10.1
+
+Overig
+Termijn afwikke  I ing faill isse me nt
+Enige weken/maanden
+
+10.2 Plan van aanpak
+
+10.3 lndiening volgend verslag
+
+10.4 Werkzaamheden
+
+ln overleg met de rechter-commissaris zal het faillissement worden opgeheven  vanwege
+gebrek aan baten
+
+Breda,  28 maart2018
+
+mr R.G.  Roeffen,
+curator
+
+Van lersel Luchtman  N.V.
+Postbus  44
+5201 AA&#39;s-Hertogenbosch
+Tel.: 073 - 6 27 B0 80
+Fax: 073 - 6 27 80 90
+E-mail : r. roeffen@vil. nl / b. louwerier@vil. nl
+
+Bijlagen
+
+Dit openbaar verslag en het bijbehorende  financieel verslag zijn geen prospectus  of jaarrekening.
+Hoewel de informatie in dit openbaar verslag  zo zorgvuldig mogelijk  is samengesteld, staat de curator
+niet in voor de volledigheid en juistheid  daarvan.  Mogelijk is immers dat onder  andere  bepaalde
+informatie nog  niet beschikbaar is, nog niet geopenbaard kan worden, of - achteraf  - bijgesteld  dient te
+worden. Dit kan ingrijpende  gevolgen hebben  voor de in dit verslag geschetste  perspectieven  voor
+crediteuren. Aan dit
+
+kunnen  derhalve geen  rechten  worden  ontleend
+
+Pagina 5 van 5
+
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[192]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">report_headings</span> <span class="o">=</span> <span class="n">match_headings</span><span class="p">(</span><span class="n">report_content</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -12301,7 +14594,7 @@ verslagperiode eindigen.' (11_rot_12_41_F_V_15)</li>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[172]:</div>
+<div class="prompt input_prompt">In&nbsp;[193]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># BREADTH FIRST SEARCH: eerst van zoveel mogelijk rapporten een zo weid mogelijk net uitgooien, dan inzoomen</span>
@@ -12375,7 +14668,7 @@ all headings report in model: True
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[194]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># store matched headers as json strings</span>
@@ -12387,10 +14680,92 @@ all headings report in model: True
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[194]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>identification
+01_obr_13_608_F_V_11     [[&#34;1.1&#34;, &#34;Directie  en organisatie&#34;], [&#34;1.2&#34;, ...
+01_obr_13_400_F_V_11     [[&#34;1.1&#34;, &#34;Directie  en organisatie&#34;], [&#34;1.2&#34;, ...
+01_obr_13_399_F_V_10     [[&#34;1.07&#34;, &#34;2.175,-&#34;], [&#34;1.1&#34;, &#34;Directie  en or...
+01_obr_15_133_F_V_07     [[&#34;1.1&#34;, &#34;Directie  en organisatie&#34;], [&#34;1.13&#34;,...
+01_obr_14_973_F_V_08     [[&#34;1.1&#34;, &#34;Directie  en organisatie&#34;], [&#34;76.95&#34;...
+10_rot_14_1054_F_V_10    [[&#34;1.1&#34;, &#34;Directie en organisatie &#34;], [&#34;1.2&#34;, ...
+10_rot_14_1055_F_V_10    [[&#34;1.1&#34;, &#34;Directie en organisatie &#34;], [&#34;1.2&#34;, ...
+10_rot_12_90_F_V_16      [[&#34;1.1&#34;, &#34;Directie en Organisatie&#34;], [&#34;1.2&#34;, &#34;...
+11_rot_12_41_F_V_15      [[&#34;1.1&#34;, &#34;Inventarisatie &#34;], [&#34;1.2&#34;, &#34;Winst en...
+13_ams_15_478_F_V_06     [[&#34;1.1&#34;, &#34;.  Directie en organisatie &#34;], [&#34;1.2...
+05_gel_16_674_F_V_05     [[&#34;1.1&#34;, &#34;Directie en organisatie&#34;], [&#34;1.2&#34;, &#34;...
+05_gel_16_666_F_V_05     [[&#34;1.1&#34;, &#34;Directie en organisatie&#34;], [&#34;1.2&#34;, &#34;...
+16_mne_16_568_F_V_01     [[&#34;1.1&#34;, &#34;Directie en organisatie&#34;], [&#34;1.2&#34;, &#34;...
+05_gel_16_660_F_V_05     [[&#34;1.1&#34;, &#34;Directie en organisatie&#34;], [&#34;1.2&#34;, &#34;...
+01_obr_13_1204_F_V_04    [[&#34;1.1&#34;, &#34;Directie en organisatie&#34;], [&#34;1.2&#34;, &#34;...
+01_obr_13_293_F_V_09     [[&#34;1.1&#34;, &#34;Directie  en organisatie:&#34;], [&#34;1.2&#34;,...
+01_obr_15_189_F_V_07                                                    []
+01_obr_15_188_F_V_08                                                    []
+13_ams_14_651_F_V_06     [[&#34;1.1&#34;, &#34;Directie en organisatie &#34;], [&#34;1.2&#34;, ...
+13_ams_14_497_F_V_07     [[&#34;1.1&#34;, &#34;Directie en organisatie &#34;], [&#34;1.2&#34;, ...
+01_obr_13_1107_F_V_08    [[&#34;1.1&#34;, &#34;Directie  en organisatie&#34;], [&#34;1.2&#34;, ...
+10_rot_11_359_F_V_15     [[&#34;1.1&#34;, &#34;. Directie  en organisatie&#34;], [&#34;1.2&#34;...
+18_nne_15_225_F_V_11     [[&#34;1.1&#34;, &#34;Directie en organisatie &#34;], [&#34;1.2&#34;, ...
+10_rot_14_725_F_V_11     [[&#34;1.1&#34;, &#34;De voormelde uren zijn inclusief de ...
+10_rot_14_693_F_V_08     [[&#34;1.1&#34;, &#34;Directie en organisatie &#34;], [&#34;1.2&#34;, ...
+13_ams_15_42_F_V_06      [[&#34;7.1&#34;, &#34;PERSONEEL &#34;], [&#34;7.2&#34;, &#34;7.3 &#34;], [&#34;7.4...
+13_ams_13_6_F_V_14       [[&#34;1.1&#34;, &#34;. Directie en organisatie&#34;], [&#34;1.2&#34;,...
+13_ams_15_15_F_V_09      [[&#34;3.5&#34;, &#34;Beschrijving&#34;], [&#34;3.6&#34;, &#34;Verkoopopbr...
+13_ams_09_386_F_V_18     [[&#34;3.69&#34;, &#34;6,9 uur&#34;], [&#34;3.2&#34;, &#34;0pbrengsten&#34;], ...
+10_rot_12_592_F_V_12     [[&#34;1.1&#34;, &#34;Directie en Organisatie&#34;], [&#34;1.2&#34;, &#34;...
+                                               ...                        
+01_obr_15_30_F_V_03      [[&#34;1.1&#34;, &#34;D\u00edrectie en organisatie:&#34;], [&#34;1...
+02_zwb_15_563_F_V_02     [[&#34;1.1&#34;, &#34;Directie en organisatie:  &#34;], [&#34;1.2&#34;...
+05_gel_15_772_F_V_02     [[&#34;1.1&#34;, &#34;Inventarisatie &#34;], [&#34;1.2&#34;, &#34;Winst en...
+05_gel_15_771_F_V_02     [[&#34;1.1&#34;, &#34;Inventarisatie &#34;], [&#34;1.2&#34;, &#34;Winst en...
+05_gel_15_770_F_V_02     [[&#34;1.1&#34;, &#34;Inventarisatie &#34;], [&#34;1.2&#34;, &#34;Winst en...
+01_obr_14_95_F_V_05      [[&#34;1.1&#34;, &#34;Directie en organisatie &#34;], [&#34;1.2&#34;, ...
+13_ams_13_493_F_V_06     [[&#34;6.1&#34;, &#34;7. &#34;], [&#34;7.1&#34;, &#34;7.2 &#34;], [&#34;8.1&#34;, &#34;8.2...
+13_ams_14_429_F_V_05     [[&#34;1.1&#34;, &#34;1.2 &#34;], [&#34;1.3&#34;, &#34;1.4 &#34;], [&#34;1.5&#34;, &#34;1....
+18_nne_15_177_F_V_04     [[&#34;1.1&#34;, &#34;Directie en organisatie   &#34;], [&#34;1.2&#34;...
+05_gel_14_619_F_V_04     [[&#34;1.1&#34;, &#34;Vordering van bank(en) &#34;], [&#34;1.2&#34;, &#34;...
+05_gel_14_620_F_V_04     [[&#34;1.1&#34;, &#34;Vordering van bank(en) &#34;], [&#34;1.2&#34;, &#34;...
+05_gel_14_617_F_V_06     [[&#34;1.1&#34;, &#34;Omvang debiteuren &#34;], [&#34;2.1&#34;, &#34;Vorde...
+03_lim_15_95_F_V_04      [[&#34;1.1&#34;, &#34;Directie en organisatie &#34;], [&#34;1.2&#34;, ...
+04_lim_13_216_F_V_07     [[&#34;1.1&#34;, &#34;Directie en organisatie &#34;], [&#34;1.2&#34;, ...
+04_lim_13_92_F_V_07      [[&#34;1.1&#34;, &#34;Directie en organisatie &#34;], [&#34;1.2&#34;, ...
+05_gel_14_302_F_V_06     [[&#34;1.1&#34;, &#34;Directie en organisatie  &#34;], [&#34;1.2&#34;,...
+16_mne_15_509_F_V_03     [[&#34;1.1&#34;, &#34;Inventarisatie&#34;], [&#34;1.2&#34;, &#34;Winst en ...
+16_mne_15_508_F_V_03     [[&#34;1.1&#34;, &#34;Inventarisatie&#34;], [&#34;1.2&#34;, &#34;Winst en ...
+04_lim_12_229_F_V_08     [[&#34;1.1&#34;, &#34;Directie en organisatie &#34;], [&#34;1.2&#34;, ...
+04_lim_12_228_F_V_08     [[&#34;1.1&#34;, &#34;Directie en organisatie &#34;], [&#34;1.2&#34;, ...
+04_lim_12_227_F_V_08     [[&#34;1.1&#34;, &#34;Directie en organisatie &#34;], [&#34;1.2&#34;, ...
+09_dha_12_470_F_V_09     [[&#34;1.2&#34;, &#34;. \tWinst en verlies  &#34;], [&#34;1.3&#34;, &#34;....
+09_dha_14_459_F_V_05     [[&#34;1.2&#34;, &#34;. \tWinst en verlies  &#34;], [&#34;1.3&#34;, &#34;....
+01_obr_15_122_F_V_03     [[&#34;1.2&#34;, &#34;Winst en verlies &#34;], [&#34;1.3&#34;, &#34;Balans...
+05_gel_13_903_F_V_08     [[&#34;17.53&#34;, &#34;7,17 &#34;], [&#34;18.45&#34;, &#34;3,17 &#34;], [&#34;8.1...
+05_gel_13_902_F_V_08     [[&#34;17.53&#34;, &#34;7,17 &#34;], [&#34;18.45&#34;, &#34;3,17 &#34;], [&#34;8.1...
+05_gel_13_901_F_V_08     [[&#34;17.53&#34;, &#34;7,17 &#34;], [&#34;18.45&#34;, &#34;3,17 &#34;], [&#34;8.1...
+13_ams_13_275_F_V_08     [[&#34;29.24&#34;, &#34;4,70 &#34;], [&#34;1.1&#34;, &#34;Directie en orga...
+13_ams_15_243_F_V_03     [[&#34;1.1&#34;, &#34;Directie en organisatie &#34;], [&#34;1.2&#34;, ...
+06_gel_11_170_F_V_11     [[&#34;1.1&#34;, &#34;Activa &#34;], [&#34;2.1&#34;, &#34;Vordering van ba...
+Name: headings, Length: 1000, dtype: object</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[195]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;heading_numbers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">get_heading_numbers</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
@@ -12401,10 +14776,92 @@ all headings report in model: True
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[195]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>identification
+01_obr_13_608_F_V_11     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;20.84&#34;, &#34;46.29&#34;,...
+01_obr_13_400_F_V_11     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;2....
+01_obr_13_399_F_V_10     [&#34;1.07&#34;, &#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1...
+01_obr_15_133_F_V_07     [&#34;1.1&#34;, &#34;1.13&#34;, &#34;56.10&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, ...
+01_obr_14_973_F_V_08     [&#34;1.1&#34;, &#34;76.95&#34;, &#34;68.09&#34;, &#34;3.42&#34;, &#34;1.2&#34;, &#34;1.3&#34;...
+10_rot_14_1054_F_V_10    [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+10_rot_14_1055_F_V_10    [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+10_rot_12_90_F_V_16      [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.4&#34;, &#34;1.6&#34;, &#34;2.1&#34;, &#34;2.3&#34;, &#34;3....
+11_rot_12_41_F_V_15      [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+13_ams_15_478_F_V_06     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+05_gel_16_674_F_V_05     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+05_gel_16_666_F_V_05     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+16_mne_16_568_F_V_01     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+05_gel_16_660_F_V_05     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+01_obr_13_1204_F_V_04    [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+01_obr_13_293_F_V_09     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+01_obr_15_189_F_V_07                                                  null
+01_obr_15_188_F_V_08                                                  null
+13_ams_14_651_F_V_06     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+13_ams_14_497_F_V_07     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+01_obr_13_1107_F_V_08    [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;2....
+10_rot_11_359_F_V_15     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+18_nne_15_225_F_V_11     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+10_rot_14_725_F_V_11     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+10_rot_14_693_F_V_08     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+13_ams_15_42_F_V_06      [&#34;7.1&#34;, &#34;7.2&#34;, &#34;7.4&#34;, &#34;7.6&#34;, &#34;8.1&#34;, &#34;8.3&#34;, &#34;8....
+13_ams_13_6_F_V_14       [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+13_ams_15_15_F_V_09      [&#34;3.5&#34;, &#34;3.6&#34;, &#34;3.7&#34;, &#34;3.9&#34;, &#34;3.10&#34;, &#34;3.11&#34;, &#34;...
+13_ams_09_386_F_V_18     [&#34;3.69&#34;, &#34;3.2&#34;, &#34;3.3&#34;, &#34;3.12&#34;, &#34;3.13&#34;, &#34;3.14&#34;,...
+10_rot_12_592_F_V_12     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;38.00&#34;, &#34;1.3&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;...
+                                               ...                        
+01_obr_15_30_F_V_03      [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.6&#34;, &#34;1.7&#34;, &#34;2....
+02_zwb_15_563_F_V_02     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+05_gel_15_772_F_V_02     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+05_gel_15_771_F_V_02     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+05_gel_15_770_F_V_02     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+01_obr_14_95_F_V_05      [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+13_ams_13_493_F_V_06     [&#34;6.1&#34;, &#34;7.1&#34;, &#34;8.1&#34;, &#34;8.3&#34;, &#34;8.5&#34;, &#34;8.7&#34;, &#34;9....
+13_ams_14_429_F_V_05     [&#34;1.1&#34;, &#34;1.3&#34;, &#34;1.5&#34;, &#34;1.7&#34;, &#34;3.1&#34;, &#34;3.3&#34;, &#34;3....
+18_nne_15_177_F_V_04     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+05_gel_14_619_F_V_04     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;2.1&#34;, &#34;2.2&#34;, &#34;3.1&#34;, &#34;3....
+05_gel_14_620_F_V_04     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;2.1&#34;, &#34;2.2&#34;, &#34;3.1&#34;, &#34;3....
+05_gel_14_617_F_V_06     [&#34;1.1&#34;, &#34;2.1&#34;, &#34;3.1&#34;, &#34;3.2&#34;, &#34;4.1&#34;, &#34;4.2&#34;, &#34;4....
+03_lim_15_95_F_V_04      [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.6&#34;, &#34;2.1&#34;, &#34;2....
+04_lim_13_216_F_V_07     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.5&#34;, &#34;1.7&#34;, &#34;2.1&#34;, &#34;2....
+04_lim_13_92_F_V_07      [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+05_gel_14_302_F_V_06     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;3.1&#34;, &#34;3.2&#34;, &#34;3.3&#34;, &#34;3.4&#34;, &#34;3....
+16_mne_15_509_F_V_03     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+16_mne_15_508_F_V_03     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.7&#34;, &#34;2....
+04_lim_12_229_F_V_08     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+04_lim_12_228_F_V_08     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+04_lim_12_227_F_V_08     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+09_dha_12_470_F_V_09     [&#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1.7&#34;, &#34;2....
+09_dha_14_459_F_V_05     [&#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1.7&#34;, &#34;2....
+01_obr_15_122_F_V_03     [&#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1.7&#34;, &#34;1....
+05_gel_13_903_F_V_08     [&#34;17.53&#34;, &#34;18.45&#34;, &#34;8.1&#34;, &#34;8.2&#34;, &#34;8.3&#34;, &#34;8.5&#34;,...
+05_gel_13_902_F_V_08     [&#34;17.53&#34;, &#34;18.45&#34;, &#34;8.1&#34;, &#34;8.2&#34;, &#34;8.3&#34;, &#34;8.5&#34;,...
+05_gel_13_901_F_V_08     [&#34;17.53&#34;, &#34;18.45&#34;, &#34;8.1&#34;, &#34;8.2&#34;, &#34;8.3&#34;, &#34;8.5&#34;,...
+13_ams_13_275_F_V_08     [&#34;29.24&#34;, &#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;...
+13_ams_15_243_F_V_03     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
+06_gel_11_170_F_V_11     [&#34;1.1&#34;, &#34;2.1&#34;, &#34;2.2&#34;, &#34;2.3&#34;, &#34;3.1&#34;, &#34;3.2&#34;, &#34;4....
+Name: heading_numbers, Length: 1000, dtype: object</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[196]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;strictly_increasing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;heading_numbers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
@@ -12416,10 +14873,92 @@ all headings report in model: True
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[196]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>identification
+01_obr_13_608_F_V_11     False
+01_obr_13_400_F_V_11     False
+01_obr_13_399_F_V_10     False
+01_obr_15_133_F_V_07     False
+01_obr_14_973_F_V_08     False
+10_rot_14_1054_F_V_10    False
+10_rot_14_1055_F_V_10    False
+10_rot_12_90_F_V_16      False
+11_rot_12_41_F_V_15      False
+13_ams_15_478_F_V_06     False
+05_gel_16_674_F_V_05     False
+05_gel_16_666_F_V_05     False
+16_mne_16_568_F_V_01     False
+05_gel_16_660_F_V_05     False
+01_obr_13_1204_F_V_04     True
+01_obr_13_293_F_V_09     False
+01_obr_15_189_F_V_07     False
+01_obr_15_188_F_V_08     False
+13_ams_14_651_F_V_06      True
+13_ams_14_497_F_V_07      True
+01_obr_13_1107_F_V_08    False
+10_rot_11_359_F_V_15     False
+18_nne_15_225_F_V_11     False
+10_rot_14_725_F_V_11     False
+10_rot_14_693_F_V_08     False
+13_ams_15_42_F_V_06       True
+13_ams_13_6_F_V_14       False
+13_ams_15_15_F_V_09      False
+13_ams_09_386_F_V_18     False
+10_rot_12_592_F_V_12     False
+                         ...  
+01_obr_15_30_F_V_03      False
+02_zwb_15_563_F_V_02     False
+05_gel_15_772_F_V_02     False
+05_gel_15_771_F_V_02     False
+05_gel_15_770_F_V_02     False
+01_obr_14_95_F_V_05      False
+13_ams_13_493_F_V_06      True
+13_ams_14_429_F_V_05      True
+18_nne_15_177_F_V_04     False
+05_gel_14_619_F_V_04      True
+05_gel_14_620_F_V_04      True
+05_gel_14_617_F_V_06      True
+03_lim_15_95_F_V_04      False
+04_lim_13_216_F_V_07     False
+04_lim_13_92_F_V_07      False
+05_gel_14_302_F_V_06     False
+16_mne_15_509_F_V_03     False
+16_mne_15_508_F_V_03     False
+04_lim_12_229_F_V_08     False
+04_lim_12_228_F_V_08     False
+04_lim_12_227_F_V_08     False
+09_dha_12_470_F_V_09     False
+09_dha_14_459_F_V_05     False
+01_obr_15_122_F_V_03     False
+05_gel_13_903_F_V_08     False
+05_gel_13_902_F_V_08     False
+05_gel_13_901_F_V_08     False
+13_ams_13_275_F_V_08     False
+13_ams_15_243_F_V_03     False
+06_gel_11_170_F_V_11      True
+Name: strictly_increasing, Length: 1000, dtype: bool</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[115]:</div>
+<div class="prompt input_prompt">In&nbsp;[197]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># report percentage strictly increasing</span>
@@ -12436,7 +14975,7 @@ all headings report in model: True
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[115]:</div>
+<div class="prompt output_prompt">Out[197]:</div>
 
 
 
@@ -12453,7 +14992,7 @@ all headings report in model: True
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[198]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;only_model_headings&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;heading_numbers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
@@ -12465,10 +15004,92 @@ all headings report in model: True
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[198]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>identification
+01_obr_13_608_F_V_11     False
+01_obr_13_400_F_V_11     False
+01_obr_13_399_F_V_10     False
+01_obr_15_133_F_V_07     False
+01_obr_14_973_F_V_08     False
+10_rot_14_1054_F_V_10    False
+10_rot_14_1055_F_V_10    False
+10_rot_12_90_F_V_16      False
+11_rot_12_41_F_V_15      False
+13_ams_15_478_F_V_06     False
+05_gel_16_674_F_V_05     False
+05_gel_16_666_F_V_05     False
+16_mne_16_568_F_V_01     False
+05_gel_16_660_F_V_05     False
+01_obr_13_1204_F_V_04     True
+01_obr_13_293_F_V_09     False
+01_obr_15_189_F_V_07     False
+01_obr_15_188_F_V_08     False
+13_ams_14_651_F_V_06      True
+13_ams_14_497_F_V_07      True
+01_obr_13_1107_F_V_08    False
+10_rot_11_359_F_V_15     False
+18_nne_15_225_F_V_11     False
+10_rot_14_725_F_V_11     False
+10_rot_14_693_F_V_08     False
+13_ams_15_42_F_V_06       True
+13_ams_13_6_F_V_14       False
+13_ams_15_15_F_V_09      False
+13_ams_09_386_F_V_18     False
+10_rot_12_592_F_V_12     False
+                         ...  
+01_obr_15_30_F_V_03      False
+02_zwb_15_563_F_V_02     False
+05_gel_15_772_F_V_02     False
+05_gel_15_771_F_V_02     False
+05_gel_15_770_F_V_02     False
+01_obr_14_95_F_V_05      False
+13_ams_13_493_F_V_06      True
+13_ams_14_429_F_V_05      True
+18_nne_15_177_F_V_04     False
+05_gel_14_619_F_V_04      True
+05_gel_14_620_F_V_04      True
+05_gel_14_617_F_V_06      True
+03_lim_15_95_F_V_04      False
+04_lim_13_216_F_V_07     False
+04_lim_13_92_F_V_07      False
+05_gel_14_302_F_V_06     False
+16_mne_15_509_F_V_03     False
+16_mne_15_508_F_V_03     False
+04_lim_12_229_F_V_08     False
+04_lim_12_228_F_V_08     False
+04_lim_12_227_F_V_08     False
+09_dha_12_470_F_V_09     False
+09_dha_14_459_F_V_05     False
+01_obr_15_122_F_V_03     False
+05_gel_13_903_F_V_08     False
+05_gel_13_902_F_V_08     False
+05_gel_13_901_F_V_08     False
+13_ams_13_275_F_V_08     False
+13_ams_15_243_F_V_03     False
+06_gel_11_170_F_V_11      True
+Name: strictly_increasing, Length: 1000, dtype: bool</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[199]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;only_model_headings&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;heading_numbers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
@@ -12480,10 +15101,92 @@ all headings report in model: True
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[199]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>identification
+01_obr_13_608_F_V_11     False
+01_obr_13_400_F_V_11     False
+01_obr_13_399_F_V_10     False
+01_obr_15_133_F_V_07     False
+01_obr_14_973_F_V_08     False
+10_rot_14_1054_F_V_10     True
+10_rot_14_1055_F_V_10     True
+10_rot_12_90_F_V_16      False
+11_rot_12_41_F_V_15      False
+13_ams_15_478_F_V_06     False
+05_gel_16_674_F_V_05      True
+05_gel_16_666_F_V_05      True
+16_mne_16_568_F_V_01      True
+05_gel_16_660_F_V_05      True
+01_obr_13_1204_F_V_04     True
+01_obr_13_293_F_V_09      True
+01_obr_15_189_F_V_07     False
+01_obr_15_188_F_V_08     False
+13_ams_14_651_F_V_06     False
+13_ams_14_497_F_V_07     False
+01_obr_13_1107_F_V_08     True
+10_rot_11_359_F_V_15     False
+18_nne_15_225_F_V_11      True
+10_rot_14_725_F_V_11     False
+10_rot_14_693_F_V_08      True
+13_ams_15_42_F_V_06       True
+13_ams_13_6_F_V_14       False
+13_ams_15_15_F_V_09       True
+13_ams_09_386_F_V_18     False
+10_rot_12_592_F_V_12     False
+                         ...  
+01_obr_15_30_F_V_03       True
+02_zwb_15_563_F_V_02      True
+05_gel_15_772_F_V_02      True
+05_gel_15_771_F_V_02      True
+05_gel_15_770_F_V_02      True
+01_obr_14_95_F_V_05       True
+13_ams_13_493_F_V_06      True
+13_ams_14_429_F_V_05      True
+18_nne_15_177_F_V_04      True
+05_gel_14_619_F_V_04      True
+05_gel_14_620_F_V_04      True
+05_gel_14_617_F_V_06     False
+03_lim_15_95_F_V_04       True
+04_lim_13_216_F_V_07      True
+04_lim_13_92_F_V_07       True
+05_gel_14_302_F_V_06     False
+16_mne_15_509_F_V_03      True
+16_mne_15_508_F_V_03      True
+04_lim_12_229_F_V_08      True
+04_lim_12_228_F_V_08      True
+04_lim_12_227_F_V_08      True
+09_dha_12_470_F_V_09     False
+09_dha_14_459_F_V_05      True
+01_obr_15_122_F_V_03     False
+05_gel_13_903_F_V_08     False
+05_gel_13_902_F_V_08     False
+05_gel_13_901_F_V_08     False
+13_ams_13_275_F_V_08     False
+13_ams_15_243_F_V_03      True
+06_gel_11_170_F_V_11     False
+Name: only_model_headings, Length: 1000, dtype: bool</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[114]:</div>
+<div class="prompt input_prompt">In&nbsp;[200]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># report percentage only model headings</span>
@@ -12500,7 +15203,7 @@ all headings report in model: True
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[114]:</div>
+<div class="prompt output_prompt">Out[200]:</div>
 
 
 
@@ -12517,7 +15220,7 @@ all headings report in model: True
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[174]:</div>
+<div class="prompt input_prompt">In&nbsp;[201]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># inspect not strictly increasing</span>
@@ -12571,19 +15274,6 @@ all headings report in model: True
 </div>
 </div>
 
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
-
-</div>
 </div>
 </div>
 

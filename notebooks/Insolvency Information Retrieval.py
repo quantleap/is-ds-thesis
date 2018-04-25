@@ -3,7 +3,7 @@
 
 # # Setup
 
-# In[ ]:
+# In[175]:
 
 
 #import pdb; pdb.set_trace()
@@ -15,7 +15,7 @@ import re
 import json
 
 
-# In[ ]:
+# In[176]:
 
 
 # connection to the database
@@ -35,7 +35,7 @@ print('CONNECTION ESTABLISHED')
 
 # # Insolvents
 
-# In[ ]:
+# In[177]:
 
 
 sql = """select count(distinct case_number) 
@@ -45,7 +45,7 @@ no_insolvents = pd.read_sql(sql, con).iloc[0][0]
 print('the total number of insolvents cases in the database is {}'.format(no_insolvents))
 
 
-# In[ ]:
+# In[178]:
 
 
 sql = """select start_date_insolvency is not null as known, count(*)
@@ -57,7 +57,7 @@ print('fraction of known start date')
 df_known_start_date
 
 
-# In[ ]:
+# In[179]:
 
 
 df_known_start_date.plot.pie(y='count', labels=df_known_start_date['known'])
@@ -65,7 +65,7 @@ df_known_start_date.plot.pie(y='count', labels=df_known_start_date['known'])
 
 # # Judges
 
-# In[ ]:
+# In[180]:
 
 
 sql = """select count(supervisory_judge) as no_cases, supervisory_judge
@@ -103,7 +103,7 @@ pd.read_sql(sql, con)
 # 7. strip leading and trailing spaces
 # 
 
-# In[ ]:
+# In[181]:
 
 
 sql = """select distinct supervisory_judge
@@ -120,20 +120,20 @@ def normalize_judge_name(name):
 non_normalized_name['supervisory_judge'].apply(normalize_judge_name)[0:10]
 
 
-# In[ ]:
+# In[182]:
 
 
 # rechters_df = pd.read_html('http://ors.openstate.eu/relations')[0]
 rechters_df = pd.read_json('http://ors.openstate.eu/relations/json')
 
 
-# In[ ]:
+# In[183]:
 
 
 rechters_df
 
 
-# In[ ]:
+# In[184]:
 
 
 rechters_df[rechters_df['set'] == 'Rechtbank Amsterdam']
@@ -143,7 +143,7 @@ rechters_df[rechters_df['set'] == 'Rechtbank Amsterdam']
 
 # ## Split voortgangs vs financiele rapportages
 
-# In[ ]:
+# In[185]:
 
 
 sql = """select 
@@ -157,7 +157,7 @@ pd.read_sql(sql, con)
 
 # ## Split PDF was scanned vs converted
 
-# In[ ]:
+# In[186]:
 
 
 sql = """select 
@@ -173,7 +173,7 @@ pd.read_sql(sql, con)
 
 # ## praktijk van het rapporteren voortgangsverslagen met/zonder financiele bijlage
 
-# In[ ]:
+# In[187]:
 
 
 sql = """select * from progess_financial_report_cooccurence;"""
@@ -186,7 +186,7 @@ df
 
 # ## rapportages over tijd
 
-# In[ ]:
+# In[188]:
 
 
 sql = """
@@ -214,7 +214,7 @@ df.plot.bar(stacked=True, figsize=(20, 5), title='publicaties per maand')
 
 # ## steekproef van niet OCR eindverslagen
 
-# In[ ]:
+# In[189]:
 
 
 sql = '''SELECT identification, publication_date, is_end_report, content, start_date_insolvency
@@ -282,7 +282,7 @@ df_reports.head()
 
 # ### Kandidaat sectie headers
 
-# In[ ]:
+# In[190]:
 
 
 # Step 1: extract sections from progress reports
@@ -306,14 +306,14 @@ model_heading_numbers = list(zip(*model_headings))[0]
 model_headings
 
 
-# In[ ]:
+# In[191]:
 
 
 report_content = df_reports['content']['01_obr_13_1204_F_V_04']
 print(report_content)
 
 
-# In[ ]:
+# In[192]:
 
 
 report_headings = match_headings(report_content, level=1)
@@ -321,7 +321,7 @@ report_heading_numbers = list(zip(*report_headings))[0]
 
 
 
-# In[172]:
+# In[193]:
 
 
 # BREADTH FIRST SEARCH: eerst van zoveel mogelijk rapporten een zo weid mogelijk net uitgooien, dan inzoomen
@@ -369,7 +369,7 @@ print('is strictly increasing: {}'.format(is_strictly_increasing_heading_numbers
 print('all headings report in model: {}'.format(all_report_headings_in_model(report_heading_numbers, model_heading_numbers)))
 
 
-# In[ ]:
+# In[194]:
 
 
 # store matched headers as json strings
@@ -377,14 +377,14 @@ df_reports['headings'] = df_reports['content'].apply(lambda x: json.dumps(match_
 df_reports['headings']
 
 
-# In[ ]:
+# In[195]:
 
 
 df_reports['heading_numbers'] = df_reports['content'].apply(lambda x: json.dumps(get_heading_numbers(x)))
 df_reports['heading_numbers']
 
 
-# In[ ]:
+# In[196]:
 
 
 df_reports['strictly_increasing'] = df_reports['heading_numbers'].apply(
@@ -392,14 +392,14 @@ df_reports['strictly_increasing'] = df_reports['heading_numbers'].apply(
 df_reports['strictly_increasing']
 
 
-# In[115]:
+# In[197]:
 
 
 # report percentage strictly increasing
 df_reports['strictly_increasing'][df_reports['strictly_increasing'] == True].count() / df_reports['strictly_increasing'].count() * 100
 
 
-# In[ ]:
+# In[198]:
 
 
 df_reports['only_model_headings'] = df_reports['heading_numbers'].apply(
@@ -407,7 +407,7 @@ df_reports['only_model_headings'] = df_reports['heading_numbers'].apply(
 df_reports['strictly_increasing']
 
 
-# In[ ]:
+# In[199]:
 
 
 df_reports['only_model_headings'] = df_reports['heading_numbers'].apply(
@@ -415,14 +415,14 @@ df_reports['only_model_headings'] = df_reports['heading_numbers'].apply(
 df_reports['only_model_headings']
 
 
-# In[114]:
+# In[200]:
 
 
 # report percentage only model headings
 df_reports['only_model_headings'][df_reports['only_model_headings'] == True].count() / df_reports['only_model_headings'].count() * 100
 
 
-# In[174]:
+# In[201]:
 
 
 # inspect not strictly increasing
@@ -435,10 +435,4 @@ for a, b in zip(heading_numbers, heading_numbers[1:]):
     print(float(a), float(b), float(a)<float(b))
     
 # finding: in many reports 3.10 became 3.1 even though the PDF shows 3.10, PDFMiner issue ?
-
-
-# In[ ]:
-
-
-
 
