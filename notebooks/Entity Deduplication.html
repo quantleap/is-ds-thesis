@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>Insolvency Information Retrieval</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>Entity Deduplication</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 <style type="text/css">
@@ -11775,7 +11775,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Setup">Setup<a class="anchor-link" href="#Setup">&#182;</a></h4>
+<h1 id="Setup">Setup<a class="anchor-link" href="#Setup">&#182;</a></h1>
 </div>
 </div>
 </div>
@@ -11797,11 +11797,10 @@ div#notebook {
 <span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="k">import</span> <span class="n">create_engine</span>
 
 <span class="c1"># set username/password here:</span>
-<span class="n">db</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;username&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;DB_QIR_USERNAME&#39;</span><span class="p">],</span>
-      <span class="s1">&#39;password&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;DB_QIR_PASSWORD&#39;</span><span class="p">],</span>
-      <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;www.quantleap.nl&#39;</span><span class="p">,</span>  <span class="c1"># localhost</span>
+<span class="n">db</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;username&#39;</span><span class="p">:</span> <span class="s1">&#39;dbusr&#39;</span><span class="p">,</span>  <span class="c1">#os.environ[&#39;USERNAME_11323671&#39;],</span>
+      <span class="s1">&#39;password&#39;</span><span class="p">:</span> <span class="s1">&#39;dbpw&#39;</span><span class="p">,</span>  <span class="c1">#os.environ[&#39;PASSWORD_11323671&#39;],</span>
+      <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span>  <span class="c1"># &#39;quantleap.nl:5432&#39;,</span>
       <span class="s1">&#39;catalog&#39;</span><span class="p">:</span> <span class="s1">&#39;qir&#39;</span><span class="p">}</span>
-
 
 <span class="n">con</span> <span class="o">=</span> <span class="s1">&#39;postgresql://</span><span class="si">{username}</span><span class="s1">:</span><span class="si">{password}</span><span class="s1">@</span><span class="si">{host}</span><span class="s1">/</span><span class="si">{catalog}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">db</span><span class="p">)</span>
 <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -11835,313 +11834,80 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Insolvents">Insolvents<a class="anchor-link" href="#Insolvents">&#182;</a></h1>
+<h1 id="Judges">Judges<a class="anchor-link" href="#Judges">&#182;</a></h1>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select count(distinct case_number) </span>
-<span class="s2">         from company_insolvents&quot;&quot;&quot;</span>
-
-<span class="n">no_insolvents</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;the total number of insolvents cases in the database is </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">no_insolvents</span><span class="p">))</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>the total number of insolvents cases in the database is 50319
-</pre>
-</div>
-</div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Example-of-non-normalized-judge-names:">Example of non normalized judge names:<a class="anchor-link" href="#Example-of-non-normalized-judge-names:">&#182;</a></h2><ul>
+<li>"mr. W.J.  Geurts - de Veld"</li>
+<li>"mr. W.J. Geurts - de Veld"</li>
+<li>"mr. W.J. Geurts-deVeld"</li>
+<li>"mr. W.J. Geurts-de Veld"</li>
+<li>"mr. W.J.Geurts-de Veld"</li>
+<li>"mr.W.J. Geurts-de Veld"</li>
+<li>"mr. W.J. Geurts-de Veld (Rotterdam)"</li>
+<li>"mr W.J.Geurts-de Veld"</li>
+<li><p>"W.J.Geurts-de Veld"</p>
+<p>correct: "mr. W.J. Geurts-de Veld"
+normalized: "wj geurts-de veld"</p>
+<p>normalization steps:</p>
+</li>
+<li>make lowercase</li>
+<li>remove leading mr[.]</li>
+<li>remove spaces around dash</li>
+<li>remove dots</li>
+<li>replace double spaces by single space</li>
+<li>remove parentheses and text within</li>
+<li>strip leading and trailing spaces </li>
+</ul>
 
 </div>
 </div>
-
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select start_date_insolvency is not null as known, count(*)</span>
-<span class="s2">         from company_insolvents</span>
-<span class="s2">         group by start_date_insolvency is not null&quot;&quot;&quot;</span>
-
-<span class="n">df_known_start_date</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;fraction of known start date&#39;</span><span class="p">)</span>
-<span class="n">df_known_start_date</span>
-</pre></div>
-
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="normalisering-van-de-namen">normalisering van de namen<a class="anchor-link" href="#normalisering-van-de-namen">&#182;</a></h2>
 </div>
 </div>
 </div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>fraction of known start date
-</pre>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
-</div>
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[3]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>known</th>
-      <th>count</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>False</td>
-      <td>3900</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>True</td>
-      <td>46419</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_known_start_date</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">pie</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">df_known_start_date</span><span class="p">[</span><span class="s1">&#39;known&#39;</span><span class="p">])</span>
-</pre></div>
-
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="golden-standard---nevenfunctieregister,-already-scraped-by-openstate-(up-to-date?)">golden standard - nevenfunctieregister, already scraped by openstate (up to date?)<a class="anchor-link" href="#golden-standard---nevenfunctieregister,-already-scraped-by-openstate-(up-to-date?)">&#182;</a></h2>
 </div>
 </div>
 </div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[4]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x10dd65668&gt;</pre>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
-
-</div>
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-
-
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-"
->
-</div>
-
-</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="API-voor-nevenfuncties">API voor nevenfuncties<a class="anchor-link" href="#API-voor-nevenfuncties">&#182;</a></h2><p>Open Rechtspraak bevat nu tevens ook een heuse API (application programming interface) voor nevenfuncties. Dit is een RESTFULL api welke twee apicalls ondersteunt:</p>
+<ol>
+<li><p><a href="http://ors.openstate.eu/index.php/relations/json">http://ors.openstate.eu/index.php/relations/json</a> geeft een overzicht van alle nevenfuncties met URL's naar de JSON pagina</p>
+</li>
+<li><p><a href="http://ors.openstate.eu/relations/instantie/RECHTBANK/NAAM/json">http://ors.openstate.eu/relations/instantie/RECHTBANK/NAAM/json</a> Naam en Rechtbank dienen in URL ENCODE gecodeerd te zijn, cf. de lijst van punt 1.</p>
+</li>
+</ol>
+<p>Voorbeeld: <a href="http://ors.openstate.eu/relations/instantie/Rechtbank+Amsterdam/mw.+mr.+J.F.+Aalders+/json">http://ors.openstate.eu/relations/instantie/Rechtbank+Amsterdam/mw.+mr.+J.F.+Aalders+/json</a></p>
 
 </div>
 </div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># rechters_df = pd.read_html(&#39;http://ors.openstate.eu/relations&#39;)[0]</span>
 <span class="n">rechters_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;http://ors.openstate.eu/relations/json&#39;</span><span class="p">)</span>
+<span class="n">rechters_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span><span class="n">A</span>
 </pre></div>
 
 </div>
@@ -12151,432 +11917,7 @@ iEjMqLhFRGJGxS0iEjMqbhGRmPn/qEf/Aq+uxWwAAAAASUVORK5CYII=
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[183]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rechters_df</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[183]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>name</th>
-      <th>set</th>
-      <th>uri</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>mw. mr. J.F. Aalders</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>mw. mr. L.Z. Achouak El Idrissi</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>dhr. mr. M.J. Alink</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>mw. mr. L.C. Bachrach</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>dhr. mr. J.J. Bade</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>mw. mr. L. Baggerman</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>dhr. mr. M. Bakhuis</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>mw. mr. K. Oldekamp-Bakker</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>mw. mr. C. Bakker</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>mw. mr.dr. H.J.M. Baldinger</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>dhr. mr. F.G. Bauduin</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>dhr. mr. J.H. Beestman</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>mw. mr. M.A.H. Van Dalen-van Bekkum</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>mw. mr. A.D. Belcheva</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>14</th>
-      <td>mw. mr. W.H. van Benthem</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>15</th>
-      <td>dhr. mr. J.R. Berculo</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>16</th>
-      <td>mw. mr.drs. W.M.C. van den Berg</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>17</th>
-      <td>dhr. mr. W.M. van den Bergh</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>18</th>
-      <td>mw. mr. M.J. van den Bergh</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>19</th>
-      <td>mw. mr. C.M. Berkhout</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>20</th>
-      <td>mw. mr. L. van Berkum</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>21</th>
-      <td>dhr. mr. A.J. Beukenhorst</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>22</th>
-      <td>mw. mr. G.M. Beunk</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>23</th>
-      <td>dhr. mr. B.T. Beuving</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>24</th>
-      <td>mw. mr. C.W. Bianchi</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>25</th>
-      <td>mw. mr. I.M. Bilderbeek</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>26</th>
-      <td>mw. mr. L. Biller</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>27</th>
-      <td>dhr. mr. N.C.H. Blankevoort</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>28</th>
-      <td>mw. mr. C.P. Bleeker</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>29</th>
-      <td>dhr. mr. W.B. van Bockel</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>4099</th>
-      <td>dhr. mr. G. Snijders</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4100</th>
-      <td>mw. mr. A.M.J. van Buchem-Spapens</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4101</th>
-      <td>dhr. prof.mr. J. Spier</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4102</th>
-      <td>mw. prof.mr. T.N.B.M. Spronken</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4103</th>
-      <td>dhr. mr. J. Storm</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4104</th>
-      <td>dhr. mr. C.A. Streefkerk</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4105</th>
-      <td>dhr. mr. R.P. Streng</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4106</th>
-      <td>mw. mr. A.L.J. van Strien</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4107</th>
-      <td>dhr. mr. S. Tang</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4108</th>
-      <td>dhr. prof.mr. L. Timmerman</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4109</th>
-      <td>mw. mr. I.G.C. Bij de Vaate</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4110</th>
-      <td>dhr. mr. P.C. Vegter</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4111</th>
-      <td>dhr. mr. W.H. Vellinga</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4112</th>
-      <td>mw. mr. M. Beusmans-Verwijs</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4113</th>
-      <td>mw. mr. K.I.J. Visser</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4114</th>
-      <td>dhr. mr. D. Visser</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4115</th>
-      <td>dhr. prof.mr. P. Vlas</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4116</th>
-      <td>dhr. mr. D.G. van Vliet</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4117</th>
-      <td>mw. mr. E.L.M. Vos</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4118</th>
-      <td>dhr. mr. I.J. de Vré</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4119</th>
-      <td>dhr. mr. B.P.L. de Vries</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4120</th>
-      <td>mw. mr. N.N. Kirkels-Vrijman</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4121</th>
-      <td>mw. mr. F.A. Te Water Mulder</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4122</th>
-      <td>dhr. prof.mr. P.J. Wattel</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4123</th>
-      <td>dhr. mr. C.T.C. Welters</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4124</th>
-      <td>mw. mr. G.J.M. van Wijk</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4125</th>
-      <td>dhr. prof.mr. M.H. Wissink</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4126</th>
-      <td>dhr. mr. J. Wortel</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4127</th>
-      <td>dhr. mr. J.B.M.M. Wuisman</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-    <tr>
-      <th>4128</th>
-      <td>mw. mr. S. Crijns-Zuidwijk</td>
-      <td>Hoge Raad</td>
-      <td>http://ors.openstate.eu/relations/instantie/Ho...</td>
-    </tr>
-  </tbody>
-</table>
-<p>4129 rows × 3 columns</p>
-</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[184]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">rechters_df</span><span class="p">[</span><span class="n">rechters_df</span><span class="p">[</span><span class="s1">&#39;set&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Rechtbank Amsterdam&#39;</span><span class="p">]</span>
@@ -12586,13 +11927,37 @@ iEjMqLhFRGJGxS0iEjMqbhGRmPn/qEf/Aq+uxWwAAAAASUVORK5CYII=
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+</div>
+</div>
+</div>
+
 <div class="output_wrapper">
 <div class="output">
 
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[184]:</div>
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>top 10 judges by number of cases
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[2]:</div>
 
 
 
@@ -12615,900 +11980,64 @@ iEjMqLhFRGJGxS0iEjMqbhGRmPn/qEf/Aq+uxWwAAAAASUVORK5CYII=
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>name</th>
-      <th>set</th>
-      <th>uri</th>
+      <th>no_cases</th>
+      <th>supervisory_judge</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>mw. mr. J.F. Aalders</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+      <td>1107</td>
+      <td>mr. A.E. Zweers</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>mw. mr. L.Z. Achouak El Idrissi</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+      <td>1082</td>
+      <td>mr. C. Schollen-den Besten</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>dhr. mr. M.J. Alink</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+      <td>1000</td>
+      <td>mr. J.S.W. Lucassen</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>mw. mr. L.C. Bachrach</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+      <td>902</td>
+      <td>mr. A.M.P.T. Blokhuis</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>dhr. mr. J.J. Bade</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+      <td>888</td>
+      <td>mr. P.J. Neijt</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>mw. mr. L. Baggerman</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+      <td>878</td>
+      <td>mr. A.E. de Vos</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>dhr. mr. M. Bakhuis</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+      <td>788</td>
+      <td>mr. M Pellikaan</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>mw. mr. K. Oldekamp-Bakker</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+      <td>760</td>
+      <td>mr. I.M. Bilderbeek</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>mw. mr. C. Bakker</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+      <td>722</td>
+      <td>mr. S.J.O. de Vries</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>mw. mr.dr. H.J.M. Baldinger</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>dhr. mr. F.G. Bauduin</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>dhr. mr. J.H. Beestman</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>mw. mr. M.A.H. Van Dalen-van Bekkum</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>mw. mr. A.D. Belcheva</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>14</th>
-      <td>mw. mr. W.H. van Benthem</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>15</th>
-      <td>dhr. mr. J.R. Berculo</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>16</th>
-      <td>mw. mr.drs. W.M.C. van den Berg</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>17</th>
-      <td>dhr. mr. W.M. van den Bergh</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>18</th>
-      <td>mw. mr. M.J. van den Bergh</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>19</th>
-      <td>mw. mr. C.M. Berkhout</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>20</th>
-      <td>mw. mr. L. van Berkum</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>21</th>
-      <td>dhr. mr. A.J. Beukenhorst</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>22</th>
-      <td>mw. mr. G.M. Beunk</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>23</th>
-      <td>dhr. mr. B.T. Beuving</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>24</th>
-      <td>mw. mr. C.W. Bianchi</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>25</th>
-      <td>mw. mr. I.M. Bilderbeek</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>26</th>
-      <td>mw. mr. L. Biller</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>27</th>
-      <td>dhr. mr. N.C.H. Blankevoort</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>28</th>
-      <td>mw. mr. C.P. Bleeker</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>29</th>
-      <td>dhr. mr. W.B. van Bockel</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>263</th>
-      <td>mw. mr. E.T. Vreugdenhil</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>264</th>
-      <td>dhr. mr. R.H. De Vries</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>265</th>
-      <td>mw. mr. J.A.A.G. de Vries</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>266</th>
-      <td>mw. mr. W.M. de Vries</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>267</th>
-      <td>dhr. mr. J.W. Vriethoff</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>268</th>
-      <td>mw. mr. P. Vrugt</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>269</th>
-      <td>dhr. mr. C.L.J.M. de Waal</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>270</th>
-      <td>dhr. mr. A.Th. de Walle</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>271</th>
-      <td>mw. mr. L.H. Waller</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>272</th>
-      <td>mw. mr. M. van Walraven</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>273</th>
-      <td>dhr. mr. R. van de Water</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>274</th>
-      <td>mw. mr. N.M. van Waterschoot</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>275</th>
-      <td>dhr. mr. M.R.J. van Wel</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>276</th>
-      <td>dhr. mr.drs. E.J. Weller</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>277</th>
-      <td>dhr. mr. A.J. Wesdorp</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>278</th>
-      <td>mw. mr.drs. A.P. Schoonbrood-Wessels</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>279</th>
-      <td>dhr. mr. F.M. Wieland</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>280</th>
-      <td>mw. mr. C.A.E. Wijnker</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>281</th>
-      <td>mw. mr. A.B.M. Wijnveldt</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>282</th>
-      <td>dhr. prof.mr. H.G. van der Wilt</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>283</th>
-      <td>mw. mr.drs. J.J.C.M. Wirken</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>284</th>
-      <td>mw. mr. L.R. Wisse</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>285</th>
-      <td>mw. mr. A.M.C. de Wit</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>286</th>
-      <td>dhr. mr. D.H. De Witte</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>287</th>
-      <td>mw. mr. M. Woerdman</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>288</th>
-      <td>dhr. mr.dr. M.J.F. van der Wolf</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>289</th>
-      <td>dhr. mr. J.C. Zevenberg</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>290</th>
-      <td>mw. mr. J.Th.H. Zimmerman</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>291</th>
-      <td>mw. mr. V. Zuiderbaan</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
-    </tr>
-    <tr>
-      <th>292</th>
-      <td>mw. mr. A.H. van Zutphen</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+      <td>705</td>
+      <td>mr. M.H.F. van Vugt</td>
     </tr>
   </tbody>
 </table>
-<p>293 rows × 3 columns</p>
 </div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="steekproef-van-niet-OCR-eindverslagen">steekproef van niet OCR eindverslagen<a class="anchor-link" href="#steekproef-van-niet-OCR-eindverslagen">&#182;</a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Wenselijke-datavelden-in-het-voortgangsverslag">Wenselijke datavelden in het voortgangsverslag<a class="anchor-link" href="#Wenselijke-datavelden-in-het-voortgangsverslag">&#182;</a></h3><p>Het voortgangsverslag hoort gestructureerd te zijn volgens de RECOFA richtlijnenm zie <strong>model-verslag-faillissement-rechtspersoon.pdf</strong>. In eerste instantie zijn we geinteresseerd in de data uit de <strong>eindverslagen</strong>.</p>
-<p>Algemeen</p>
-<ul>
-<li>Personeel gemiddeld aantal: aantal</li>
-<li>Bestede uren totaal: aantal</li>
-<li>Saldo boedelrekening: bedrag</li>
-</ul>
-<p>4 Debiteuren</p>
-<p>4.2 Opbrengst: bedrag</p>
-<p>7 Rechtmatigheid</p>
-<p>7.2 Depot jaarrekeningen: wel/niet</p>
-<p>7.5 Onbehoorlijk bestuur: wel/niet</p>
-<p>8 Crediteuren</p>
-<p>8.1 Boedelvorderingen: bedrag (salaris curator / UWV / ..)</p>
-<p>8.2 Preferente vorderingen van de fiscus: bedrag</p>
-<p>8.3 Preferente vorderingen van het UWV: bedrag</p>
-<p>8.4 Andere preferente vorderingen: bedrag</p>
-<p>8.5 Aantal concurrente crediteuren: bedrag</p>
-<p>8.6 Bedrag concurrente crediteuren: bedrag</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Enige-bevindingen-/-Issues">Enige bevindingen / Issues<a class="anchor-link" href="#Enige-bevindingen-/-Issues">&#182;</a></h3><ul>
-<li>Bij insolventen van verslagen 13_ams_15_478_F_V_06 en 10_rot_12_90_F_V_16 zijn geen enkele financiele verslagen ook curator salaris wordt niet genoemd. Vraag: wie levert geen financieel verslag en waarom?</li>
-<li>Bij eindverslag 10_rot_14_1054_F_V_10 staat curator salaris alleen in de financiele bijlage. Er lijkt ook sprake van een schikking - regeling bestuurder: 22.000 - wegens rechtmatigheidsissue. </li>
-<li>bij 11_rot_12_41_F_V_15 staan bedragen doorgestreept, textconversie pakt dat niet</li>
-<li>De eindverslagen zijn niet echt eindverslagen: 'Naar verwachting zal het faillissement in de komende
-verslagperiode eindigen.' (11_rot_12_41_F_V_15)</li>
-<li>uurtarief bij 11_rot_12_41_F_V_15 komt op 280,-</li>
-<li>10_rot_14_1054_F_V_10, 01_obr_13_293_F_V_09 omzetting pdf&gt;txt verliest letters/gegevens/structuur met PDFMiner. Welke converter pakt dit goed aan ?</li>
-<li>strikethrough in PDF komt niet terug in de tekstconversie</li>
-<li>PDFMiner wisselt soms woordvolgorde en mangled soms letters ook al staat dit duidelijk in het PDF</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[276]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># store matched headers as json strings</span>
-<span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;headings&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">match_headings</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
-<span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;headings&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[276]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>identification
-01_obr_13_608_F_V_11     [[&#34;1.1&#34;, &#34;Directie  en organisatie&#34;], [&#34;1.2&#34;, ...
-01_obr_13_400_F_V_11     [[&#34;1.1&#34;, &#34;Directie  en organisatie&#34;], [&#34;1.2&#34;, ...
-01_obr_13_399_F_V_10     [[&#34;1.07&#34;, &#34;2.175,-&#34;], [&#34;1.1&#34;, &#34;Directie  en or...
-01_obr_15_133_F_V_07     [[&#34;1.1&#34;, &#34;Directie  en organisatie&#34;], [&#34;1.13&#34;,...
-01_obr_14_973_F_V_08     [[&#34;1.1&#34;, &#34;Directie  en organisatie&#34;], [&#34;76.95&#34;...
-10_rot_14_1054_F_V_10    [[&#34;1.1&#34;, &#34;Directie en organisatie &#34;], [&#34;1.2&#34;, ...
-10_rot_14_1055_F_V_10    [[&#34;1.1&#34;, &#34;Directie en organisatie &#34;], [&#34;1.2&#34;, ...
-10_rot_12_90_F_V_16      [[&#34;1.1&#34;, &#34;Directie en Organisatie&#34;], [&#34;1.2&#34;, &#34;...
-11_rot_12_41_F_V_15      [[&#34;1.1&#34;, &#34;Inventarisatie &#34;], [&#34;1.2&#34;, &#34;Winst en...
-13_ams_15_478_F_V_06     [[&#34;1.1&#34;, &#34;.  Directie en organisatie &#34;], [&#34;1.2...
-05_gel_16_674_F_V_05     [[&#34;1.1&#34;, &#34;Directie en organisatie&#34;], [&#34;1.2&#34;, &#34;...
-05_gel_16_666_F_V_05     [[&#34;1.1&#34;, &#34;Directie en organisatie&#34;], [&#34;1.2&#34;, &#34;...
-16_mne_16_568_F_V_01     [[&#34;1.1&#34;, &#34;Directie en organisatie&#34;], [&#34;1.2&#34;, &#34;...
-05_gel_16_660_F_V_05     [[&#34;1.1&#34;, &#34;Directie en organisatie&#34;], [&#34;1.2&#34;, &#34;...
-01_obr_13_1204_F_V_04    [[&#34;1.1&#34;, &#34;Directie en organisatie&#34;], [&#34;1.2&#34;, &#34;...
-01_obr_13_293_F_V_09     [[&#34;1.1&#34;, &#34;Directie  en organisatie:&#34;], [&#34;1.2&#34;,...
-01_obr_15_189_F_V_07                                                    []
-01_obr_15_188_F_V_08                                                    []
-13_ams_14_651_F_V_06     [[&#34;1.1&#34;, &#34;Directie en organisatie &#34;], [&#34;1.2&#34;, ...
-13_ams_14_497_F_V_07     [[&#34;1.1&#34;, &#34;Directie en organisatie &#34;], [&#34;1.2&#34;, ...
-Name: headings, dtype: object</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[277]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;heading_numbers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">get_heading_numbers</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
-<span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;heading_numbers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[277]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>identification
-01_obr_13_608_F_V_11     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;20.84&#34;, &#34;46.29&#34;,...
-01_obr_13_400_F_V_11     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;2....
-01_obr_13_399_F_V_10     [&#34;1.07&#34;, &#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1...
-01_obr_15_133_F_V_07     [&#34;1.1&#34;, &#34;1.13&#34;, &#34;56.10&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, ...
-01_obr_14_973_F_V_08     [&#34;1.1&#34;, &#34;76.95&#34;, &#34;68.09&#34;, &#34;3.42&#34;, &#34;1.2&#34;, &#34;1.3&#34;...
-10_rot_14_1054_F_V_10    [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
-10_rot_14_1055_F_V_10    [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
-10_rot_12_90_F_V_16      [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.4&#34;, &#34;1.6&#34;, &#34;2.1&#34;, &#34;2.3&#34;, &#34;3....
-11_rot_12_41_F_V_15      [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
-13_ams_15_478_F_V_06     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
-05_gel_16_674_F_V_05     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
-05_gel_16_666_F_V_05     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
-16_mne_16_568_F_V_01     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
-05_gel_16_660_F_V_05     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
-01_obr_13_1204_F_V_04    [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
-01_obr_13_293_F_V_09     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
-01_obr_15_189_F_V_07                                                    []
-01_obr_15_188_F_V_08                                                    []
-13_ams_14_651_F_V_06     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
-13_ams_14_497_F_V_07     [&#34;1.1&#34;, &#34;1.2&#34;, &#34;1.3&#34;, &#34;1.4&#34;, &#34;1.5&#34;, &#34;1.6&#34;, &#34;1....
-Name: heading_numbers, dtype: object</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[278]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># </span>
-<span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;strictly_increasing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;heading_numbers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
-    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">is_strictly_increasing_heading_numbers</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
-<span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;strictly_increasing&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[278]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>identification
-01_obr_13_608_F_V_11     False
-01_obr_13_400_F_V_11     False
-01_obr_13_399_F_V_10     False
-01_obr_15_133_F_V_07     False
-01_obr_14_973_F_V_08     False
-10_rot_14_1054_F_V_10    False
-10_rot_14_1055_F_V_10    False
-10_rot_12_90_F_V_16      False
-11_rot_12_41_F_V_15      False
-13_ams_15_478_F_V_06     False
-05_gel_16_674_F_V_05     False
-05_gel_16_666_F_V_05     False
-16_mne_16_568_F_V_01     False
-05_gel_16_660_F_V_05     False
-01_obr_13_1204_F_V_04     True
-01_obr_13_293_F_V_09     False
-01_obr_15_189_F_V_07      True
-01_obr_15_188_F_V_08      True
-13_ams_14_651_F_V_06      True
-13_ams_14_497_F_V_07      True
-Name: strictly_increasing, dtype: bool</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[279]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># report percentage strictly increasing</span>
-<span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;strictly_increasing&#39;</span><span class="p">][</span><span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;strictly_increasing&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">/</span> <span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;strictly_increasing&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[279]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>26.100000000000001</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[280]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;only_model_headings&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;heading_numbers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
-    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">is_strictly_increasing_heading_numbers</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
-<span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;strictly_increasing&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[280]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>identification
-01_obr_13_608_F_V_11     False
-01_obr_13_400_F_V_11     False
-01_obr_13_399_F_V_10     False
-01_obr_15_133_F_V_07     False
-01_obr_14_973_F_V_08     False
-10_rot_14_1054_F_V_10    False
-10_rot_14_1055_F_V_10    False
-10_rot_12_90_F_V_16      False
-11_rot_12_41_F_V_15      False
-13_ams_15_478_F_V_06     False
-05_gel_16_674_F_V_05     False
-05_gel_16_666_F_V_05     False
-16_mne_16_568_F_V_01     False
-05_gel_16_660_F_V_05     False
-01_obr_13_1204_F_V_04     True
-01_obr_13_293_F_V_09     False
-01_obr_15_189_F_V_07      True
-01_obr_15_188_F_V_08      True
-13_ams_14_651_F_V_06      True
-13_ams_14_497_F_V_07      True
-Name: strictly_increasing, dtype: bool</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[281]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;only_model_headings&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;heading_numbers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">has_only_model_heading_numbers</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
-<span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;only_model_headings&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[281]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>identification
-01_obr_13_608_F_V_11     False
-01_obr_13_400_F_V_11     False
-01_obr_13_399_F_V_10     False
-01_obr_15_133_F_V_07     False
-01_obr_14_973_F_V_08     False
-10_rot_14_1054_F_V_10     True
-10_rot_14_1055_F_V_10     True
-10_rot_12_90_F_V_16      False
-11_rot_12_41_F_V_15      False
-13_ams_15_478_F_V_06     False
-05_gel_16_674_F_V_05      True
-05_gel_16_666_F_V_05      True
-16_mne_16_568_F_V_01      True
-05_gel_16_660_F_V_05      True
-01_obr_13_1204_F_V_04     True
-01_obr_13_293_F_V_09      True
-01_obr_15_189_F_V_07      True
-01_obr_15_188_F_V_08      True
-13_ams_14_651_F_V_06     False
-13_ams_14_497_F_V_07     False
-Name: only_model_headings, dtype: bool</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[282]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># report percentage only model headings</span>
-<span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;only_model_headings&#39;</span><span class="p">][</span><span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;only_model_headings&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">/</span> <span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;only_model_headings&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[282]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>54.400000000000006</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[283]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># inspect cases only model heading numbers but not strictly increasing</span>
-<span class="n">df_not_increasing</span> <span class="o">=</span> <span class="n">df_reports</span><span class="p">[</span><span class="n">df_reports</span><span class="o">.</span><span class="n">only_model_headings</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">df_reports</span><span class="o">.</span><span class="n">strictly_increasing</span><span class="p">)]</span>
-<span class="n">index</span> <span class="o">=</span> <span class="mi">20</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">df_not_increasing</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
-<span class="n">heading_numbers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">df_not_increasing</span><span class="o">.</span><span class="n">headings</span><span class="p">[</span><span class="n">index</span><span class="p">])))[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">is_strictly_increasing_heading_numbers</span><span class="p">(</span><span class="n">heading_numbers</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">heading_numbers</span><span class="p">,</span> <span class="n">heading_numbers</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">&lt;</span><span class="nb">float</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
-    
-<span class="c1"># finding: in many reports 3.10 became 3.1 even though the PDF shows 3.10, PDFMiner issue ?</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>10_rot_14_762_F_V_09
-1.1 1.2 True
-1.2 1.3 True
-1.3 1.5 True
-1.5 1.7 True
-1.7 2.1 True
-2.1 2.3 True
-2.3 5.1 True
-5.1 5.2 True
-5.2 5.4 True
-5.4 5.6 True
-5.6 5.8 True
-5.8 7.1 True
-7.1 7.2 True
-7.2 7.4 True
-7.4 8.1 True
-8.1 8.3 True
-8.3 8.5 True
-8.5 7.6 False
-7.6 10.1 True
-10.1 10.3 True
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[284]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># count heading number in model collection</span>
-<span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;no_headings&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;heading_numbers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
-    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-<span class="n">df_reports</span><span class="p">[</span><span class="s1">&#39;only_model_headings&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[284]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>identification
-01_obr_13_608_F_V_11     False
-01_obr_13_400_F_V_11     False
-01_obr_13_399_F_V_10     False
-01_obr_15_133_F_V_07     False
-01_obr_14_973_F_V_08     False
-10_rot_14_1054_F_V_10     True
-10_rot_14_1055_F_V_10     True
-10_rot_12_90_F_V_16      False
-11_rot_12_41_F_V_15      False
-13_ams_15_478_F_V_06     False
-05_gel_16_674_F_V_05      True
-05_gel_16_666_F_V_05      True
-16_mne_16_568_F_V_01      True
-05_gel_16_660_F_V_05      True
-01_obr_13_1204_F_V_04     True
-01_obr_13_293_F_V_09      True
-01_obr_15_189_F_V_07      True
-01_obr_15_188_F_V_08      True
-13_ams_14_651_F_V_06     False
-13_ams_14_497_F_V_07     False
-Name: only_model_headings, dtype: bool</pre>
 </div>
 
 </div>
