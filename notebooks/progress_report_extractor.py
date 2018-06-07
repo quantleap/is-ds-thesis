@@ -1,93 +1,109 @@
 # -*- coding: utf-8 -*
+import re
+import psycopg2
 
-# -*- coding: utf-8 -*
+# create session
+from sqlalchemy.engine.url import URL
+
+con = str(URL(drivername='postgresql',
+              username='dbusr',  # os.environ['DB_QIR_USERNAME'],
+              password='dbpw',  # os.environ['DB_QIR_PASSWORD'],
+              host='www.quantleap.nl',
+              database='qir'))
+conn = psycopg2.connect(con)
+cur = conn.cursor()
 
 
 class ProgressReportSectionExtractor:
-    """ Class to represent a sectioned progress report content. """
-    def __init__(self, content):
-        self.content = content
-        self.sections = {
-[('0.', 'Introduction'),
- ('1.', 'Inventarisatie'),
- ('1.1', 'Directie en organisatie'),
- ('1.2', 'Winst en verlies'),
- ('1.3', 'Balanstotaal'),
- ('1.4', 'Lopende procedures'),
- ('1.5', 'Verzekeringen'),
- ('1.6', 'Huur'),
- ('1.7', 'Oorzaak faillissement'),
- ('2.', 'Personeel'),
- ('2.1', 'Aantal ten tijde van faillissement'),
- ('2.2', 'Aantal in jaar voor faillissement'),
- ('2.3', 'Datum ontslagaanzegging'),
- ('2.4', 'Werkzaamheden'),
- ('3.', 'Activa'),
- ('3.1', 'Beschrijving'),
- ('3.2', 'Verkoopopbrengst'),
- ('3.3', 'Hoogte hypotheek'),
- ('3.4', 'Boedelbijdrage'),
- ('3.5', 'Werkzaamheden'),
- ('3.6', 'Beschrijving'),
- ('3.7', 'Verkoopopbrengst'),
- ('3.8', 'Boedelbijdrage'),
- ('3.9', 'Bodemvoorrecht fiscus'),
- ('3.10', 'Werkzaamheden'),
- ('3.11', 'Beschrijving'),
- ('3.12', 'Verkoopopbrengst'),
- ('3.13', 'Boedelbijdrage'),
- ('3.14', 'Werkzaamheden'),
- ('3.15', 'Beschrijving'),
- ('3.16', 'Verkoopopbrengst'),
- ('3.17', 'Werkzaamheden'),
- ('4.', 'Debiteuren'),
- ('4.1', 'Omvang debiteuren'),
- ('4.2', 'Opbrengst'),
- ('4.3', 'Boedelbijdrage'),
- ('4.4', 'Werkzaamheden'),
- ('5.', 'Bank / Zekerheden'),
- ('5.1', 'Vordering van bank(en)'),
- ('5.2', 'Leasecontracten'),
- ('5.3', 'Beschrijving zekerheden'),
- ('5.4', 'Separatistenpositie'),
- ('5.5', 'Boedelbijdragen'),
- ('5.6', 'Eigendomsvoorbehoud'),
- ('5.7', 'Retentierechten'),
- ('5.8', 'Reclamerechten'),
- ('5.9', 'Werkzaamheden'),
- ('6.', 'Doorstart / voortzetten onderneming'),
- ('6.1', 'Exploitatie / zekerheden'),
- ('6.2', 'Financiële verslaglegging'),
- ('6.3', 'Werkzaamheden'),
- ('6.4', 'Beschrijving'),
- ('6.5', 'Verantwoording'),
- ('6.6', 'Opbrengst'),
- ('6.7', 'Boedelbijdrage'),
- ('6.8', 'Werkzaamheden'),
- ('7.', 'Rechtmatigheid'),
- ('7.1', 'Boekhoudplicht'),
- ('7.2', 'Depot jaarrekeningen'),
- ('7.3', 'Goedk. Verkl. Accountant'),
- ('7.4', 'Stortingsverpl. aandelen'),
- ('7.5', 'Onbehoorlijk bestuur'),
- ('7.6', 'Paulianeus handelen'),
- ('7.7', 'Werkzaamheden'),
- ('8.', 'Crediteuren'),
- ('8.1', 'Boedelvorderingen'),
- ('8.2', 'Pref. vord. van de fiscus'),
- ('8.3', 'Pref. vord. van het UWV'),
- ('8.4', 'Andere pref. crediteuren'),
- ('8.5', 'Aantal concurrente crediteuren'),
- ('8.6', 'Bedrag concurrente crediteuren'),
- ('8.7', 'Verwachte wijze van afwikkeling'),
- ('8.8', 'Werkzaamheden'),
- ('9.', 'Procedures'),
- ('9.1', 'Naam wederpartij(en)'),
- ('9.2', 'Aard procedure'),
- ('9.3', 'Stand procedure'),
- ('9.4', 'Werkzaamheden'),
- ('10.', 'Overig'),
- ('10.1', 'Termijn afwikkeling faillissement'),
- ('10.2', 'Plan van aanpak'),
- ('10.3', 'Indiening volgend verslag'),
- ('10.4', 'Werkzaamheden')]}
+    """ Class to extract sections from a progress report.
+        Supplied patterns are applied in given order, specify from strict to broad.
+        Only the first match is returned. """
+    def __init__(self, report_content=None):
+        self.report_content = report_content
+        self.sections = {'0.0': {'id': 'introduction',
+                                 'heading': 'Introduction',
+                                 'patterns': [r'(.*?)(?=\n1\.1)']},
+                         '1.1': {'id': 'directie_en_organisatie',
+                                 'heading': 'Directie en organisatie',
+                                 'patterns': [r'(?<=\n1\.1)(.*?)(?=\n1\.2)',
+                                              r'(?:inventarisatie.*\n1)(.*?)(?:\n2)']},  # heading level 2 missing
+                         '1.7': {'id': 'oorzaak_faillissement',
+                                 'heading': 'Oorzaak faillissement',
+                                 'patterns': [r'(?<=\n1\.7)(.*?)(?=\n2)']},
+                         '2.1': {'id': 'aantal_ten_tijde_van_faillissement',
+                                 'heading': 'Aantal ten tijde van faillissement',
+                                 'patterns': [r'(?<=\n2\.1)(.*?)(?=\n2\.2)']},
+                         '7.1': {'id': 'boekhoudplicht',
+                                 'heading': 'Boekhoudplicht',
+                                 'patterns': [r'(?<=\n7\.1)(.*?)(?=\n7\.2)']},
+                         '7.5': {'id': 'onbehoorlijk_bestuur',
+                                 'heading': 'Onbehoorlijk bestuur',
+                                 'patterns': [r'(?<=\n7\.5)(.*?)(?=\n7\.6)']},
+                         '7.6': {'id': 'paulianeus_handelen',
+                                 'heading': 'Paulianeus handelen',
+                                 'patterns': [r'(?<=\n7\.6)(.*?)(?=\n7\.7)',
+                                              r'(?<=\n7\.6)(.*?)(?=\n8)',  # 7.7 werkzaamheden often omitted
+                                              r'(?:rechtmatigheid.*?)(paulianeus.*?)(?:\n8)',  # sub heading omitted
+                                              r'(?:rechtmatigheid.*?)(paulianeus.*?)(?:crediteuren)',  # heading info not reliable
+                                              r'(paulianeus.*?\n{2,})']},
+                         '8.1': {'id': 'boedelvorderingen',
+                                 'heading': 'Boedelvorderingen',
+                                 'patterns': [r'(?<=\n8\.1)(.*?)(?=\n8\.2)']},
+                         '8.2': {'id': 'pref_vord_van_de_fiscus',
+                                 'heading': 'Pref. vord. van de fiscus',
+                                 'patterns': [r'(?<=\n8\.2)(.*?)(?=\n8\.3)']},
+                         '8.3': {'id': 'pred_vord_van_het_uwv',
+                                 'heading': 'Pref. vord. van het UWV',
+                                 'patterns': [r'(?<=\n8\.3)(.*?)(?=\n8\.4)']},
+                         '8.4': {'id': 'andere_pred_crediteuren',
+                                 'heading': 'Andere pref. crediteuren',
+                                 'patterns': [r'(?<=\n8\.4)(.*?)(?=\n8\.5)']},
+                         '8.5': {'id': 'aantal_concurrente_crediteuren',
+                                 'heading': 'Aantal concurrente crediteuren',
+                                 'patterns': [r'(?<=\n8\.5)(.*?)(?=\n8\.6)']},
+                         '8.6': {'id': 'bedrag_concurrente_crediteuren',
+                                 'heading': 'Bedrag concurrente crediteuren',
+                                 'patterns': [r'(?<=\n8\.6)(.*?)(?=\n8\.7)']},
+                         }
+
+    def extract_section(self, section):
+        """ Return given section (by heading number) from the reports. """
+        if section not in self.sections.keys():
+            raise NotImplementedError
+
+        section_content = None
+        for pattern in self.sections[section]['patterns']:
+            match = re.search(pattern, self.report_content, re.DOTALL | re.IGNORECASE)
+            if match:
+                section_content = match.group(1)
+                break
+        return section_content
+
+    def section_id(self, section):
+        return self.sections[section]['id']
+
+    def section_heading(self, section):
+        return self.sections[section]['heading']
+
+
+# helper function
+def extract_section(content, section):
+    extractor = ProgressReportSectionExtractor(report_content=content)
+    return extractor.extract_section(section)
+
+
+def get_content(report_id):
+    cur.execute("select content from reports where identification = '{}';".format(report_id))
+    result = cur.fetchone()
+    return result[0]
+
+
+def test():
+    content = get_content('05_gel_12_600_F_V_04')
+    print(extract_section(content, '7.6'))
+
+
+if __name__ == '__main__':
+    # put noting here as this is also run by the jupyter notebook %run command
+    test()
+    pass
