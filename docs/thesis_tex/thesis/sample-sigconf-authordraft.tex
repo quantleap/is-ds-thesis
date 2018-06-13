@@ -1,6 +1,7 @@
-\documentclass[sigconf]{acmart}
+\documentclass[sigconf, authordraft]{acmart}
 
 \usepackage{booktabs} % For formal tables
+
 
 % Copyright
 %\setcopyright{none}
@@ -14,30 +15,22 @@
 
 
 % DOI
-%\acmDOI{10.475/123_4}
+\acmDOI{10.475/123_4}
 
 % ISBN
-%\acmISBN{123-4567-24-567/08/06}
+\acmISBN{123-4567-24-567/08/06}
 
 %Conference
-%\acmConference[WOODSTOCK'97]{ACM Woodstock conference}{July 1997}{El  Paso, Texas USA}
-%\acmYear{1997}
-%\copyrightyear{2016}
+\acmConference[WOODSTOCK'97]{ACM Woodstock conference}{July 1997}{El
+  Paso, Texas USA}
+\acmYear{1997}
+\copyrightyear{2016}
 
+\acmPrice{15.00}
 
-%\acmArticle{4}
-%\acmPrice{15.00}
-
-% These commands are optional
-%\acmBooktitle{Transactions of the ACM Woodstock conference}
-%\editor{Jennifer B. Sartor}
-%\editor{Theo D'Hondt}
-%\editor{Wolfgang De Meuter}
-
+\acmSubmissionID{123-A12-B3}
 
 \begin{document}
-\input{Thesis-Title-Page-DS}
-\pagebreak
 \title{SIG Proceedings Paper in LaTeX Format}
 \titlenote{Produces the permission block, and
   copyright information}
@@ -79,27 +72,19 @@
   \country{Iceland}}
 \email{larst@affiliation.org}
 
-\author{Valerie B\'eranger}
+\author{Lawrence P. Leipuner}
+\affiliation{
+  \institution{Brookhaven Laboratories}
+  \streetaddress{P.O. Box 5000}}
+\email{lleipuner@researchlabs.org}
+
+\author{Sean Fogarty}
 \affiliation{%
-  \institution{Inria Paris-Rocquencourt}
-  \city{Rocquencourt}
-  \country{France}
-}
-\author{Aparna Patel}
-\affiliation{%
- \institution{Rajiv Gandhi University}
- \streetaddress{Rono-Hills}
- \city{Doimukh}
- \state{Arunachal Pradesh}
- \country{India}}
-\author{Huifen Chan}
-\affiliation{%
-  \institution{Tsinghua University}
-  \streetaddress{30 Shuangqing Rd}
-  \city{Haidian Qu}
-  \state{Beijing Shi}
-  \country{China}
-}
+  \institution{NASA Ames Research Center}
+  \city{Moffett Field}
+  \state{California}
+  \postcode{94035}}
+\email{fogartys@amesres.org}
 
 \author{Charles Palmer}
 \affiliation{%

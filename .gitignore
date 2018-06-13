@@ -16,3 +16,11 @@ __pycache__
 \abbyy_cloud_ocr
 \data
 \literatuur
+
+
+# latex intermediate produced files
+\thesis_tex\*.synctex.gz
+\thesis_tex\*.log
+\thesis_tex\*.out
+\thesis_tex\comment.cut
+

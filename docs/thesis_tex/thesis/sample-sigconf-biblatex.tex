@@ -1,6 +1,23 @@
-\documentclass[sigconf]{acmart}
+\documentclass[sigconf,natbib=false]{acmart}
+
+%drt24 hacks
+% Letter paper
+\setlength{\paperheight}{11in}
+\setlength{\paperwidth}{8.5in}
+
+% Hack to try to make acmart work with biblatex: https://tex.stackexchange.com/questions/37076/is-it-possible-to-load-biblatex-with-a-class-that-has-already-loaded-natbib
+\let\citename\relax
+\RequirePackage[abbreviate=true, dateabbrev=true, isbn=true, doi=true, urldate=comp, url=true, maxbibnames=9, backref=false, backend=biber, style=ACM-Reference-Format, language=american]{biblatex}
+
+
+
+
+\addbibresource{sample-bibliography-biblatex.bib}
+\renewcommand{\bibfont}{\Small}
+
 
 \usepackage{booktabs} % For formal tables
+
 
 % Copyright
 %\setcopyright{none}
@@ -14,30 +31,21 @@
 
 
 % DOI
-%\acmDOI{10.475/123_4}
+\acmDOI{10.475/123_4}
 
 % ISBN
-%\acmISBN{123-4567-24-567/08/06}
+\acmISBN{123-4567-24-567/08/06}
 
 %Conference
-%\acmConference[WOODSTOCK'97]{ACM Woodstock conference}{July 1997}{El  Paso, Texas USA}
-%\acmYear{1997}
-%\copyrightyear{2016}
+\acmConference[WOODSTOCK'97]{ACM Woodstock conference}{July 1997}{El
+  Paso, Texas USA}
+\acmYear{1997}
+\copyrightyear{2016}
 
-
-%\acmArticle{4}
-%\acmPrice{15.00}
-
-% These commands are optional
-%\acmBooktitle{Transactions of the ACM Woodstock conference}
-%\editor{Jennifer B. Sartor}
-%\editor{Theo D'Hondt}
-%\editor{Wolfgang De Meuter}
+\acmPrice{15.00}
 
 
 \begin{document}
-\input{Thesis-Title-Page-DS}
-\pagebreak
 \title{SIG Proceedings Paper in LaTeX Format}
 \titlenote{Produces the permission block, and
   copyright information}
@@ -118,7 +126,7 @@
 \affiliation{\institution{The Kumquat Consortium}}
 \email{jpkumquat@consortium.net}
 
-% The default list of authors is too long for headers.
+% The default list of authors is too long for headers}
 \renewcommand{\shortauthors}{B. Trovato et al.}
 
 
@@ -171,7 +179,7 @@ ACM SIG Proceedings.\footnote{This is an abstract footnote}
 
 \input{samplebody-conf}
 
-\bibliographystyle{ACM-Reference-Format}
-\bibliography{sample-bibliography}
+\printbibliography
+
 
 \end{document}
