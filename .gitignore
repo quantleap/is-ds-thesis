@@ -27,4 +27,10 @@ __pycache__
 **/thesis_tex/**/*.blg
 **/thesis_tex/**/*.aux
 
+# folders
+/docs/IMG/*
+**/acmart-master
+**/ThesisTemplate
+
+
 
