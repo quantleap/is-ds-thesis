@@ -2,6 +2,7 @@
 \.idea
 *.json
 __pycache__
+.env
 
 # notebooks
 .ipynb_checkpoints
