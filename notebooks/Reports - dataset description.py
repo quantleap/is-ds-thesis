@@ -3,13 +3,14 @@
 
 # #### Setup
 
-# In[1]:
+# In[92]:
 
 
 #import pdb; pdb.set_trace()
 
-get_ipython().magic('matplotlib inline')
+get_ipython().run_line_magic('matplotlib', 'inline')
 import pandas as pd
+import matplotlib.pyplot as plt
 import os
 import re
 import json
@@ -47,7 +48,7 @@ print('CONNECTION ESTABLISHED')
 # 
 # For the purpose of this study the progress reports published in 2017 will be used.
 
-# In[2]:
+# In[124]:
 
 
 sql = """
@@ -56,13 +57,13 @@ financial as (
       select to_char(publication_date, 'YYYY-MM') as month,
              count(*) as financial_report_count
       from reports
-      where right(identification, 1) = 'B'
+      where is_attachment is True
       group by 1),
 progress as (
       select to_char(publication_date, 'YYYY-MM') as month,
              count(*) as progres_report_count
       from reports
-      where right(identification, 1) != 'B'
+      where is_attachment is False
       group by 1)
 select prog.month, progres_report_count, coalesce(financial_report_count, 0) as financial_report_count
   from financial fin
@@ -82,42 +83,77 @@ df.plot.bar(stacked=True, figsize=(15, 4), title='report publications per month'
 # 
 # ## PDF reports downloaded
 
-# In[3]:
+# In[133]:
 
 
-sql = '''select identification, is_ocr, is_on_disk, publication_date, is_extractable
-         from reports 
-         where extract(year from publication_date) >= 2014
-             and extract(year from publication_date) <= 2017
-             and is_attachment=False;'''
+sql = """select identification, is_ocr, is_on_disk, publication_date, is_extractable
+         from reports rep join insolvents ins on rep.insolvent_id = ins.id
+         where publication_date >= '2014-01-01'
+             and publication_date) <= 2018-06-
+             and is_attachment=False;"""
+             #and ins.is_removed=False;"""
+             #and (end_findability ISNULL or end_findability >= '2017-12-31');"""
+    
 df = pd.read_sql(sql, con, index_col='publication_date')
 
 print('The dataset to be used contains {} progress reports in period 2014 - 2017'.format(len(df)))
 df.head()
 
 
-# In[4]:
+# ## Report extraction funnel
+
+# In[134]:
 
 
-total = df['identification'].resample('M').count()
-total
+# Funnel of searchable reports (later the contraint of being txt_type report can be dropped)
+sample_freq = 'QS'
+total_serie = df['identification'].resample(sample_freq).count().rename('total')
+
+# on disk
+on_disk_serie = df[df.is_on_disk == True].is_on_disk.resample(sample_freq).count().rename('on_disk')
+not_on_disk_serie = (total_serie - on_disk_serie).rename('not_on_disk')
+
+# report type
+and_img_type_serie = df[(df.is_on_disk == True) & (df.is_ocr == True)].is_ocr.resample(sample_freq).count().rename('and_img')
+and_txt_type_serie = df[(df.is_on_disk == True) & (df.is_ocr == False)].is_ocr.resample(sample_freq).count().rename('and_txt')
+and_unk_type_serie = (on_disk_serie - and_img_type_serie - and_txt_type_serie).rename('and_unk')
+
+# extracted content
+and_is_extractable_serie = df[(df.is_on_disk == True) & (df.is_extractable == True)].is_extractable.resample(sample_freq).count().rename('and_extractable')
+and_is_not_extractable_serie = (on_disk_serie - and_is_extractable_serie).rename('and_not_extractable')
+
+pd.concat([total_serie, 
+           not_on_disk_serie, on_disk_serie,
+           and_unk_type_serie, and_img_type_serie, and_txt_type_serie,
+           and_is_not_extractable_serie, and_is_extractable_serie], axis=1)
 
 
-# In[5]:
+# In[141]:
 
 
-df_on_disk = df[df.is_on_disk == True]
-on_disk = df_on_disk.is_on_disk.resample('M').count()
-on_disk
+# plot funnel
+fig, axes = plt.subplots(nrows=2)
+fig.set_size_inches(15, 15)
+
+# percentage of available/downloaded reports
+ax = pd.concat([(on_disk_serie / total_serie).rename('on disk'),
+                (not_on_disk_serie / total_serie).rename('not on disk')], axis=1)  \
+                 .plot.barh(ax=axes[0], stacked=True, title='Downloaded reports of total as pct', xlim=[0,1]) \
+                 .legend(bbox_to_anchor=(1.2, 0.5))
+
+ax = pd.concat([(and_is_extractable_serie / on_disk_serie).rename('extractable'),
+                (and_is_not_extractable_serie / on_disk_serie).rename('not extractable')], axis=1)  \
+                 .plot.barh(ax=axes[1], stacked=True, title='Extractable reports of reports on disk as pct', xlim=[0,1]) \
+                 .legend(bbox_to_anchor=(1.2, 0.5))
 
 
-# In[6]:
-
-
-(on_disk / total).plot.barh(title='Downloaded progress reports as pct', xlim=[0,1], figsize=(15, 15))
-
-
-# Results: The chart shows download percentage **for all** insolvents. Effort will be put into making this set complete **for active insolvents**. Not all reports are downloaded/retrieved for the 2017 dataset. 
+# ### Result
+# The deviations must be investigates:
+# - missing reports jan 2017 were not downloaded and later retracted by CIR due to end findability of cases.
+# - unextractable reports Q4 2017 are not explained yet.
+# 
+# Most PDF reports can be extracted. One found cause for some of the remaining:
+# - some downloaded reports appear to be empty, 0kb. Something went wrong during downloading. These files must be
 
 # ## PDF Conversion of progress reports on disk
 # 
@@ -128,79 +164,57 @@ on_disk
 # 
 # The latter one can have discrepancies between the visible text and extracted text.
 
-# In[7]:
+# ### adoption of conversion software over scanner over time
+# Content extraction of PDFs created with conversion software is more accurate and much faster than conversion using OCR from scanned PDFs. We can assume in general that searches of recent and future reports will be more accurate than older reports.
+
+# In[145]:
 
 
-df_on_disk_and_not_scanned = df_on_disk[df_on_disk.is_ocr == False]
-on_disk_and_not_scanned = df_on_disk_and_not_scanned['is_ocr'].resample('M').count()
-on_disk_and_not_scanned
-
-
-# In[8]:
-
-
-(on_disk_and_not_scanned / on_disk).plot.barh(title='Textual progress reports on disk as pct', xlim=[0,1], figsize=(15, 15))
-
-
-# ## Textual progress reports on disk with extracted text
-
-# In[9]:
-
-
-df_is_extractable = df_on_disk_and_not_scanned[df_on_disk_and_not_scanned.is_extractable == True]
-is_extractable = df_is_extractable.is_extractable.resample('M').count()
-is_extractable
-
-
-# In[10]:
-
-
-(is_extractable / on_disk_and_not_scanned).plot.barh(title='Extractable textual progress reports on disk as pct', xlim=[0,1], figsize=(15, 15))
-
-
-# ### Completeness total funnel
-
-# In[11]:
-
-
-(is_extractable / total).plot.barh(title='Extractable textual progress reports on disk as pct of total', xlim=[0,1], figsize=(15, 15))
+pd.concat([(and_img_type_serie/(on_disk_serie - and_unk_type_serie)).rename('scanned'),
+           (and_txt_type_serie/(on_disk_serie - and_unk_type_serie)).rename('converted')], axis=1) \
+.plot.barh(stacked=True, title='adoption of conversion software', figsize=[15, 5]).legend(bbox_to_anchor=(1.2, 0.5))
 
 
 # ## Search in progress reports.
 # 
-# There are three search objectives, each more scoped: 
+# There are three progress report search objectives, each more scoped: 
 # 1. to enable full text search over the whole report
-# 2. to enable faceted search by heading section
+# 2. to enable faceted search by subheading section
 # 3. to extract specific data points as value. 
 # 
 # ### Full Text Search
 # The extracted contents is made searchable using the postgres full text search functionality. (https://www.postgresql.org/docs/9.6/static/textsearch.html)
 # 
 # ### Faceted search
-# The progress reports should be structured in sections according to RECOFA guidelines, see **model-verslag-faillissement-rechtspersoon.pdf**. We like to be able to specificly perform full text search in one of the sections.
+# The progress reports should be structured in sections according to RECOFA guidelines, see **model-verslag-faillissement-rechtspersoon.pdf**. We like to be able to extract the sub heading sections to 1. perform full text search in one of the sub sections and 2. to narrow down the field of interest for futher extraction and analysis.
 # 
 # ### data points wish list
-# We like to extract specific data point values from the reports. A wish list is given below:
+# We like to extract specific data point values from the report sub sections. A wish list is given below:
 # 
 # Algemeen
 # - Personeel gemiddeld aantal: **aantal**
 # - Bestede uren totaal: **aantal**
 # - Saldo boedelrekening: **bedrag**
 # 
+# 1.7 Oorzaak faillissement
 # 
-# 4 Debiteuren
+# _4 Debiteuren_
 # 
 # 4.2 Opbrengst: **bedrag**
 # 
+# _5 Bank / Zekerheden
 # 
-# 7 Rechtmatigheid
+# 5.1 Vordering van bank(en): **wel/niet** en **bedrag**
+# 
+# _7 Rechtmatigheid_
 # 
 # 7.2 Depot jaarrekeningen: **wel/niet**
 # 
 # 7.5 Onbehoorlijk bestuur: **wel/niet**
 # 
+# 7.6 Paulianeus handelen: **wel/niet**
 # 
-# 8 Crediteuren
+# _8 Crediteuren_
 # 
 # 8.1 Boedelvorderingen: bedrag (salaris curator / UWV / ..)
 # 
@@ -210,7 +224,7 @@ is_extractable
 # 
 # 8.4 Andere preferente vorderingen: **bedrag**
 # 
-# 8.5 Aantal concurrente crediteuren: **bedrag**
+# 8.5 Aantal concurrente crediteuren: **aantal**
 # 
 # 8.6 Bedrag concurrente crediteuren: **bedrag**
 
@@ -225,6 +239,7 @@ is_extractable
 # - Strikethrough in PDF komt niet terug in de tekstconversie en dit betekent vaak het tegenovergestelde.
 # - PDFMiner wisselt soms woordvolgorde en mangled soms letters ook al staat dit duidelijk in het PDF. Dit komt door het formaat: text plus image overlay.
 # - PyPDF2 hangt op grote images (voorbeelden '16_mne_13_935_F_V_13', '16_mne_13_1055_F_V_13', '16_mne_12_331_F_V_15', '16_mne_12_326_F_V_15', '16_mne_12_327_F_V_15,' '16_mne_12_384_F_V_15') - een pull request #329 fixt dit.
+# - Toezichtzaaknummer. Deze zit niet in de CIR webservice data maar is wel online in de zaak details te vinden: https://insolventies.rechtspraak.nl/#!/details/09.dha.18.3.F.1328.1.18
 
 # ### Faceted search - section extraction
 # The RECOFA model progress report contains the following sections to be extracted:
@@ -234,9 +249,10 @@ is_extractable
 # 
 # Step 2: extract candidate sections from model report
 
-# In[37]:
+# In[31]:
 
 
+# Define data set
 sql = '''SELECT identification, content
          FROM reports 
          WHERE extract(year from publication_date) >= 2014
@@ -246,12 +262,12 @@ sql = '''SELECT identification, content
              AND is_extractable = TRUE
              AND content IS NOT NULL
          ORDER BY publication_date ASC
-         LIMIT 1000;'''
+         LIMIT 200;'''
 df = pd.read_sql(sql, con, index_col='identification')
 df.head(n=10)
 
 
-# In[13]:
+# In[32]:
 
 
 # Step 1: extract section anchor points from progress reports
@@ -276,7 +292,7 @@ print(len(model_headings))
 model_headings
 
 
-# In[14]:
+# In[33]:
 
 
 # Example (first) report
@@ -287,7 +303,7 @@ print(report_content)
 print(report_headings)
 
 
-# In[15]:
+# In[34]:
 
 
 # SECTIONS
@@ -322,21 +338,27 @@ def model_heading_coverage(report_heading_numbers):
     pass
 
 
-# In[25]:
+# In[35]:
 
 
-get_ipython().magic('run progress_report_extractor')
+get_ipython().run_line_magic('run', 'progress_report_extractor')
 report_content = df['content'][0]
 print(extract_section(report_content, '7.6'))  # paulianeus handelen
 
 
-# In[50]:
+# In[36]:
+
+
+print(report_content)
+
+
+# In[37]:
 
 
 # make sections columns in the dataframe - capture section content and length
-get_ipython().magic('run progress_report_extractor')
+get_ipython().run_line_magic('run', 'progress_report_extractor')
 extractor = ProgressReportSectionExtractor()
-sections = ['7.6']  # extractor.sections.keys()  # all available sections
+sections = extractor.sections.keys()  # all available sections
 for section in sections:
     section_column = extractor.section_id(section)
     df[section_column] = df['content'].apply(lambda x: extract_section(x, section))
@@ -344,14 +366,21 @@ for section in sections:
 df.head(20)
 
 
-# In[51]:
+# In[38]:
+
+
+print(df['paulianeus_handelen'][1])
+# eerst conclusie zin extraheren
+
+
+# In[70]:
 
 
 # empty section percentages - no match 
 df[[col for col in list(df) if 'length' not in col]].isnull().sum()/df.shape[0]*100
 
 
-# In[ ]:
+# In[12]:
 
 
 # Result: better adherence to the model report over time
@@ -389,7 +418,6 @@ aantal_concurrente_crediteuren        6.5
 bedrag_concurrente_crediteuren        6.0
 
 
-
 # #### Results
 # Edge cases are identified that result in empty sections:
 # 
@@ -417,7 +445,7 @@ df[df['paulianeus_handelen'].isnull() & df['content'].str.contains('paulianeus')
 #df[df['paulianeus_handelen'].isnull()]['content'][0:5]
 
 
-# In[ ]:
+# In[71]:
 
 
 # analyze section length distribution - analyse [false / too long] matches
@@ -437,6 +465,16 @@ if match:
     print(match.group(1))
 else:
     print('no match')
+
+
+# In[ ]:
+
+
+# wens
+# use cases
+# ontwerp
+# evaluatie: hoe goed is het gelukt (ruwe data naar app, sanity checks)
+# 2. werkt het: via de use cases.
 
 
 # In[ ]:

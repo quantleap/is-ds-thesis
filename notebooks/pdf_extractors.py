@@ -20,7 +20,7 @@
 # - PyPDF2 fix for endless loop sekrause:fast-inline-images - PR: https://github.com/mstamy2/PyPDF2/pull/331
 # 
 
-# In[7]:
+# In[1]:
 
 
 import os
@@ -31,7 +31,7 @@ os.path.isfile(report_path)
 # ## classification of PDF: scanned or converted
 # To classify a PDF file 
 
-# In[ ]:
+# In[2]:
 
 
 def is_scanned_pdf(file_path):
@@ -56,7 +56,7 @@ def is_scanned_pdf(file_path):
 
 # ## PDFMiner
 
-# In[1]:
+# In[3]:
 
 
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
@@ -91,7 +91,7 @@ def pdf_to_txt_pdfminer(file_path):
     return as_string
 
 
-# In[3]:
+# In[4]:
 
 
 print(pdf_to_txt_pdfminer(report_path))
@@ -119,7 +119,7 @@ print(pdf_to_txt_pdfminer(report_path))
 
 # ## PyPDF2
 
-# In[1]:
+# In[5]:
 
 
 import PyPDF2
@@ -138,7 +138,7 @@ print(content)
 # ## pdftotext
 # ### command-line using popen - with layout and htmlmeta options enabled
 
-# In[3]:
+# In[6]:
 
 
 # convert pdf
@@ -161,7 +161,7 @@ print(report_content)
 
 # ### using pdftotext pyton package
 
-# In[4]:
+# In[7]:
 
 
 import pdftotext
@@ -182,4 +182,29 @@ options = ''
 os.system(' '.join([exec_path, options, report_path]))
 
 
-# 
+# # pdfrw
+
+# In[9]:
+
+
+import pdfrw
+from pdfrw import PdfReader
+pdf = PdfReader(report_path)
+#pdf.keys()
+pdf.Info
+#pdf.Root.keys()
+
+
+# result: not text extract and tags not user friendly
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+

@@ -42,8 +42,8 @@ class ProgressReportSectionExtractor:
                          '7.6': {'id': 'paulianeus_handelen',
                                  'heading': 'Paulianeus handelen',
                                  'patterns': [r'(?<=\n7\.6)(.*?)(?=\n7\.7)',
-                                              r'(?<=\n7\.6)(.*?)(?=\n8)',  # 7.7 werkzaamheden often omitted
-                                              r'(?:rechtmatigheid.*?)(paulianeus.*?)(?:\n8)',  # sub heading omitted
+                                              r'(?<=\n7\.6)(.*?)(?=\n8)',  # next sub heading (7.7) often omitted
+                                              r'(?:rechtmatigheid.*?)(paulianeus.*?)(?:\n8)',  # own sub heading omitted
                                               r'(?:rechtmatigheid.*?)(paulianeus.*?)(?:crediteuren)',  # heading info not reliable
                                               r'(paulianeus.*?\n{2,})']},
                          '8.1': {'id': 'boedelvorderingen',

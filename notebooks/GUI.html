@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>pdf_extractors</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>GUI</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 <style type="text/css">
@@ -11771,39 +11771,30 @@ div#notebook {
   <div tabindex="-1" id="notebook" class="border-box-sizing">
     <div class="container" id="notebook-container">
 
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="PDF-Extractors">PDF Extractors<a class="anchor-link" href="#PDF-Extractors">&#182;</a></h1><p>There are a variety of PDF text extractors and most are based on a limited number of underlying engines:</p>
-<p>The engines:</p>
-<ul>
-<li>PDF Box <a href="https://pdfbox.apache.org/">https://pdfbox.apache.org/</a> used by Tika</li>
-<li>xPDF <a href="http://www.xpdfreader.com/">http://www.xpdfreader.com/</a> used by command line utilities <strong>pdftotext</strong> and <strong>pdftohtml</strong></li>
-<li>PDF Miner <a href="http://www.unixuser.org/~euske/python/pdfminer/pure">http://www.unixuser.org/~euske/python/pdfminer/pure</a> python 20x slower than xPDF</li>
-<li>Poppler <a href="https://poppler.freedesktop.org/">https://poppler.freedesktop.org/</a>  Poppler is a fork of Xpdf-3.0</li>
-<li>PyPDF2 <a href="https://github.com/mstamy2/PyPDF2">https://github.com/mstamy2/PyPDF2</a> </li>
-</ul>
-<p>Other Python libraries:</p>
-<ul>
-<li>pdftotext <a href="https://github.com/jalan/pdftotext">https://github.com/jalan/pdftotext</a> wrapper for the command line utility (no options)</li>
-<li>PyPDF <a href="http://pyfpdf.readthedocs.io/en/latest/#support">http://pyfpdf.readthedocs.io/en/latest/#support</a>   </li>
-<li>pyPoppler <a href="https://launchpad.net/poppler-python">https://launchpad.net/poppler-python</a></li>
-<li>pdfrw <a href="https://github.com/pmaupin/pdfrw">https://github.com/pmaupin/pdfrw</a></li>
-<li>PyPDF2 fix for endless loop sekrause:fast-inline-images - PR: <a href="https://github.com/mstamy2/PyPDF2/pull/331">https://github.com/mstamy2/PyPDF2/pull/331</a></li>
-</ul>
-
-</div>
-</div>
-</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="n">report_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s1">&#39;../data/report_met_issues/01_obr_13_293_F_V_09.pdf&#39;</span><span class="p">)</span>
-<span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">report_path</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%</span><span class="k">html</span>
+&lt;script&gt;
+  function code_toggle() {
+    if (code_shown){
+      $(&#39;div.input&#39;).hide(&#39;500&#39;);
+      $(&#39;#toggleButton&#39;).val(&#39;Show Code&#39;)
+    } else {
+      $(&#39;div.input&#39;).show(&#39;500&#39;);
+      $(&#39;#toggleButton&#39;).val(&#39;Hide Code&#39;)
+    }
+    code_shown = !code_shown
+  }
+
+  $( document ).ready(function(){
+    code_shown=false;
+    $(&#39;div.input&#39;).hide()
+  });
+&lt;/script&gt;
+&lt;form action=&quot;javascript:code_toggle()&quot;&gt;&lt;input type=&quot;submit&quot; id=&quot;toggleButton&quot; value=&quot;Show Code&quot;&gt;&lt;/form&gt;
 </pre></div>
 
 </div>
@@ -11816,114 +11807,33 @@ div#notebook {
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[1]:</div>
+<div class="prompt"></div>
 
 
 
+<div class="output_html rendered_html output_subarea ">
+<script>
+  function code_toggle() {
+    if (code_shown){
+      $('div.input').hide('500');
+      $('#toggleButton').val('Show Code')
+    } else {
+      $('div.input').show('500');
+      $('#toggleButton').val('Hide Code')
+    }
+    code_shown = !code_shown
+  }
 
-<div class="output_text output_subarea output_execute_result">
-<pre>True</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="classification-of-PDF:-scanned-or-converted">classification of PDF: scanned or converted<a class="anchor-link" href="#classification-of-PDF:-scanned-or-converted">&#182;</a></h2><p>To classify a PDF file</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">is_scanned_pdf</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    classify if pdf is ocr-ed (consists of scanned pages) or non-ocr-ed (converted to pdf from text editor)</span>
-<span class="sd">    @return true for ocr-ed, false otherwise</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># with PyPDF2: pdf is classified as ocr when first page does not contain any text</span>
-    <span class="n">fp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
-    <span class="n">document</span> <span class="o">=</span> <span class="n">PdfFileReader</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
-    <span class="n">page1</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">getPage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">is_ocr</span> <span class="o">=</span> <span class="p">(</span><span class="n">page1</span><span class="o">.</span><span class="n">extractText</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">is_ocr</span>
-</pre></div>
-
-</div>
-</div>
+  $( document ).ready(function(){
+    code_shown=false;
+    $('div.input').hide()
+  });
+</script>
+<form action="javascript:code_toggle()"><input type="submit" id="toggleButton" value="Show Code"></form>
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>results: Classification should result in three classes:</p>
-<ol>
-<li>only pictures (TIFFs)</li>
-<li>only text</li>
-<li>both pictures and overlayed text</li>
-</ol>
-<p>The latter category poses some difficulties as the text might deviate from the pictures as it is OCR-ed with some errors. Re-OCR-ing with Tesseract will help with some errors but is not without newly introduced errors itself. By storing the classification an optimal processing choice can be made.</p>
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="PDFMiner">PDFMiner<a class="anchor-link" href="#PDFMiner">&#182;</a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pdfminer.pdfinterp</span> <span class="k">import</span> <span class="n">PDFResourceManager</span><span class="p">,</span> <span class="n">PDFPageInterpreter</span>
-<span class="kn">from</span> <span class="nn">pdfminer.layout</span> <span class="k">import</span> <span class="n">LAParams</span>
-<span class="kn">from</span> <span class="nn">pdfminer.converter</span> <span class="k">import</span> <span class="n">TextConverter</span>
-<span class="kn">from</span> <span class="nn">pdfminer.pdfpage</span> <span class="k">import</span> <span class="n">PDFPage</span>
-
-<span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="n">StringIO</span>
-
-<span class="k">def</span> <span class="nf">pdf_to_txt_pdfminer</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    uses pdf miner to convert a non-ocr-ed pdf into text</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">rsrcmgr</span> <span class="o">=</span> <span class="n">PDFResourceManager</span><span class="p">()</span>
-    <span class="n">retstr</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
-    <span class="n">codec</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span>
-    <span class="n">laparams</span> <span class="o">=</span> <span class="n">LAParams</span><span class="p">()</span>
-    <span class="n">device</span> <span class="o">=</span> <span class="n">TextConverter</span><span class="p">(</span><span class="n">rsrcmgr</span><span class="p">,</span> <span class="n">retstr</span><span class="p">,</span> <span class="n">codec</span><span class="o">=</span><span class="n">codec</span><span class="p">,</span> <span class="n">laparams</span><span class="o">=</span><span class="n">laparams</span><span class="p">)</span>
-    <span class="n">fp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
-    <span class="n">interpreter</span> <span class="o">=</span> <span class="n">PDFPageInterpreter</span><span class="p">(</span><span class="n">rsrcmgr</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
-    <span class="n">password</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-    <span class="n">maxpages</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">caching</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="n">pagenos</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="n">PDFPage</span><span class="o">.</span><span class="n">get_pages</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">pagenos</span><span class="p">,</span> <span class="n">maxpages</span><span class="o">=</span><span class="n">maxpages</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span>
-                                  <span class="n">caching</span><span class="o">=</span><span class="n">caching</span><span class="p">,</span> <span class="n">check_extractable</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="n">interpreter</span><span class="o">.</span><span class="n">process_page</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
-    <span class="n">fp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="n">device</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="n">as_string</span> <span class="o">=</span> <span class="n">retstr</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
-    <span class="n">retstr</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">as_string</span>
-</pre></div>
-
-</div>
 </div>
 </div>
 
@@ -11933,7 +11843,133 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">pdf_to_txt_pdfminer</span><span class="p">(</span><span class="n">report_path</span><span class="p">))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># database connection</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">psycopg2</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.engine.url</span> <span class="k">import</span> <span class="n">URL</span>
+
+<span class="c1"># connection to the database</span>
+<span class="c1"># connection string for use in pandas:</span>
+<span class="n">con</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">URL</span><span class="p">(</span><span class="n">drivername</span><span class="o">=</span><span class="s1">&#39;postgresql&#39;</span><span class="p">,</span> 
+              <span class="n">username</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;DB_QIR_USERNAME&#39;</span><span class="p">],</span> 
+              <span class="n">password</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;DB_QIR_PASSWORD&#39;</span><span class="p">],</span> 
+              <span class="n">host</span><span class="o">=</span><span class="s1">&#39;www.quantleap.nl&#39;</span><span class="p">,</span> 
+              <span class="n">database</span><span class="o">=</span><span class="s1">&#39;qir&#39;</span><span class="p">))</span>
+
+<span class="c1"># cursor for use with psycopg2</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">con</span><span class="p">)</span>
+<span class="n">cur</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+<span class="c1"># todo: use NamedTupleCursor</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">ipywidgets</span> <span class="k">as</span> <span class="nn">widgets</span>
+<span class="kn">from</span> <span class="nn">ipywidgets</span> <span class="k">import</span> <span class="n">Layout</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">display</span>
+
+<span class="k">class</span> <span class="nc">ReportTextSearcher</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sections</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;--- Gehele verslag&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;0.0 Introduction&#39;</span><span class="p">,</span> 
+                         <span class="s1">&#39;1.7 Oorzaak faillissement&#39;</span><span class="p">,</span> 
+                         <span class="s1">&#39;7.6 Paulianeus handelen&#39;</span><span class="p">,</span> 
+                         <span class="s1">&#39;8.1 Boedelvorderingen&#39;</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="c1"># widgets, more clear to define that to access by container tuple</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_search_terms</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;Zoektermen&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;rabobank abn amro&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_section</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;hoofdstuk&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_button</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;Zoek&#39;</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;margin&#39;</span><span class="p">:</span> <span class="s1">&#39;5px 0px 0px 90px&#39;</span><span class="p">,</span> <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;212px&#39;</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_limit</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">IntSlider</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;limit&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_result_no</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">IntSlider</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;view result&#39;</span><span class="p">,</span> <span class="n">disabled</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_result</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Textarea</span><span class="p">(</span><span class="n">layout</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;90%&#39;</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;100px&#39;</span><span class="p">,</span> <span class="s1">&#39;margin&#39;</span><span class="p">:</span> <span class="s1">&#39;5px 0&#39;</span><span class="p">})</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_out</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Output</span><span class="p">()</span>
+        
+        <span class="c1"># container of widgets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">container</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">VBox</span><span class="p">([</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w_search_terms</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w_section</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w_limit</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w_button</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w_out</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w_result</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w_result_no</span>
+        <span class="p">])</span>
+        
+        <span class="c1"># register callbacks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_button</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_search</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_result_no</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_view_result</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)</span>
+        
+        <span class="c1">#import pdb; pdb.set_trace()</span>
+        
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">display</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">container</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_render_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># process results</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_out</span><span class="o">.</span><span class="n">append_stdout</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:d}</span><span class="s1"> resultaten gevonden&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_result_no</span><span class="o">.</span><span class="n">max</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># show first result</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w_result_no</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w_result_no</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w_result</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        
+    <span class="c1"># call backs</span>
+    <span class="k">def</span> <span class="nf">_view_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">change</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">w_result_no</span><span class="o">.</span><span class="n">value</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_result</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        
+    <span class="k">def</span> <span class="nf">_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">button</span><span class="p">):</span>
+        <span class="c1"># reset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_result</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_out</span><span class="o">.</span><span class="n">clear_output</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_result_no</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="kc">True</span>
+        
+        <span class="c1"># search</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="s1">&#39;content&#39;</span>
+        <span class="n">query_terms</span> <span class="o">=</span> <span class="s1">&#39;rabobank abn amro&#39;</span>
+        
+        <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;WITH eligible_reports AS (</span>
+<span class="s2">                     SELECT identification, </span><span class="si">{field}</span><span class="s2"> AS content</span>
+<span class="s2">                     FROM reports rep join insolvents ins on rep.insolvent_id = ins.id</span>
+<span class="s2">                     WHERE publication_date BETWEEN &#39;2014-01-01&#39; AND &#39;2017-12-31&#39;</span>
+<span class="s2">                         AND ins.is_removed = FALSE)</span>
+<span class="s2">                 SELECT identification, </span><span class="si">{field}</span><span class="s2"> as content</span>
+<span class="s2">                 FROM eligible_reports</span>
+<span class="s2">                 WHERE to_tsvector(&#39;dutch&#39;, </span><span class="si">{field}</span><span class="s2">) @@ plainto_tsquery(&#39;dutch&#39;, &#39;</span><span class="si">{query_terms}</span><span class="s2">&#39;) LIMIT </span><span class="si">{limit}</span><span class="s2">;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">field</span><span class="p">,</span> <span class="n">query_terms</span><span class="o">=</span><span class="n">query_terms</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">w_limit</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        
+        <span class="c1">#print(sql)</span>
+        <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_render_results</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">search</span> <span class="o">=</span> <span class="n">ReportTextSearcher</span><span class="p">()</span>
+<span class="n">search</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
 </pre></div>
 
 </div>
@@ -11949,1438 +11985,19 @@ div#notebook {
 <div class="prompt"></div>
 
 
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>FAILLISSEMENTSVERSLAG
 
-Nummer:9
 
-Datum:  26 maart  2018
 
-Gegevens  onderneming
-
-Faillissementsnummer
-
-Datum  uitspraak
-
-Rechter-commissaris
-
-Curator
-
-D.A.H.  Brusselers  Holdinq  B.V.
-statutair  gevestigd  te&#39;s-Hertogenbosch  en feitelijk
-gevestigd  te Drunen  aan  de Laan van Tasmanië (5152
-HW).
-
-clo&#39;v131293F
-
-26 maart2013
-
-mr. S.J.O.  de Vries
-
-mr. K.T.W.H.  van den Dungen
-
-Voor zover de tekst in dit verslag afw¡jkt van hetgeen  in het vorige  verslag  is vermeld,  is die
-tekst vetged  ru kt weergegeven.
-
-Activiteiten ondernem  ing
-
-De omschrijving  van de activiteiten  van gefailleerde in het handelsregister is:
-&#34;Het  beheren  en beleggen  van vermogen,  alsmede het optreden  als houdster  van aandelen in andere
-vennootschappen.&#34;
-Deze  gebruikelijke  omschrijving  voor houdstervennootschappen  sluit in dit geval redelijk  aan op de
-werkelijkheid. Er is echter  geen  sprake  geweest  van beleggingen,  maar  uitsluitend  van verrichtingen
-ter bestuur  van werkmaatschappij Metselbedrijf  Brusselers  B.V. en ter beheer  van de aandelen  van
-laatstgenoemde  dochtervennootschap. Deze dochter is twee jaar geleden,  op 1 februari  2011,  failliet
-verklaard.
-
-Omzetgegevens
-
-Personeel
-
-Saldo  ei nde verslagperiode
-
-Verslagperiode
-
-Bestede  uren  in verslagperiode
-
-Bestede  uren  in totaal
-
-ln 2010 bedroeg  de netto-omzet€.70.260,-
-ln2011  bedroeg  de netto-omzet  €  0,-.
-
-n.v.t.
-
-€  0,00
-
-2l oktober  2017 tlm einde  faillissement
-
-5,88  uren
-
-51,74 uren
-
-bed r¡jf sa dvocate n . n I
-
-lnventarisatie
-
-1. 
-1.1 Directie  en organisatie:
-
-Enig aandeelhouder  en zelfstandig bevoegd  bestuurder  van gefailleerde is de heer
-D.A.H.  Brusselers.
-1.2 Winst  en verlies:
-
-ln 2010 was het resultaat  vóór belastingen  - €  270.000,- (verlies).
-ln 2O11  was het resultaat  vóór belastingen  €  41 I .000,-.
-
-1.3  Balanstotaal:
-
-Het balanstotaal  per einde  2010  bedroeg:  €  95.994,00
-Het balanstotaal  per einde  2011  bedroeg:  €  43.678,00
-
-1.4 Lopendeprocedures:
-
-Vooralsnog is niet gebleken  van lopende procedures
-
-1.5 Verzekeringen:
-
-Vooralsnog  is niet gebleken  dat er sprake is van enige lopende  verzekering  van gefailleerde
-
-1.6 Huur:
-
-Er is geen sprake  van een lopende huurovereenkomst.
-
-1.7 Oorzaakfaillissement:
-
-De bestuurder  wijst de volgende  omstandigheden aan als oorzaak van het faillissement:
-
-De enige inkomsten  die gefailleerde in het verleden  genoot  zijn de managementfee  en de
-gebruikersvergoeding  die Metselbedrijf  Brusselers  B.V. aan  haar verschuldigd  waren.
-(De gebruikersvergoeding had betrekking  op de toen nog aanwezige  roerende  zaken  van
-gefailleerde  die voor de bedrijfsactiviteiten  van voornoemde  dochtervennootschap  werden
-ingezet.)
-Na de uitspraak  van het faillissement van deze dochtervennootschap in 2011  had  D.A.H.
-Brusselers  Holding  B.V. aldus geen inkomsten meer,  ofschoon  er wel sprake  was van
-doorlopende betalingsverplichtingen.  Er is geen  sprake  van andere  activa  die op enige  wijze
-liquiditeiten  kunnen  opleveren,  zodat  de lopende betalingsverplichtingen  uiteindelijk niet meer
-konden  worden  voldaan.
-
-Vooralsnog is niet gebleken  van andere  oorzaken  van het faillissement.
-
-2.
-
-2.1
-
-2.2
-
-2.3
-
-Personeel
-
-Aantal ten tijde van faillissement:
-
-Aantal in jaar voor faillissement:
-
-Datu m ontslagaanzegging:
-
-Bijzonderheden:
-
-n.v.t.
-
-1
-
-n.v.t.
-
-n.v.t.
-
-bed rijf sa dvocate n . n I
-
-2
-
-3.  Activa
-
-Onroerende  zaken
-3.1 Beschrijving: 
-3.2 Verkoopopbrengst: 
-3.3  Hoogte hypotheek: 
-3.4 Boedelbijdrage: 
-
-Werkzaamheden: 
-
-Bedriifsmiddelen
-3.5 Beschrijving: 
-3.6 Verkoopopbrengst: 
-3.7 Boedelbijdrage: 
-3.8 Bodemvoorrecht  fiscus: 
-
-Voorraden  / onderhanden  werk
-3.9 Beschrijving: 
-3.10 Verkoopopbrengst: 
-3.11 Boedelbijdrage: 
-
-Werkzaamheden: 
-
-Andere activa
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-3.12 Beschrijving:
-
-Er ziin nog enkele roerende zaken van gefailleerde  opgeslagen in een container in Kerkdriel;
-een oude  (computer-)server,  een eveneens  gedateerde monitor,  een iPad 1, een spelcomputer
-en een fitnessbank met losse  gewichten.
-
-ING Bank N.V. heeft deze zaken al getaxeerd.  Volgens dat taxatierapport  weegt de te
-verwachten  verkoopopbrengst niet op tegen  de benodigde  verkoopinspanningen.
-
-3.13 Verkoopopbrengst: 
-
-Werkzaamheden: 
-
-n.v.t.
-
-n.v.t.
-
-bedr¡jfsadvocaten.nl
-
-3
-
-4.  Debiteuren
-4.1 Omvang  debiteuren:
-
-Er is sprake  van twee  debiteuren met een totale  omvang  van €  80.090,96.
-Gefailleerde  heeft een vordering  op Metselbedrijf  Brusselers  B.V. van €  41 .794,96.  Nu deze
-vennootschap  in staat van faillissement verkeert,  wordt deze vordering  als oninbaar
-aangemerkt.
-De andere  debiteur  is de bestuurder,  de heer  D.A.H.  Brusselers.  Deze vordering komt voort uit
-de rekening-courantverhouding  en bedraagt  €  38.296,00.  De heer  Brusselers  heeft aangegeven
-deze vordering niet te kunnen  voldoen. Hij heeft opgemerkt  zijn faillissement te zullen
-aanvragen.
-
-De heer  Brusselers  is niet overgegaan  tot aanvraag  van zijn faillissement.
-De buitengerechtelijke  inspanningen  van - of namens  - ondergetekende hebben  niet geleid  tot
-ontvangst  van enige betaling  of van enig betalingsvoorstel  van de bestuurder.
-
-Nadat daartoe  toestemming  van de rechter-commissaris is verkregen,  zijn maatregelen
-strekkende  tot inleiding  van de gerechtelijke procedure  tegen  de heer  Brusselers  genomen
-De heer  Brusselers  heeft ondergetekende medegedeeld  om ten aanzien van voornoemde
-schuld  aan  de boedeltot  een betalingsregeling  te willen komen. Aan hem is vervolgens
-medegedeeld  onder  welke  voorwaarden  die betalingsregeling  aan de orde zou kunnen  zijn
-Door de heer  Brusselers  is daarop niet meer  gereageerd.
-
-Nu inmiddels  gebleken is dat de heer  Brusselers  nagenoeg  geen  verhaal biedt,  is besloten  om
-vooralsnog  af te zien van voornoemde gerechtelijke procedure.  Momenteel  wordt met derden
-overleg  gevoerd  over de eventuele  aanvraag  van het faillissement van de heer  Brusselers.
-
-De heer  Brusselers  heeft  niet alsnog  een deel van zijn schuld  aan gefailleerde betaald.  Tot
-dusver  zijn  geen  verhaalsmogelijkheden  aangetroffen en heeft zich nog niet de mogelijkheid
-voorgedaan  om op een effectieve  wijze  tot een  aanvraag  van zijn faillissement te komen.
-Voorlopig  wordt gewacht  tot zich  een wijziging in tenminste één van laatstgenoemde  drie
-omstand  igheden  voordoet.
-
-De komende  verslagperiode  wordt  opnieuw bezien  of de heer Brusselers  inmiddels  enige
-verhaalsmogelijkheden biedt en of naar aanvraag  van zijn faillissement dient te worden
-gestreefd.
-
-Geconstateerd is dat de rekening-courantvordering  op de heer  Brusselers  is verpand  aan ING
-Bank  N.V.  De bank  is een gerechtelijke procedure  gestart  tegen  de heer Brusselers  en heeft  in
-deze procedure  de aan  haar verpande  vordering  op de heer  Brusselers  beperkt  tot een bedrag
-van €  12.500,-.  De bank  heeft zich het recht voorbehouden op het meerdere.  Afgelopen
-verslagperiode heeft de kantonrechter  deze vordering toegewezen. De bank is inmiddels  een
-redelijke  termijn  ex artikel  58 lid I Fw van vier maanden  gesteld  om tot inning van het
-resterende  gedeelte  van de rekening-courantvordering  over te gaan.
-
-De aan de bank  gestelde redelijke termijn is verstreken  zodat de vordering in beginsel
-ten gunste van de boedel kan worden  geincasseerd.  ln dat verband  is wederom  bezien  of
-sprake is van verhaalsmogelijkheden  jegens  de heer Brusselers.  Daarvan  is helaas  niet
-gebleken. Ook ING bank is er vooralsnog niet in geslaagd om de vordering uit hoofde
-van het vonnis van de kantonrechter  bij de heer Brusselers  te innen.
-Er is ook geen  aanleiding  om te veronderstellen  dat er binnen afzienbare tijd alsnog
-
-bed r¡jf sadvocaten.  n I
-
-4
-
-verhaalsmogelijkheden  zullen ontstaan.  Daarom  is besloten om niet langer  te wachten
-met de afronding  van dit faillissement.
-
-4.2 Opbrengst
-
-4.3  Boedelbijdrage:
-
-Werkzaamheden:
-
-vooralsnog n.v.t.
-n.v.t-
-
-n.v.t.
-
-zie onderdeel4.1.
-Er liggen geen  bijzondere werkzaamheden in het
-verschiet.
-
-5.  Bank/Zekerheden
-5.1 Vorderingbank(en):
-
-ING Bank  N.V. heeft een vordering ingediend  van €  176.932,68.
-
-5.2 Leasecontracten: 
-5.3 Beschrijvingzekerheden:
-
-n.v.t.
-
-ING Bank  N.V. heeft een pandrecht  op de bedrijfsuitrusting,  de voorraden  en de debiteuren.  Zie
-onderdeel  4.1.
-
-n.v.t.
-
-5.4 Separatistenpositie: 
-5.5 Boedelbijdragen: 
-n.v.t.
-5.6 Eigendomsvoorbehoud:  n.v.t.
-5.7 Reclamerechten: 
-5.8 Retentierechten: 
-Werkzaamheden: 
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-6.  Doorstart / voortzetten
-
-Voortzetten
-
-Een doorstart is niet aan de orde.
-6.1 Exploitatie/zekerheden:  n.v.t.
-6.2  Financiële  verslaglegging: 
-
-n.v.t.
-
-Werkzaamheden: 
-
-Doorstart
-6.3 Beschrijving: 
-
-n.v.t.
-
-n.v.t.
-
-bedr¡jfsadvocaten.nl
-
-5
-
-6.4
-
-6.5
-
-Verantwoording:
-
-Opbrengst:
-
-6.6
-
-Boedelbijdrage:
-
-Werkzaamheden
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-7.  Rechtmatigheid
-7.1  Boekhoudplicht:
-
-De grootboekkaarten  van2011  en2012  zijn overgelegd alsmede  de kolommenbalans  van
-2012.  Ook zijn de jaarrekeningen van 2010 en 2011  ontvangen.
-Er is geen  reden  om te concluderen  dat de boekhoudplicht  geschonden is.
-
-7.2 Depotjaarrekeningen:
-
-7.3
-
-7.4
-
-De verkorte balans over  2011 is gepubliceerd
-Goedkeurende  verklaring  accountant: 
-
-n.v.t.
-
-Volstortingsverpl  ichting  aandelen :
-Vooralsnog is niet gebleken dat de aandelen  van gefailleerde  zijn volgestort.  Van belang  is dat,
-indien zou blijken  dat de aandelen niet zijn volgestort, de vordering  tot nakoming  van de
-volstortingsverplichting  verjaard is.
-
-7.5 Onbehoorlijkbestuur:
-
-Er is tot dusver geen  aanleiding  om te veronderstellen  dat het bestuur  haar taak
-onbehoorlijk heeft  vervu  ld.
-
-7.6  Paulianeushandelen:
-
-Tot dusver is niet gebleken van rechtshandelingen  die krachtens arl.42 e.v. Fw vernietigbaar
-zijn.
-
-Werkzaamheden
-
-n.v.t.
-
-Crediteuren
-
-Boedelvorderingen:
-
-n.v.t.
-
-Preferente  vordering van de fiscus:
-
-€  18.546,00
-
-Preferente  vordering  van het UWV
-
-Andere preferente  crediteuren:
-
-Aantal  concurrente  crediteuren:
-
-Bedrag  concurrente  crediteuren  :
-N.V.)
-
-n.v.t.
-
-n.v.t.
-
-2
-
-€  177.074,16  (inclusief  de vordering  van ING Bank
-
-8.
-
-8.1
-
-8.2
-
-8.3
-
-8.4
-
-8.5
-
-8.6
-
-bedr¡jfsadvocaten.nl
-
-6
-
-8.7  Veruvachte  wijze  van afwikkeling
-
-Mogelijk  zal het uiteindelijke  boedelactief  niet voldoende  zijn om de faillissementskosten te
-voldoen.  De rechter-commissaris  zal in dat geval  te zijner  tijd verzocht  worden om de rechtbank
-voor te stellen het faillissement op te heffen wegens de toestand  van de boedel.
-
-Er is geen boedelactief gerealiseerd.  De rechter-commissaris  wordt verzocht  om de
-rechtbank voor te stellen  het faillissement  op te heffen  wegens de toestand  van de
-boedel.
-
-9.
-Ll
-
-9.2
-
-9.3
-
-Procedures
-
-Naam wederpartij(en)
-
-Aard procedure:
-
-Stand  procedure:
-
-Werkzaamheden:
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-n.v.t.
-
-10. Overig
-10.1 Termijn añrikkeling faillissement:
-
-Mogelijk  zal dit faillissement binnen  6 maanden  afgewikkeld kunnen  worden
-Dit faillissement kan binnen enkele  maanden  worden  afgewikkeld.
-
-10.2  Plan van aanpak:
-Zie onderdeel4.l
-n.v.t.
-
-10.3 lndiening  volgend  verslag:
-
-n.v.t.
-
-K.T.W.H.  van den Dungen
-
-bedrijfsadvocaten.nl
-
-7
-
-
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Results:</p>
-<ul>
-<li>good: line breaks</li>
-<li>bad: misinterpreting table structure for two column structure, important for extracting parameters. THIS STRUCTURE / TEXT FLOW IS ALSO APPARENT WHEN SELECTING TEXT</li>
-<li>bad: slashes in 'C/01/13/293' F become clo'v131293F - SAME HAPPENS WHEN I COPY AND PASTE FROM PDF</li>
-<li>bad: 'tekst vetged ru kt weergegeven' - SAME COPY&amp;PASTE</li>
-</ul>
-<p>quote from documentation on the text extract function:</p>
-<p>"Locate all text drawing commands, in the order they are provided in the content stream, and extract the text. This works well for some PDF files, but poorly for others, depending on the generator used. This will be refined in the future. Do not rely on the order of text coming out of this function, as it will change if this function is made more sophisticated."</p>
-<p>De misgeinterpreteerde tekst wordt veroorzaakt door een verkeerde of slechte OCR. In dit geval Canon iR-ADV C5235  PDF. DIT PROCES RESULTEERT IN EEN PDF DIE BESTAAT UIT PLAATJES MET DAAROVER ONZICHTBARE TEKST. Je ziet het plaatje en selecteert de onzichtbare tekst, dit leidt tot de copy&amp;paste fouten.</p>
-<p>Indicatie hiervan zit in de meta informatie die met pdftotext te extraheren is. Dit veld, voorbeeld <meta name="Creator" content="Canon iR-ADV C5235  PDF"/> kunnen we meenemen en opslaan voor latere optimalisatie van OCR methode.</p>
-<p>Ook opslaan is de pdf classificatie: [image only/text only/text and images] - de derde optie is er nu nog niet en deze klasse zou opnieuw ge-OCR-ed kunnen worden.</p>
-<p>source: <a href="https://pythonhosted.org/PyPDF2/PageObject.html">https://pythonhosted.org/PyPDF2/PageObject.html</a></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="PyPDF2">PyPDF2<a class="anchor-link" href="#PyPDF2">&#182;</a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">PyPDF2</span>
-<span class="n">pdfFileObj</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">report_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
-<span class="n">pdfReader</span> <span class="o">=</span> <span class="n">PyPDF2</span><span class="o">.</span><span class="n">PdfFileReader</span><span class="p">(</span><span class="n">pdfFileObj</span><span class="p">)</span>
-<span class="n">content</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pdfReader</span><span class="o">.</span><span class="n">numPages</span><span class="p">):</span>
-    <span class="n">pageObj</span> <span class="o">=</span> <span class="n">pdfReader</span><span class="o">.</span><span class="n">getPage</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-    <span class="n">content</span> <span class="o">+=</span> <span class="n">pageObj</span><span class="o">.</span><span class="n">extractText</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>FAILLISSEMENTSVERSLAGGegevens ondernemingFaillissementsnummerDatum uitspraakRechter-commissarisCuratorNummer:9Datum: 26 maart 2018D.A.H. Brusselers Holdinq B.V.statutair gevestigd te&#39;s-Hertogenbosch en feitelijkgevestigd te Drunen aan de Laan van Tasmanië (5152HW).clo&#39;v131293F26 maart2013mr. S.J.O. de Vriesmr. K.T.W.H. van den DungenVoor zover de tekst in dit verslag afw¡jkt van hetgeen in het vorige verslag is vermeld, is dietekst vetged ru kt weergegeven.Activiteiten ondernem ingDe omschrijving van de activiteiten van gefailleerde in het handelsregister is:&#34;Het beheren en beleggen van vermogen, alsmede het optreden als houdster van aandelen in anderevennootschappen.&#34;Deze gebruikelijke omschrijving voor houdstervennootschappen sluit in dit geval redelijk aan op dewerkelijkheid. Er is echter geen sprake geweest van beleggingen, maar uitsluitend van verrichtingenter bestuur van werkmaatschappij Metselbedrijf Brusselers B.V. en ter beheer van de aandelen vanlaatstgenoemde dochtervennootschap. Deze dochter is twee jaar geleden, op 1 februari 2011, faillietverklaard.Omzetgegevensln 2010 bedroeg de netto-omzet•.70.260,-ln2011 bedroeg de netto-omzet • 0,-.n.v.t.• 0,002l oktober 2017 tlm einde faillissement5,88 uren51,74 urenPersoneelSaldo ei nde verslagperiodeVerslagperiodeBestede uren in verslagperiodeBestede uren in totaalbed r¡jf sa dvocate n . n I1. lnventarisatie1.1 Directie en organisatie:Enig aandeelhouder en zelfstandig bevoegd bestuurder van gefailleerde is de heerD.A.H. Brusselers.1.2 Winst en verlies:ln 2010 was het resultaat vóór belastingen - • 270.000,- (verlies).ln 2O11 was het resultaat vóór belastingen • 41 I .000,-.1.3 Balanstotaal:Het balanstotaal per einde 2010 bedroeg: • 95.994,00Het balanstotaal per einde 2011 bedroeg: • 43.678,001.4 Lopendeprocedures:Vooralsnog is niet gebleken van lopende procedures1.5 Verzekeringen:Vooralsnog is niet gebleken dat er sprake is van enige lopende verzekering van gefailleerde1.6 Huur:Er is geen sprake van een lopende huurovereenkomst.1.7 Oorzaakfaillissement:De bestuurder wijst de volgende omstandigheden aan als oorzaak van het faillissement:De enige inkomsten die gefailleerde in het verleden genoot zijn de managementfee en degebruikersvergoeding die Metselbedrijf Brusselers B.V. aan haar verschuldigd waren.(De gebruikersvergoeding had betrekking op de toen nog aanwezige roerende zaken vangefailleerde die voor de bedrijfsactiviteiten van voornoemde dochtervennootschap werdeningezet.)Na de uitspraak van het faillissement van deze dochtervennootschap in 2011 had D.A.H.Brusselers Holding B.V. aldus geen inkomsten meer, ofschoon er wel sprake was vandoorlopende betalingsverplichtingen. Er is geen sprake van andere activa die op enige wijzeliquiditeiten kunnen opleveren, zodat de lopende betalingsverplichtingen uiteindelijk niet meerkonden worden voldaan.Vooralsnog is niet gebleken van andere oorzaken van het faillissement.2.2.12.22.3PersoneelAantal ten tijde van faillissement:Aantal in jaar voor faillissement:Datu m ontslagaanzegging:Bijzonderheden:n.v.t.1n.v.t.n.v.t.2bed rijf sa dvocate n . n I3. ActivaOnroerende zaken3.1 Beschrijving: n.v.t.3.2 Verkoopopbrengst: n.v.t.3.3 Hoogte hypotheek: n.v.t.3.4 Boedelbijdrage: n.v.t.Werkzaamheden: n.v.t.Bedriifsmiddelen3.5 Beschrijving: n.v.t.3.6 Verkoopopbrengst: n.v.t.3.7 Boedelbijdrage: n.v.t.3.8 Bodemvoorrecht fiscus: n.v.t.Voorraden / onderhanden werk3.9 Beschrijving: n.v.t.3.10 Verkoopopbrengst: n.v.t.3.11 Boedelbijdrage: n.v.t.Werkzaamheden: n.v.t.Andere activa3.12 Beschrijving:Er ziin nog enkele roerende zaken van gefailleerde opgeslagen in een container in Kerkdriel;een oude (computer-)server, een eveneens gedateerde monitor, een iPad 1, een spelcomputeren een fitnessbank met losse gewichten.ING Bank N.V. heeft deze zaken al getaxeerd. Volgens dat taxatierapport weegt de teverwachten verkoopopbrengst niet op tegen de benodigde verkoopinspanningen.3.13 Verkoopopbrengst: n.v.t.Werkzaamheden: n.v.t.3bedr¡jfsadvocaten.nl4. Debiteuren4.1 Omvang debiteuren:Er is sprake van twee debiteuren met een totale omvang van • 80.090,96.Gefailleerde heeft een vordering op Metselbedrijf Brusselers B.V. van • 41 .794,96. Nu dezevennootschap in staat van faillissement verkeert, wordt deze vordering als oninbaaraangemerkt.De andere debiteur is de bestuurder, de heer D.A.H. Brusselers. Deze vordering komt voort uitde rekening-courantverhouding en bedraagt • 38.296,00. De heer Brusselers heeft aangegevendeze vordering niet te kunnen voldoen. Hij heeft opgemerkt zijn faillissement te zullenaanvragen.De heer Brusselers is niet overgegaan tot aanvraag van zijn faillissement.De buitengerechtelijke inspanningen van - of namens - ondergetekende hebben niet geleid totontvangst van enige betaling of van enig betalingsvoorstel van de bestuurder.Nadat daartoe toestemming van de rechter-commissaris is verkregen, zijn maatregelenstrekkende tot inleiding van de gerechtelijke procedure tegen de heer Brusselers genomenDe heer Brusselers heeft ondergetekende medegedeeld om ten aanzien van voornoemdeschuld aan de boedeltot een betalingsregeling te willen komen. Aan hem is vervolgensmedegedeeld onder welke voorwaarden die betalingsregeling aan de orde zou kunnen zijnDoor de heer Brusselers is daarop niet meer gereageerd.Nu inmiddels gebleken is dat de heer Brusselers nagenoeg geen verhaal biedt, is besloten omvooralsnog af te zien van voornoemde gerechtelijke procedure. Momenteel wordt met derdenoverleg gevoerd over de eventuele aanvraag van het faillissement van de heer Brusselers.De heer Brusselers heeft niet alsnog een deel van zijn schuld aan gefailleerde betaald. Totdusver zijn geen verhaalsmogelijkheden aangetroffen en heeft zich nog niet de mogelijkheidvoorgedaan om op een effectieve wijze tot een aanvraag van zijn faillissement te komen.Voorlopig wordt gewacht tot zich een wijziging in tenminste één van laatstgenoemde drieomstand igheden voordoet.De komende verslagperiode wordt opnieuw bezien of de heer Brusselers inmiddels enigeverhaalsmogelijkheden biedt en of naar aanvraag van zijn faillissement dient te wordengestreefd.Geconstateerd is dat de rekening-courantvordering op de heer Brusselers is verpand aan INGBank N.V. De bank is een gerechtelijke procedure gestart tegen de heer Brusselers en heeft indeze procedure de aan haar verpande vordering op de heer Brusselers beperkt tot een bedragvan • 12.500,-. De bank heeft zich het recht voorbehouden op het meerdere. Afgelopenverslagperiode heeft de kantonrechter deze vordering toegewezen. De bank is inmiddels eenredelijke termijn ex artikel 58 lid I Fw van vier maanden gesteld om tot inning van hetresterende gedeelte van de rekening-courantvordering over te gaan.De aan de bank gestelde redelijke termijn is verstreken zodat de vordering in beginselten gunste van de boedel kan worden geincasseerd. ln dat verband is wederom bezien ofsprake is van verhaalsmogelijkheden jegens de heer Brusselers. Daarvan is helaas nietgebleken. Ook ING bank is er vooralsnog niet in geslaagd om de vordering uit hoofdevan het vonnis van de kantonrechter bij de heer Brusselers te innen.Er is ook geen aanleiding om te veronderstellen dat er binnen afzienbare tijd alsnog4bed r¡jf sadvocaten. n Iverhaalsmogelijkheden zullen ontstaan. Daarom is besloten om niet langer te wachtenmet de afronding van dit faillissement.4.2 Opbrengstvooralsnog n.v.t.n.v.t-4.3 Boedelbijdrage:Werkzaamheden:zie onderdeel4.1.Er liggen geen bijzondere werkzaamheden in hetverschiet.5. Bank/Zekerheden5.1 Vorderingbank(en):ING Bank N.V. heeft een vordering ingediend van • 176.932,68.5.2 Leasecontracten: n.v.t.5.3 Beschrijvingzekerheden:ING Bank N.V. heeft een pandrecht op de bedrijfsuitrusting, de voorraden en de debiteuren. Zieonderdeel 4.1.5.4 Separatistenpositie: n.v.t.5.5 Boedelbijdragen: n.v.t.5.6 Eigendomsvoorbehoud: n.v.t.5.7 Reclamerechten: n.v.t.5.8 Retentierechten: n.v.t.Werkzaamheden: n.v.t.6. Doorstart / voortzettenVoortzettenEen doorstart is niet aan de orde.6.1 Exploitatie/zekerheden: n.v.t.6.2 Financiële verslaglegging: n.v.t.Werkzaamheden: n.v.t.Doorstart6.3 Beschrijving: n.v.t.n.v.t.5bedr¡jfsadvocaten.nl6.46.56.67.37.47. Rechtmatigheid7.1 Boekhoudplicht:De grootboekkaarten van2011 en2012 zijn overgelegd alsmede de kolommenbalans van2012. Ook zijn de jaarrekeningen van 2010 en 2011 ontvangen.Er is geen reden om te concluderen dat de boekhoudplicht geschonden is.7.2 Depotjaarrekeningen:De verkorte balans over 2011 is gepubliceerdVerantwoording:Opbrengst:Boedelbijdrage:WerkzaamhedenCrediteurenBoedelvorderingen:Preferente vordering van de fiscus:Preferente vordering van het UWVAndere preferente crediteuren:Aantal concurrente crediteuren:Bedrag concurrente crediteuren :N.V.)n.v.t.n.v.t.n.v.t.n.v.t.n.v.t.• 18.546,00n.v.t.n.v.t.2• 177.074,16 (inclusief de vordering van ING BankGoedkeurende verklaring accountant: n.v.t.Volstortingsverpl ichting aandelen :Vooralsnog is niet gebleken dat de aandelen van gefailleerde zijn volgestort. Van belang is dat,indien zou blijken dat de aandelen niet zijn volgestort, de vordering tot nakoming van devolstortingsverplichting verjaard is.7.5 Onbehoorlijkbestuur:Er is tot dusver geen aanleiding om te veronderstellen dat het bestuur haar taakonbehoorlijk heeft vervu ld.7.6 Paulianeushandelen:Tot dusver is niet gebleken van rechtshandelingen die krachtens arl.42 e.v. Fw vernietigbaarzijn.Werkzaamhedenn.v.t.8.8.18.28.38.48.58.66bedr¡jfsadvocaten.nl8.7 Veruvachte wijze van afwikkelingMogelijk zal het uiteindelijke boedelactief niet voldoende zijn om de faillissementskosten tevoldoen. De rechter-commissaris zal in dat geval te zijner tijd verzocht worden om de rechtbankvoor te stellen het faillissement op te heffen wegens de toestand van de boedel.Er is geen boedelactief gerealiseerd. De rechter-commissaris wordt verzocht om derechtbank voor te stellen het faillissement op te heffen wegens de toestand van deboedel.9.Ll9.29.3ProceduresNaam wederpartij(en)Aard procedure:Stand procedure:Werkzaamheden:n.v.t.n.v.t.n.v.t.n.v.t.10. Overig10.1 Termijn añrikkeling faillissement:Mogelijk zal dit faillissement binnen 6 maanden afgewikkeld kunnen wordenDit faillissement kan binnen enkele maanden worden afgewikkeld.10.2 Plan van aanpak:Zie onderdeel4.ln.v.t.10.3 lndiening volgend verslag:n.v.t.K.T.W.H. van den Dungen7bedrijfsadvocaten.nl
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Results:</p>
-<ul>
-<li>bad: no linebreaks, missing structure</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="pdftotext">pdftotext<a class="anchor-link" href="#pdftotext">&#182;</a></h2><h3 id="command-line-using-popen---with-layout-and-htmlmeta-options-enabled">command-line using popen - with layout and htmlmeta options enabled<a class="anchor-link" href="#command-line-using-popen---with-layout-and-htmlmeta-options-enabled">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># convert pdf</span>
-<span class="n">exec_path</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;/usr/local/bin/pdftotext&#39;</span>
-<span class="n">options</span> <span class="o">=</span> <span class="s1">&#39;-layout -htmlmeta&#39;</span>
-<span class="n">to_stdout</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span>
-<span class="n">command</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">exec_path</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">report_path</span><span class="p">,</span> <span class="n">to_stdout</span><span class="p">])</span>
-<span class="n">report_content</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="n">command</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">report_content</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>&lt;!DOCTYPE html PUBLIC &#34;-//W3C//DTD XHTML 1.0 Transitional//EN&#34; &#34;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&#34;&gt;&lt;html xmlns=&#34;http://www.w3.org/1999/xhtml&#34;&gt;
-&lt;head&gt;
-&lt;title&gt;&lt;/title&gt;
-&lt;meta name=&#34;Creator&#34; content=&#34;Canon iR-ADV C5235  PDF&#34;/&gt;
-&lt;meta name=&#34;Producer&#34; content=&#34;Adobe PSL 1.2e for Canon&#34;/&gt;
-&lt;meta name=&#34;CreationDate&#34; content=&#34;&#34;/&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;pre&gt;
-FAILLISSEMENTSVERSLAG                       Nummer:9                   Datum: 26 maart 2018
-
-
-
-
-Gegevens onderneming                        D.A.H. Brusselers Holdinq B.V.
-                                            statutair gevestigd te&#39;s-Hertogenbosch en feitelijk
-                                            gevestigd te Drunen aan de Laan van Tasmanië (5152
-                                            HW).
-
-Faillissementsnummer                        clo&#39;v131293F
-
-Datum uitspraak                             26 maart2013
-
-Rechter-commissaris                         mr. S.J.O. de Vries
-
-Curator                                     mr. K.T.W.H. van den Dungen
-
-
-
-
-Voor zover de tekst in dit verslag afw¡jkt van hetgeen in het vorige verslag is vermeld, is die
-tekst vetged ru kt weergegeven.
-
-
-Activiteiten ondernem ing
-
-De omschrijving van de activiteiten van gefailleerde in het handelsregister is:
-&#34;Het beheren en beleggen van vermogen, alsmede het optreden als houdster van aandelen in andere
-vennootschappen.&#34;
-Deze gebruikelijke omschrijving voor houdstervennootschappen sluit in dit geval redelijk aan op de
-werkelijkheid. Er is echter geen sprake geweest van beleggingen, maar uitsluitend van verrichtingen
-ter bestuur van werkmaatschappij Metselbedrijf Brusselers B.V. en ter beheer van de aandelen van
-laatstgenoemde dochtervennootschap. Deze dochter is twee jaar geleden, op 1 februari 2011, failliet
-verklaard.
-
-Omzetgegevens                              ln 2010 bedroeg de netto-omzet€.70.260,-
-                                           ln2011 bedroeg de netto-omzet € 0,-.
-
-Personeel                                   n.v.t.
-
-Saldo   ei   nde verslagperiode            € 0,00
-
-Verslagperiode                             2l oktober   2017 tlm einde faillissement
-
-Bestede uren in verslagperiode             5,88 uren
-
-Bestede uren in totaal                     51,74 uren
-
-
-
-
-                                                     bed r¡jf         sa dvocate n . n                I
- 1.     lnventarisatie
-
- 1.1    Directie en organisatie:
-        Enig aandeelhouder en zelfstandig bevoegd bestuurder van gefailleerde is de heer
-        D.A.H. Brusselers.
- 1.2    Winst en verlies:
-        ln 2010 was het resultaat vóór belastingen - € 270.000,- (verlies).
-        ln 2O11 was het resultaat vóór belastingen € 41 I .000,-.
-
-1.3     Balanstotaal:
-        Het balanstotaal per einde 2010 bedroeg: € 95.994,00
-        Het balanstotaal per einde 2011 bedroeg: € 43.678,00
-
-1.4    Lopendeprocedures:
-       Vooralsnog is niet gebleken van lopende procedures
-
-1.5 Verzekeringen:
-       Vooralsnog is niet gebleken dat er sprake is van enige lopende verzekering van gefailleerde
-
-1.6    Huur:
-       Er is geen sprake van een lopende huurovereenkomst.
-
-1.7    Oorzaakfaillissement:
-
-       De bestuurder wijst de volgende omstandigheden aan als oorzaak van het faillissement:
-
-       De enige inkomsten die gefailleerde in het verleden genoot zijn de managementfee en de
-       gebruikersvergoeding die Metselbedrijf Brusselers B.V. aan haar verschuldigd waren.
-       (De gebruikersvergoeding had betrekking op de toen nog aanwezige roerende zaken van
-       gefailleerde die voor de bedrijfsactiviteiten van voornoemde dochtervennootschap werden
-       ingezet.)
-       Na de uitspraak van het faillissement van deze dochtervennootschap in 2011 had D.A.H.
-       Brusselers Holding B.V. aldus geen inkomsten meer, ofschoon er wel sprake was van
-       doorlopende betalingsverplichtingen. Er is geen sprake van andere activa die op enige wijze
-       liquiditeiten kunnen opleveren, zodat de lopende betalingsverplichtingen uiteindelijk niet meer
-       konden worden voldaan.
-
-       Vooralsnog is niet gebleken van andere oorzaken van het faillissement.
-
-
-2.     Personeel
-
-2.1    Aantal ten tijde van faillissement:    n.v.t.
-
-2.2    Aantal in jaar voor faillissement:     1
-
-
-
-2.3    Datu m ontslagaanzegging:              n.v.t.
-
-       Bijzonderheden:                        n.v.t.
-
-
-
-
-                                                                                                         2
-
-
-
-
-                                                       bed rijf           sa     dvocate                     n .n   I
-3.     Activa
-
-Onroerende zaken
-
-3.1 Beschrijving:                            n.v.t.
-
-3.2 Verkoopopbrengst:                        n.v.t.
-
-3.3 Hoogte hypotheek:                        n.v.t.
-
-3.4 Boedelbijdrage:                          n.v.t.
-
-    Werkzaamheden:                          n.v.t.
-
-Bedriifsmiddelen
-
-3.5 Beschrijving:                           n.v.t.
-
-3.6 Verkoopopbrengst:                       n.v.t.
-
-3.7 Boedelbijdrage:                         n.v.t.
-
-3.8 Bodemvoorrecht fiscus:                  n.v.t.
-
-Voorraden / onderhanden werk
-
-3.9 Beschrijving:                           n.v.t.
-
-3.10 Verkoopopbrengst:                      n.v.t.
-
-3.11 Boedelbijdrage:                        n.v.t.
-
-     Werkzaamheden:                         n.v.t.
-
-Andere activa
-
-3.12   Beschrijving:
-       Er ziin nog enkele roerende zaken van gefailleerde opgeslagen in een container in Kerkdriel;
-       een oude (computer-)server, een eveneens gedateerde monitor, een iPad 1, een spelcomputer
-       en een fitnessbank met losse gewichten.
-
-       ING Bank N.V. heeft deze zaken al getaxeerd. Volgens dat taxatierapport weegt de te
-       verwachten verkoopopbrengst niet op tegen de benodigde verkoopinspanningen.
-
-3.13   Verkoopopbrengst:                    n.v.t.
-
-       Werkzaamheden:                       n.v.t.
-
-
-
-
-                                                                                                  3
-
-
-
-
-                                                      bedr¡jfsadvocaten.nl
-4.    Debiteuren
-
-4.1   Omvang debiteuren:
-      Er is sprake van twee debiteuren met een totale omvang van € 80.090,96.
-      Gefailleerde heeft een vordering op Metselbedrijf Brusselers B.V. van € 41 .794,96. Nu deze
-      vennootschap in staat van faillissement verkeert, wordt deze vordering als oninbaar
-      aangemerkt.
-      De andere debiteur is de bestuurder, de heer D.A.H. Brusselers. Deze vordering komt voort uit
-      de rekening-courantverhouding en bedraagt € 38.296,00. De heer Brusselers heeft aangegeven
-      deze vordering niet te kunnen voldoen. Hij heeft opgemerkt zijn faillissement te zullen
-      aanvragen.
-
-
-      De heer Brusselers is niet overgegaan tot aanvraag van zijn faillissement.
-      De buitengerechtelijke inspanningen van - of namens - ondergetekende hebben niet geleid tot
-      ontvangst van enige betaling of van enig betalingsvoorstel van de bestuurder.
-
-      Nadat daartoe toestemming van de rechter-commissaris is verkregen, zijn maatregelen
-      strekkende tot inleiding van de gerechtelijke procedure tegen de heer Brusselers genomen
-      De heer Brusselers heeft ondergetekende medegedeeld om ten aanzien van voornoemde
-      schuld aan de boedeltot een betalingsregeling te willen komen. Aan hem is vervolgens
-      medegedeeld onder welke voorwaarden die betalingsregeling aan de orde zou kunnen zijn
-      Door de heer Brusselers is daarop niet meer gereageerd.
-
-      Nu inmiddels gebleken is dat de heer Brusselers nagenoeg geen verhaal biedt, is besloten om
-      vooralsnog af te zien van voornoemde gerechtelijke procedure. Momenteel wordt met derden
-      overleg gevoerd over de eventuele aanvraag van het faillissement van de heer Brusselers.
-
-      De heer Brusselers heeft niet alsnog een deel van zijn schuld aan gefailleerde betaald. Tot
-      dusver zijn geen verhaalsmogelijkheden aangetroffen en heeft zich nog niet de mogelijkheid
-      voorgedaan om op een effectieve wijze tot een aanvraag van zijn faillissement te komen.
-      Voorlopig wordt gewacht tot zich een wijziging in tenminste één van laatstgenoemde drie
-      omstand igheden voordoet.
-
-      De komende verslagperiode wordt opnieuw bezien of de heer Brusselers inmiddels enige
-      verhaalsmogelijkheden biedt en of naar aanvraag van zijn faillissement dient te worden
-      gestreefd.
-
-      Geconstateerd is dat de rekening-courantvordering op de heer Brusselers is verpand aan ING
-      Bank N.V. De bank is een gerechtelijke procedure gestart tegen de heer Brusselers en heeft in
-      deze procedure de aan haar verpande vordering op de heer Brusselers beperkt tot een bedrag
-      van € 12.500,-. De bank heeft zich het recht voorbehouden op het meerdere. Afgelopen
-      verslagperiode heeft de kantonrechter deze vordering toegewezen. De bank is inmiddels een
-      redelijke termijn ex artikel 58 lid I Fw van vier maanden gesteld om tot inning van het
-      resterende gedeelte van de rekening-courantvordering over te gaan.
-
-      De aan de bank gestelde redelijke termijn is verstreken zodat de vordering in beginsel
-      ten gunste van de boedel kan worden geincasseerd. ln dat verband is wederom bezien of
-      sprake is van verhaalsmogelijkheden jegens de heer Brusselers. Daarvan is helaas niet
-      gebleken. Ook ING bank is er vooralsnog niet in geslaagd om de vordering uit hoofde
-      van het vonnis van de kantonrechter bij de heer Brusselers te innen.
-      Er is ook geen aanleiding om te veronderstellen dat er binnen afzienbare tijd alsnog
-
-
-
-
-                                                                                                      4
-
-
-
-
-                                                  bed r¡jf sadvocaten.                                    nI
-       verhaalsmogelijkheden zullen ontstaan. Daarom is besloten om niet langer te wachten
-       met de afronding van dit faillissement.
-
-4.2    Opbrengst                            vooralsnog n.v.t.
-                                            n.v.t-
-
-4.3    Boedelbijdrage:                      n.v.t.
-
-       Werkzaamheden:                       zie onderdeel4.1.
-                                            Er liggen geen bijzondere werkzaamheden in het
-                                            verschiet.
-
-
-5. Bank/Zekerheden
-5.1 Vorderingbank(en):
-       ING Bank N.V. heeft een vordering ingediend van € 176.932,68.
-
-5.2 Leasecontracten:                       n.v.t.
-
-5.3 Beschrijvingzekerheden:
-      ING Bank N.V. heeft een pandrecht op de bedrijfsuitrusting, de voorraden en de debiteuren. Zie
-      onderdeel 4.1.
-
-5.4   Separatistenpositie:                 n.v.t.
-
-5.5   Boedelbijdragen:                     n.v.t.
-
-5.6   Eigendomsvoorbehoud:                 n.v.t.
-
-5.7   Reclamerechten:                      n.v.t.
-
-5.8   Retentierechten:                     n.v.t.
-
-      Werkzaamheden:                       n.v.t.
-
-6.    Doorstart / voortzetten
-
-Voortzetten
-
-Een doorstart is niet aan de orde.
-
-6.1 Exploitatie/zekerheden:                    n.v.t.
-
-6.2 Financiële verslaglegging:                 n.v.t.
-
-    Werkzaamheden:                             n.v.t.
-
-Doorstart
-
-6.3 Beschrijving:                              n.v.t.
-
-
-
-
-                                                                                                   5
-
-
-
-
-                                                     bedr¡jfsadvocaten.nl
-6.4   Verantwoording:                           n.v.t.
-
-6.5   Opbrengst:                                n.v.t.
-
-6.6   Boedelbijdrage:                           n.v.t.
-
-      Werkzaamheden                             n.v.t.
-
-
-7.    Rechtmatigheid
-
-7.1   Boekhoudplicht:
-      De grootboekkaarten van2011 en2012 zijn overgelegd alsmede de kolommenbalans van
-      2012. Ook zijn de jaarrekeningen van 2010 en 2011 ontvangen.
-      Er is geen reden om te concluderen dat de boekhoudplicht geschonden is.
-
-7.2   Depotjaarrekeningen:
-      De verkorte balans over 2011 is gepubliceerd
-
-7.3   Goedkeurende verklaring   accountant:              n.v.t.
-
-7.4   Volstortingsverpl ichting aandelen :
-      Vooralsnog is niet gebleken dat de aandelen van gefailleerde zijn volgestort. Van belang is dat,
-      indien zou blijken dat de aandelen niet zijn volgestort, de vordering tot nakoming van de
-      volstortingsverplichting verjaard is.
-
-7.5   Onbehoorlijkbestuur:
-      Er is tot dusver geen aanleiding om te veronderstellen dat het bestuur haar taak
-      onbehoorlijk heeft vervu ld.
-
-7.6   Paulianeushandelen:
-      Tot dusver is niet gebleken van rechtshandelingen die krachtens arl.42 e.v. Fw vernietigbaar
-      zijn.
-
-      Werkzaamheden                                      n.v.t.
-
-
-8.    Crediteuren
-
-8.1   Boedelvorderingen:                        n.v.t.
-
-8.2   Preferente vordering van de fiscus:      € 18.546,00
-
-8.3   Preferente vordering van het UWV          n.v.t.
-
-8.4   Andere preferente crediteuren:            n.v.t.
-
-8.5   Aantal concurrente crediteuren:          2
-
-8.6   Bedrag concurrente crediteuren    :      € 177.074,16 (inclusief de vordering van ING Bank
-      N.V.)
-
-
-
-
-                                                                                                         6
-
-
-
-
-                                                     bedr¡jfsadvocaten.nl
-8.7    Veruvachte wijze van afwikkeling
-
-       Mogelijk zal het uiteindelijke boedelactief niet voldoende zijn om de faillissementskosten te
-       voldoen. De rechter-commissaris zal in dat geval te zijner tijd verzocht worden om de rechtbank
-       voor te stellen het faillissement op te heffen wegens de toestand van de boedel.
-
-       Er is geen boedelactief gerealiseerd. De rechter-commissaris wordt verzocht om de
-       rechtbank voor te stellen het faillissement op te heffen wegens de toestand van de
-       boedel.
-
-9.     Procedures
-
-Ll     Naam wederpartij(en)                  n.v.t.
-
-9.2    Aard procedure:                       n.v.t.
-
-9.3    Stand procedure:                      n.v.t.
-
-       Werkzaamheden:                        n.v.t.
-
-
-10.    Overig
-
-10.1 Termijn añrikkeling faillissement:
-       Mogelijk zal dit faillissement binnen 6 maanden afgewikkeld kunnen worden
-       Dit faillissement kan binnen enkele maanden worden afgewikkeld.
-
-10.2   Plan van aanpak:
-       Zie onderdeel4.l
-       n.v.t.
-
-10.3   lndiening volgend verslag:
-
-       n.v.t.
-
-
-
-
-                                                               K.T.W.H. van den Dungen
-
-
-
-
-                                                                                                     7
-
-
-
-
-                                                      bedrijfsadvocaten.nl
-&lt;/pre&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Results:</p>
-<ul>
-<li>very good: keeps the proper column format (only when using the -layout option)</li>
-<li>bad: same text issues - reason below </li>
-<li>good: additional meta data, but not very important</li>
-</ul>
-<p>"Fonts in PDF files are stored with two tables, one contains the glyphs (the character shapes) and one contains a "toUnicode" map, which says what character each glyph represents. Acrobat uses the first table to draw the page, so it doesn't actually know what the text "says", only which patterns of shapes to draw. When you copy or search the file, the second lookup table is used to work out what the text says"</p>
-<p>use pdffonts</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="using-pdftotext-pyton-package">using pdftotext pyton package<a class="anchor-link" href="#using-pdftotext-pyton-package">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pdftotext</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">report_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">pdf</span> <span class="o">=</span> <span class="n">pdftotext</span><span class="o">.</span><span class="n">PDF</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pdf</span><span class="p">))</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre> FAILLISSEMENTSVERSLAG                         Nummer:9                     Datum: 26 maart 2018
- Gegevens onderneming                          D.A.H. Brusselers Holdinq B.V.
-                                               statutair gevestigd te&#39;s-Hertogenbosch en feitelijk
-                                               gevestigd te Drunen aan de Laan van Tasmanië (5152
-                                               HW).
- Faillissementsnummer                          clo&#39;v131293F
- Datum uitspraak                              26 maart2013
- Rechter-commissaris                           mr. S.J.O. de Vries
- Curator                                       mr. K.T.W.H. van den Dungen
-Voor zover de tekst in dit verslag afw¡jkt van hetgeen in het vorige verslag is vermeld, is die
-tekst vetged ru kt weergegeven.
-Activiteiten ondernem ing
-De omschrijving van de activiteiten van gefailleerde in het handelsregister is:
-&#34;Het beheren en beleggen van vermogen, alsmede het optreden als houdster van aandelen in andere
-vennootschappen.&#34;
-Deze gebruikelijke omschrijving voor houdstervennootschappen sluit in dit geval redelijk aan op de
-werkelijkheid. Er is echter geen sprake geweest van beleggingen, maar uitsluitend van verrichtingen
-ter bestuur van werkmaatschappij Metselbedrijf Brusselers B.V. en ter beheer van de aandelen van
-laatstgenoemde dochtervennootschap. Deze dochter is twee jaar geleden, op 1 februari 2011, failliet
-verklaard.
-Omzetgegevens                                 ln 2010 bedroeg de netto-omzet€.70.260,-
-                                              ln2011 bedroeg de netto-omzet € 0,-.
-Personeel                                     n.v.t.
-Saldo   ei nde verslagperiode                € 0,00
-Verslagperiode                               2l oktober     2017 tlm einde faillissement
-Bestede uren in verslagperiode                5,88 uren
-Bestede uren in totaal                       51,74 uren
-                                                      bed r¡jf              sa dvocate n . n        I
-
-
- 1.    lnventarisatie
- 1.1   Directie en organisatie:
-       Enig aandeelhouder en zelfstandig bevoegd bestuurder van gefailleerde is de heer
-       D.A.H. Brusselers.
- 1.2   Winst en verlies:
-       ln 2010 was het resultaat vóór belastingen - € 270.000,- (verlies).
-       ln 2O11 was het resultaat vóór belastingen € 41 I .000,-.
- 1.3   Balanstotaal:
-       Het balanstotaal per einde 2010 bedroeg: € 95.994,00
-       Het balanstotaal per einde 2011 bedroeg: € 43.678,00
- 1.4   Lopendeprocedures:
-      Vooralsnog is niet gebleken van lopende procedures
- 1.5 Verzekeringen:
-      Vooralsnog is niet gebleken dat er sprake is van enige lopende verzekering van gefailleerde
- 1.6  Huur:
-      Er is geen sprake van een lopende huurovereenkomst.
- 1.7  Oorzaakfaillissement:
-     De bestuurder wijst de volgende omstandigheden aan als oorzaak van het faillissement:
-     De enige inkomsten die gefailleerde in het verleden genoot zijn de managementfee en de
-     gebruikersvergoeding die Metselbedrijf Brusselers B.V. aan haar verschuldigd waren.
-     (De gebruikersvergoeding had betrekking op de toen nog aanwezige roerende zaken van
-     gefailleerde die voor de bedrijfsactiviteiten van voornoemde dochtervennootschap werden
-     ingezet.)
-     Na de uitspraak van het faillissement van deze dochtervennootschap in 2011 had D.A.H.
-     Brusselers Holding B.V. aldus geen inkomsten meer, ofschoon er wel sprake was van
-     doorlopende betalingsverplichtingen. Er is geen sprake van andere activa die op enige wijze
-     liquiditeiten kunnen opleveren, zodat de lopende betalingsverplichtingen uiteindelijk niet meer
-     konden worden voldaan.
-     Vooralsnog is niet gebleken van andere oorzaken van het faillissement.
-2.   Personeel
-2.1  Aantal ten tijde van faillissement:       n.v.t.
-2.2  Aantal in jaar voor faillissement:        1
-2.3  Datu m ontslagaanzegging:                 n.v.t.
-     Bijzonderheden:                           n.v.t.
-                                                                                                     2
-                                                      bed rijf             sa dvocate                  n .n I
-
-
- 3.     Activa
- Onroerende zaken
- 3.1 Beschrijving:                           n.v.t.
- 3.2 Verkoopopbrengst:                       n.v.t.
- 3.3 Hoogte hypotheek:                       n.v.t.
-3.4 Boedelbijdrage:                          n.v.t.
-        Werkzaamheden:                       n.v.t.
-Bedriifsmiddelen
-3.5 Beschrijving:                            n.v.t.
-3.6 Verkoopopbrengst:                       n.v.t.
-3.7 Boedelbijdrage:                         n.v.t.
-3.8 Bodemvoorrecht fiscus:                   n.v.t.
-Voorraden / onderhanden werk
-3.9 Beschrijving:                           n.v.t.
-3.10 Verkoopopbrengst:                      n.v.t.
-3.11 Boedelbijdrage:                        n.v.t.
-       Werkzaamheden:                       n.v.t.
-Andere activa
-3.12   Beschrijving:
-       Er ziin nog enkele roerende zaken van gefailleerde opgeslagen in een container in Kerkdriel;
-       een oude (computer-)server, een eveneens gedateerde monitor, een iPad 1, een spelcomputer
-      en een fitnessbank met losse gewichten.
-       ING Bank N.V. heeft deze zaken al getaxeerd. Volgens dat taxatierapport weegt de te
-      verwachten verkoopopbrengst niet op tegen de benodigde verkoopinspanningen.
-3.13  Verkoopopbrengst:                     n.v.t.
-      Werkzaamheden:                        n.v.t.
-                                                                                                    3
-                                                    bedr¡jfsadvocaten.nl
-
-
-4.    Debiteuren
-4.1   Omvang debiteuren:
-      Er is sprake van twee debiteuren met een totale omvang van € 80.090,96.
-     Gefailleerde heeft een vordering op Metselbedrijf Brusselers B.V. van € 41 .794,96. Nu deze
-     vennootschap in staat van faillissement verkeert, wordt deze vordering als oninbaar
-     aangemerkt.
-     De andere debiteur is de bestuurder, de heer D.A.H. Brusselers. Deze vordering komt voort uit
-     de rekening-courantverhouding en bedraagt € 38.296,00. De heer Brusselers heeft aangegeven
-     deze vordering niet te kunnen voldoen. Hij heeft opgemerkt zijn faillissement te zullen
-     aanvragen.
-     De heer Brusselers is niet overgegaan tot aanvraag van zijn faillissement.
-     De buitengerechtelijke inspanningen van - of namens - ondergetekende hebben niet geleid tot
-     ontvangst van enige betaling of van enig betalingsvoorstel van de bestuurder.
-     Nadat daartoe toestemming van de rechter-commissaris is verkregen, zijn maatregelen
-     strekkende tot inleiding van de gerechtelijke procedure tegen de heer Brusselers genomen
-     De heer Brusselers heeft ondergetekende medegedeeld om ten aanzien van voornoemde
-     schuld aan de boedeltot een betalingsregeling te willen komen. Aan hem is vervolgens
-     medegedeeld onder welke voorwaarden die betalingsregeling aan de orde zou kunnen zijn
-     Door de heer Brusselers is daarop niet meer gereageerd.
-     Nu inmiddels gebleken is dat de heer Brusselers nagenoeg geen verhaal biedt, is besloten om
-     vooralsnog af te zien van voornoemde gerechtelijke procedure. Momenteel wordt met derden
-     overleg gevoerd over de eventuele aanvraag van het faillissement van de heer Brusselers.
-     De heer Brusselers heeft niet alsnog een deel van zijn schuld aan gefailleerde betaald. Tot
-     dusver zijn geen verhaalsmogelijkheden aangetroffen en heeft zich nog niet de mogelijkheid
-    voorgedaan om op een effectieve wijze tot een aanvraag van zijn faillissement te komen.
-    Voorlopig wordt gewacht tot zich een wijziging in tenminste één van laatstgenoemde drie
-    omstand igheden voordoet.
-    De komende verslagperiode wordt opnieuw bezien of de heer Brusselers inmiddels enige
-    verhaalsmogelijkheden biedt en of naar aanvraag van zijn faillissement dient te worden
-    gestreefd.
-    Geconstateerd is dat de rekening-courantvordering op de heer Brusselers is verpand aan ING
-    Bank N.V. De bank is een gerechtelijke procedure gestart tegen de heer Brusselers en heeft in
-    deze procedure de aan haar verpande vordering op de heer Brusselers beperkt tot een bedrag
-    van € 12.500,-. De bank heeft zich het recht voorbehouden op het meerdere. Afgelopen
-    verslagperiode heeft de kantonrechter deze vordering toegewezen. De bank is inmiddels een
-    redelijke termijn ex artikel 58 lid I Fw van vier maanden gesteld om tot inning van het
-    resterende gedeelte van de rekening-courantvordering over te gaan.
-    De aan de bank gestelde redelijke termijn is verstreken zodat de vordering in beginsel
-    ten gunste van de boedel kan worden geincasseerd. ln dat verband is wederom bezien of
-    sprake is van verhaalsmogelijkheden jegens de heer Brusselers. Daarvan is helaas niet
-    gebleken. Ook ING bank is er vooralsnog niet in geslaagd om de vordering uit hoofde
-    van het vonnis van de kantonrechter bij de heer Brusselers te innen.
-    Er is ook geen aanleiding om te veronderstellen dat er binnen afzienbare tijd alsnog
-                                                                                                   4
-                                                    bed r¡jf sadvocaten.                             nI
-
-
-       verhaalsmogelijkheden zullen ontstaan. Daarom is besloten om niet langer te wachten
-        met de afronding van dit faillissement.
-4.2    Opbrengst                            vooralsnog n.v.t.
-                                            n.v.t-
-4.3    Boedelbijdrage:                      n.v.t.
-       Werkzaamheden:                       zie onderdeel4.1.
-                                            Er liggen geen bijzondere werkzaamheden in het
-                                            verschiet.
-5. Bank/Zekerheden
-5.1 Vorderingbank(en):
-       ING Bank N.V. heeft een vordering ingediend van € 176.932,68.
-5.2 Leasecontracten:                        n.v.t.
-5.3 Beschrijvingzekerheden:
-       ING Bank N.V. heeft een pandrecht op de bedrijfsuitrusting, de voorraden en de debiteuren. Zie
-      onderdeel 4.1.
-5.4   Separatistenpositie:                  n.v.t.
-5.5   Boedelbijdragen:                      n.v.t.
-5.6   Eigendomsvoorbehoud:                  n.v.t.
-5.7   Reclamerechten:                       n.v.t.
-5.8   Retentierechten:                      n.v.t.
-      Werkzaamheden:                        n.v.t.
-6.    Doorstart / voortzetten
-Voortzetten
-Een doorstart is niet aan de orde.
-6.1 Exploitatie/zekerheden:                     n.v.t.
-6.2 Financiële verslaglegging:                  n.v.t.
-      Werkzaamheden:                            n.v.t.
-Doorstart
-6.3 Beschrijving:                               n.v.t.
-                                                                                                    5
-                                                    bedr¡jfsadvocaten.nl
-
-
-6.4 Verantwoording:                             n.v.t.
-6.5  Opbrengst:                                 n.v.t.
-6.6  Boedelbijdrage:                            n.v.t.
-    Werkzaamheden                               n.v.t.
-7.  Rechtmatigheid
-7.1 Boekhoudplicht:
-    De grootboekkaarten van2011 en2012 zijn overgelegd alsmede de kolommenbalans van
-    2012. Ook zijn de jaarrekeningen van 2010 en 2011 ontvangen.
-    Er is geen reden om te concluderen dat de boekhoudplicht geschonden is.
-7.2 Depotjaarrekeningen:
-    De verkorte balans over 2011 is gepubliceerd
-7.3 Goedkeurende verklaring     accountant:            n.v.t.
-7.4 Volstortingsverpl ichting aandelen :
-    Vooralsnog is niet gebleken dat de aandelen van gefailleerde zijn volgestort. Van belang is dat,
-    indien zou blijken dat de aandelen niet zijn volgestort, de vordering tot nakoming van de
-    volstortingsverplichting verjaard is.
-7.5 Onbehoorlijkbestuur:
-    Er is tot dusver geen aanleiding om te veronderstellen dat het bestuur haar taak
-    onbehoorlijk heeft vervu ld.
-7.6 Paulianeushandelen:
-    Tot dusver is niet gebleken van rechtshandelingen die krachtens arl.42 e.v. Fw vernietigbaar
-    zijn.
-    Werkzaamheden                                      n.v.t.
-8.  Crediteuren
-8.1 Boedelvorderingen:                         n.v.t.
-8.2 Preferente vordering van de fiscus:        € 18.546,00
-8.3 Preferente vordering van het UWV           n.v.t.
-8.4 Andere preferente crediteuren:             n.v.t.
-8.5 Aantal concurrente crediteuren:            2
-8.6 Bedrag concurrente crediteuren   :         € 177.074,16 (inclusief de vordering van ING Bank
-    N.V.)
-                                                                                                     6
-                                                    bedr¡jfsadvocaten.nl
-
-
-8.7   Veruvachte wijze van afwikkeling
-      Mogelijk zal het uiteindelijke boedelactief niet voldoende zijn om de faillissementskosten te
-      voldoen. De rechter-commissaris zal in dat geval te zijner tijd verzocht worden om de rechtbank
-      voor te stellen het faillissement op te heffen wegens de toestand van de boedel.
-      Er is geen boedelactief gerealiseerd. De rechter-commissaris wordt verzocht om de
-      rechtbank voor te stellen het faillissement op te heffen wegens de toestand van de
-      boedel.
-9.    Procedures
-Ll    Naam wederpartij(en)                     n.v.t.
-9.2   Aard procedure:                          n.v.t.
-9.3   Stand procedure:                         n.v.t.
-      Werkzaamheden:                           n.v.t.
-10.   Overig
-10.1 Termijn añrikkeling faillissement:
-      Mogelijk zal dit faillissement binnen 6 maanden afgewikkeld kunnen worden
-      Dit faillissement kan binnen enkele maanden worden afgewikkeld.
-10.2 Plan van aanpak:
-     Zie onderdeel4.l
-     n.v.t.
-10.3 lndiening volgend verslag:
-     n.v.t.
-                                                                 K.T.W.H. van den Dungen
-                                                                                                    7
-                                                      bedrijfsadvocaten.nl
-
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="pdftohtml">pdftohtml<a class="anchor-link" href="#pdftohtml">&#182;</a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># convert pdf</span>
-<span class="n">exec_path</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;/usr/local/bin/pdftohtml&#39;</span>
-<span class="n">options</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">exec_path</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">report_path</span><span class="p">]))</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[8]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>0</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="pdfrw">pdfrw<a class="anchor-link" href="#pdfrw">&#182;</a></h1>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pdfrw</span>
-<span class="kn">from</span> <span class="nn">pdfrw</span> <span class="k">import</span> <span class="n">PdfReader</span>
-<span class="n">pdf</span> <span class="o">=</span> <span class="n">PdfReader</span><span class="p">(</span><span class="n">report_path</span><span class="p">)</span>
-<span class="c1">#pdf.keys()</span>
-<span class="n">pdf</span><span class="o">.</span><span class="n">Info</span>
-<span class="c1">#pdf.Root.keys()</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[9]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>{&#39;/Creator&#39;: &#39;(Canon iR-ADV C5235  PDF)&#39;,
- &#39;/CreationDate&#39;: &#34;(D:20180326151423+02&#39;00&#39;)&#34;,
- &#39;/Producer&#39;: &#39;(\\376\\377\\000A\\000d\\000o\\000b\\000e\\000 \\000P\\000S\\000L\\000 \\0001\\000.\\000\\\n2\\000e\\000 \\000f\\000o\\000r\\000 \\000C\\000a\\000n\\000o\\000n\\000\\000)&#39;}</pre>
+ 
+ 
+<div id="49a03231-26bd-4f94-bfd9-c1caae6dc38a"></div>
+<div class="output_subarea output_widget_view ">
+<script type="text/javascript">
+var element = $('#49a03231-26bd-4f94-bfd9-c1caae6dc38a');
+</script>
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "343b3d7d34bf4ed3a59b74deeff7c8f0", "version_major": 2, "version_minor": 0}
+</script>
 </div>
 
 </div>
@@ -13388,28 +12005,28 @@ Ll    Naam wederpartij(en)                     n.v.t.
 </div>
 </div>
 
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>result: not text extract and tags not user friendly</p>
-
-</div>
-</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cur</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 
 </div>
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Postgres-and-full-text-search-support">Postgres and full text search support<a class="anchor-link" href="#Postgres-and-full-text-search-support">&#182;</a></h1><p>Postgres supports normalization and lemmatization for the Dutch language.</p>
+
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
