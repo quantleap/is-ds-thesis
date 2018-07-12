@@ -3,7 +3,7 @@
 
 # #### Setup
 
-# In[92]:
+# In[2]:
 
 
 #import pdb; pdb.set_trace()
@@ -48,7 +48,7 @@ print('CONNECTION ESTABLISHED')
 # 
 # For the purpose of this study the progress reports published in 2017 will be used.
 
-# In[124]:
+# In[2]:
 
 
 sql = """
@@ -83,16 +83,16 @@ df.plot.bar(stacked=True, figsize=(15, 4), title='report publications per month'
 # 
 # ## PDF reports downloaded
 
-# In[133]:
+# In[8]:
 
 
 sql = """select identification, is_ocr, is_on_disk, publication_date, is_extractable
          from reports rep join insolvents ins on rep.insolvent_id = ins.id
          where publication_date >= '2014-01-01'
-             and publication_date) <= 2018-06-
+             and publication_date <= '2018-06-01'
              and is_attachment=False;"""
              #and ins.is_removed=False;"""
-             #and (end_findability ISNULL or end_findability >= '2017-12-31');"""
+             and (end_findability ISNULL or end_findability >= '2017-12-31');"""
     
 df = pd.read_sql(sql, con, index_col='publication_date')
 
@@ -102,7 +102,7 @@ df.head()
 
 # ## Report extraction funnel
 
-# In[134]:
+# In[9]:
 
 
 # Funnel of searchable reports (later the contraint of being txt_type report can be dropped)
@@ -128,7 +128,7 @@ pd.concat([total_serie,
            and_is_not_extractable_serie, and_is_extractable_serie], axis=1)
 
 
-# In[141]:
+# In[10]:
 
 
 # plot funnel
@@ -142,7 +142,7 @@ ax = pd.concat([(on_disk_serie / total_serie).rename('on disk'),
                  .legend(bbox_to_anchor=(1.2, 0.5))
 
 ax = pd.concat([(and_is_extractable_serie / on_disk_serie).rename('extractable'),
-                (and_is_not_extractable_serie / on_disk_serie).rename('not extractable')], axis=1)  \
+                (and_is_not_extractable_serie / on_disk_serie).rename('not extractable or yet extracted')], axis=1)  \
                  .plot.barh(ax=axes[1], stacked=True, title='Extractable reports of reports on disk as pct', xlim=[0,1]) \
                  .legend(bbox_to_anchor=(1.2, 0.5))
 
@@ -167,12 +167,12 @@ ax = pd.concat([(and_is_extractable_serie / on_disk_serie).rename('extractable')
 # ### adoption of conversion software over scanner over time
 # Content extraction of PDFs created with conversion software is more accurate and much faster than conversion using OCR from scanned PDFs. We can assume in general that searches of recent and future reports will be more accurate than older reports.
 
-# In[145]:
+# In[11]:
 
 
 pd.concat([(and_img_type_serie/(on_disk_serie - and_unk_type_serie)).rename('scanned'),
            (and_txt_type_serie/(on_disk_serie - and_unk_type_serie)).rename('converted')], axis=1) \
-.plot.barh(stacked=True, title='adoption of conversion software', figsize=[15, 5]).legend(bbox_to_anchor=(1.2, 0.5))
+.plot.barh(stacked=True, title='adoption of PDF conversion software', figsize=[15, 5]).legend(bbox_to_anchor=(1.2, 0.5))
 
 
 # ## Search in progress reports.
@@ -477,8 +477,99 @@ else:
 # 2. werkt het: via de use cases.
 
 
-# In[ ]:
+# In[39]:
 
 
+# report publication time of day 2017
+import numpy as np
+sql = """select extract(hour from publication_date), count(*) as cnt
+         from reports
+         where publication_date between '2017-01-01' and '2017-12-31'
+         group by 1
+         order by 1;"""
+df = pd.read_sql(sql, con)
+plt.figure()
+plt.bar(np.arange(23), df.cnt.values)
 
 
+# ## Reporting Frequency Distribution
+
+# In[19]:
+
+
+# first report
+sql = """with cte_reports as (
+             select ins.case_number, ins.start_date_insolvency, rep.publication_date, right(rep.identification, 2) as report_idx
+             from reports rep join insolvents ins on rep.insolvent_id = ins.id
+             where publication_date >= '2015-01-01'
+                 and publication_date <= '2018-06-01'
+                 and is_attachment is False
+                 and is_removed = False
+                 and end_findability < current_date
+             order by 1, 2),
+
+        intervals as (
+             select case_number, '00-01' as from_to, start_date_insolvency, publication_date,
+                 date_part('day', publication_date - start_date_insolvency) as days_interval
+             from cte_reports
+             where report_idx = '01' and start_date_insolvency is not NULL)
+
+        select case_number, from_to, start_date_insolvency, publication_date, days_interval 
+             from intervals;
+        """
+    
+df_initial_period = pd.read_sql(sql, con)
+df_initial_period.head(n=5)
+
+
+# In[20]:
+
+
+sql = """with cte_reports as (
+             select ins.case_number, rep.publication_date, right(rep.identification, 2) as report_idx
+             from reports rep join insolvents ins on rep.insolvent_id = ins.id
+             where publication_date >= '2015-01-01'
+                 and publication_date <= '2018-06-01'
+                 and is_attachment is False
+             order by 1, 2),
+         intervals as (
+             select rep1.case_number, rep1.report_idx || '-' || rep2.report_idx as from_to, 
+                 rep1.publication_date as pubdate1, rep2.publication_date as pubdate2,
+                 date_part('day', rep2.publication_date-rep1.publication_date) as days_interval
+             from cte_reports as rep1 join cte_reports as rep2 on rep1.case_number = rep2.case_number
+             and rep1.report_idx::integer = rep2.report_idx::integer - 1)
+         select from_to, days_interval from intervals;
+        """
+    
+df = pd.read_sql(sql, con)
+df.head(n=5)
+
+
+# In[21]:
+
+
+fig, axes = plt.subplots(nrows=10)
+fig.set_size_inches(15, 15)
+
+bins = range(-50, 400, 5)
+xlims = (-50, 400)
+ax = df_initial_period.days_interval.plot.hist(ax=axes[0], bins=bins).set_xlim(*xlims)
+ax = df[df.from_to == '01-02'].days_interval.plot.hist(ax=axes[1], bins=bins).set_xlim(*xlims)
+ax = df[df.from_to == '02-03'].days_interval.plot.hist(ax=axes[2], bins=bins).set_xlim(*xlims)
+ax = df[df.from_to == '03-04'].days_interval.plot.hist(ax=axes[3], bins=bins).set_xlim(*xlims)
+ax = df[df.from_to == '04-05'].days_interval.plot.hist(ax=axes[4], bins=bins).set_xlim(*xlims)
+ax = df[df.from_to == '05-06'].days_interval.plot.hist(ax=axes[5], bins=bins).set_xlim(*xlims)
+ax = df[df.from_to == '06-07'].days_interval.plot.hist(ax=axes[6], bins=bins).set_xlim(*xlims)
+ax = df[df.from_to == '07-08'].days_interval.plot.hist(ax=axes[7], bins=bins).set_xlim(*xlims)
+ax = df[df.from_to == '08-09'].days_interval.plot.hist(ax=axes[8], bins=bins).set_xlim(*xlims)
+ax = df[df.from_to == '09-10'].days_interval.plot.hist(ax=axes[9], bins=bins).set_xlim(*xlims)
+
+
+# # results
+# The reporting deadlines are: within 1 month for the first report and three months between consequtive reports - unless the judge decides otherwise.
+# 
+# We see (log)normal distributions for the reporting periods. A second distribution appears around the six months period, it is probable standard practise to double the allowed period.
+# 
+# Judges could use this information to rank the administrators on delivery on time.
+# 
+# Approved deadline extensions are not extractable to my knowledge.

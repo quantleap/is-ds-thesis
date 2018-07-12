@@ -11840,7 +11840,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># database connection</span>
@@ -11853,7 +11853,8 @@ div#notebook {
 <span class="n">con</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">URL</span><span class="p">(</span><span class="n">drivername</span><span class="o">=</span><span class="s1">&#39;postgresql&#39;</span><span class="p">,</span> 
               <span class="n">username</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;DB_QIR_USERNAME&#39;</span><span class="p">],</span> 
               <span class="n">password</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;DB_QIR_PASSWORD&#39;</span><span class="p">],</span> 
-              <span class="n">host</span><span class="o">=</span><span class="s1">&#39;www.quantleap.nl&#39;</span><span class="p">,</span> 
+              <span class="c1"># host=&#39;www.quantleap.nl&#39;, </span>
+              <span class="n">host</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> 
               <span class="n">database</span><span class="o">=</span><span class="s1">&#39;qir&#39;</span><span class="p">))</span>
 
 <span class="c1"># cursor for use with psycopg2</span>
@@ -11867,10 +11868,29 @@ div#notebook {
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/Users/Tom/Dropbox/datascience/_thesis/is-ds-thesis/venv/lib/python3.6/site-packages/psycopg2/__init__.py:144: UserWarning: The psycopg2 wheel package will be renamed from release 2.8; in order to keep installing from binary please use &#34;pip install psycopg2-binary&#34; instead. For details see: &lt;http://initd.org/psycopg/docs/install.html#binary-install-from-pypi&gt;.
+  &#34;&#34;&#34;)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">ipywidgets</span> <span class="k">as</span> <span class="nn">widgets</span>
@@ -11888,28 +11908,29 @@ div#notebook {
         <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
         
         <span class="c1"># widgets, more clear to define that to access by container tuple</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w_search_terms</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;Zoektermen&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;rabobank abn amro&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w_section</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;hoofdstuk&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_query_terms</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;zoektermen&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_section</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;sectie&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">w_button</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;Zoek&#39;</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;margin&#39;</span><span class="p">:</span> <span class="s1">&#39;5px 0px 0px 90px&#39;</span><span class="p">,</span> <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;212px&#39;</span><span class="p">})</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w_limit</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">IntSlider</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;limit&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w_result_no</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">IntSlider</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;view result&#39;</span><span class="p">,</span> <span class="n">disabled</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w_result</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Textarea</span><span class="p">(</span><span class="n">layout</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;90%&#39;</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;100px&#39;</span><span class="p">,</span> <span class="s1">&#39;margin&#39;</span><span class="p">:</span> <span class="s1">&#39;5px 0&#39;</span><span class="p">})</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_limit</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">IntSlider</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;limiet&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_result_no</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">IntSlider</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;bekijk #&#39;</span><span class="p">,</span> <span class="n">disabled</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1">#self.w_result = widgets.HTML()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">w_out</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Output</span><span class="p">()</span>
         
         <span class="c1"># container of widgets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">container</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">VBox</span><span class="p">([</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">w_search_terms</span><span class="p">,</span>
+            <span class="n">widgets</span><span class="o">.</span><span class="n">HTML</span><span class="p">(</span><span class="s1">&#39;&lt;h1&gt;Rapporten doorzoeken&lt;/h1&gt;&#39;</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w_query_terms</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">w_section</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">w_limit</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">w_button</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">w_out</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">w_result</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">w_result_no</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w_result_no</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w_out</span> 
+            <span class="c1">#self.w_result</span>
         <span class="p">])</span>
         
         <span class="c1"># register callbacks</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">w_button</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_search</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w_result_no</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_view_result</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_result_no</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_change_result</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)</span>
         
         <span class="c1">#import pdb; pdb.set_trace()</span>
         
@@ -11918,29 +11939,29 @@ div#notebook {
 
     <span class="k">def</span> <span class="nf">_render_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># process results</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w_out</span><span class="o">.</span><span class="n">append_stdout</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:d}</span><span class="s1"> resultaten gevonden&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">)))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">w_result_no</span><span class="o">.</span><span class="n">max</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">)</span>
         
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="c1"># show first result</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">w_result_no</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">w_result_no</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">1</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">w_result</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w_out</span><span class="o">.</span><span class="n">append_stdout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
         
     <span class="c1"># call backs</span>
-    <span class="k">def</span> <span class="nf">_view_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">change</span><span class="p">):</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">w_result_no</span><span class="o">.</span><span class="n">value</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w_result</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        
+    <span class="k">def</span> <span class="nf">_change_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">change</span><span class="p">):</span>
+        <span class="c1">#self.w_out.clear_output(wait=True)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">w_result_no</span><span class="o">.</span><span class="n">value</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_out</span><span class="o">.</span><span class="n">append_stdout</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_result_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;p style=&#39;border: 1px solid grey; padding: 10px; background-color: Azure;&#39;&gt;</span><span class="si">{}</span><span class="s2">&lt;/p&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+    
     <span class="k">def</span> <span class="nf">_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">button</span><span class="p">):</span>
         <span class="c1"># reset</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w_result</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w_out</span><span class="o">.</span><span class="n">clear_output</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">w_result_no</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="kc">True</span>
         
         <span class="c1"># search</span>
         <span class="n">field</span> <span class="o">=</span> <span class="s1">&#39;content&#39;</span>
-        <span class="n">query_terms</span> <span class="o">=</span> <span class="s1">&#39;rabobank abn amro&#39;</span>
         
         <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;WITH eligible_reports AS (</span>
 <span class="s2">                     SELECT identification, </span><span class="si">{field}</span><span class="s2"> AS content</span>
@@ -11949,12 +11970,10 @@ div#notebook {
 <span class="s2">                         AND ins.is_removed = FALSE)</span>
 <span class="s2">                 SELECT identification, </span><span class="si">{field}</span><span class="s2"> as content</span>
 <span class="s2">                 FROM eligible_reports</span>
-<span class="s2">                 WHERE to_tsvector(&#39;dutch&#39;, </span><span class="si">{field}</span><span class="s2">) @@ plainto_tsquery(&#39;dutch&#39;, &#39;</span><span class="si">{query_terms}</span><span class="s2">&#39;) LIMIT </span><span class="si">{limit}</span><span class="s2">;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">field</span><span class="p">,</span> <span class="n">query_terms</span><span class="o">=</span><span class="n">query_terms</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">w_limit</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+<span class="s2">                 WHERE to_tsvector(&#39;dutch&#39;, </span><span class="si">{field}</span><span class="s2">) @@ plainto_tsquery(&#39;dutch&#39;, &#39;</span><span class="si">{query_terms}</span><span class="s2">&#39;) LIMIT </span><span class="si">{limit}</span><span class="s2">;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">field</span><span class="p">,</span> <span class="n">query_terms</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">w_query_terms</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">w_limit</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
         
-        <span class="c1">#print(sql)</span>
         <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
-        
         <span class="bp">self</span><span class="o">.</span><span class="n">_render_results</span><span class="p">()</span>
 </pre></div>
 
@@ -11965,7 +11984,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">search</span> <span class="o">=</span> <span class="n">ReportTextSearcher</span><span class="p">()</span>
@@ -11990,13 +12009,13 @@ div#notebook {
 
  
  
-<div id="49a03231-26bd-4f94-bfd9-c1caae6dc38a"></div>
+<div id="8df0dbcd-7d65-4a72-b3b2-9b4e9cf0407c"></div>
 <div class="output_subarea output_widget_view ">
 <script type="text/javascript">
-var element = $('#49a03231-26bd-4f94-bfd9-c1caae6dc38a');
+var element = $('#8df0dbcd-7d65-4a72-b3b2-9b4e9cf0407c');
 </script>
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "343b3d7d34bf4ed3a59b74deeff7c8f0", "version_major": 2, "version_minor": 0}
+{"model_id": "7291327c4f684e92ab293d8a0cf3d592", "version_major": 2, "version_minor": 0}
 </script>
 </div>
 
@@ -12011,29 +12030,15 @@ var element = $('#49a03231-26bd-4f94-bfd9-c1caae6dc38a');
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cur</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</pre></div>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># vergelijk ES en postgres functionaliteit</span>
+<span class="c1"># query parsing, meerdere secties tegelijk - patent search total recall</span>
+<span class="c1"># permanent identifier naar reproduceerbare content.! voor discussie. wetenschappelijke</span>
+<span class="c1"># mysociety</span>
+<span class="c1"># persona - use cases  evaluatie taak. verschil met huidige situatie.</span>
 
-</div>
-</div>
-</div>
 
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Postgres-and-full-text-search-support">Postgres and full text search support<a class="anchor-link" href="#Postgres-and-full-text-search-support">&#182;</a></h1><p>Postgres supports normalization and lemmatization for the Dutch language.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
+<span class="c1"># skeleton verslag met bullet points van alles wat er doen is.</span>
+<span class="c1"># ..</span>
 </pre></div>
 
 </div>

@@ -28,7 +28,7 @@ class ProgressReportSectionExtractor:
                                  'patterns': [r'(?<=\n1\.1)(.*?)(?=\n1\.2)',
                                               r'(?:inventarisatie.*\n1)(.*?)(?:\n2)']},  # heading level 2 missing
                          '1.7': {'id': 'oorzaak_faillissement',
-                                 'heading': 'Oorzaak faillissement',
+                                 'heading': ´'Oorzaak faillissement',
                                  'patterns': [r'(?<=\n1\.7)(.*?)(?=\n2)']},
                          '2.1': {'id': 'aantal_ten_tijde_van_faillissement',
                                  'heading': 'Aantal ten tijde van faillissement',

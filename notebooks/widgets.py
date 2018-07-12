@@ -182,8 +182,18 @@ w_out = widgets.Output()
 # In[125]:
 
 
-# alternative a text area
+# .. or a text area
 w_out = widgets.Textarea(layout={'width': '90%', 'height': '100%'})
+
+
+# In[149]:
+
+
+# .. or a HMTL widget
+w_out = widgets.HTML(
+    value= "<p style='border: 1px solid grey; padding: 10px; background-color: Azure;'>" + 4*"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui." + "</p>",
+    layout={'width': '800px', 'height': '300px'})
+display(w_out)
 
 
 # In[60]:

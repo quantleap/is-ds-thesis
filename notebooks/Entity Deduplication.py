@@ -8,7 +8,7 @@
 
 #import pdb; pdb.set_trace()
 
-get_ipython().magic('matplotlib inline')
+get_ipython().run_line_magic('matplotlib', 'inline')
 import pandas as pd
 import os
 import re
@@ -68,22 +68,10 @@ print('CONNECTION ESTABLISHED')
 # 
 # Voorbeeld: http://ors.openstate.eu/relations/instantie/Rechtbank+Amsterdam/mw.+mr.+J.F.+Aalders+/json
 
-# In[ ]:
+# In[3]:
 
 
 # rechters_df = pd.read_html('http://ors.openstate.eu/relations')[0]
 rechters_df = pd.read_json('http://ors.openstate.eu/relations/json')
-rechters_df.head()A
-
-
-# In[ ]:
-
-
-rechters_df[rechters_df['set'] == 'Rechtbank Amsterdam']
-
-
-# In[2]:
-
-
-
+rechters_df.head()
 
