@@ -1,35 +1,28 @@
 \documentclass[sigconf]{acmart}
 
-\usepackage{booktabs} % For formal tables
-\usepackage[colorinlistoftodos]{todonotes} % handig voor commentaar: gebruik \todo{}, zie ftp://ftp.fu-berlin.de/tex/CTAN/macros/latex/contrib/todonotes/todonotes.pdf
+%\usepackage{booktabs} % For formal tables
+%\usepackage[utf8]{inputenc}
 
 % Copyright
 \setcopyright{rightsretained}
 
-% linenumbering  See https://texblog.org/2012/02/08/adding-line-numbers-to-documents/
-\usepackage{lineno}
-\linenumbers
-
-\begin{document}
-\input{title_page}
-\pagebreak
-\title{Data Driven Supervision in Insolvency Procedures}
-
+\title{Armchair Auditing of Insolvency Processes}
 \author{Tom Akkermans}
-\affiliation{%
-  \institution{University of Amsterdam}
-}
+\affiliation{\institution{University of Amsterdam}}
 \email{tom.akkermans@student.uva.nl}
 
 
+\begin{document}
+\input{title_page}
+
 \begin{abstract}
-When a company files for bankruptcy at the court, a court committee will appoint a curator to settle the bankruptcy. The curator dissolves the company by monetizing the company's estate and redeeming its creditors. A court's judge supervises the curator. 
+When a company is declared bankrupt at the court, a court committee will appoint a curator to settle the bankruptcy. The curator's task is to redeem the creditors claims as much as possible by monetizing the company's estate. A court's judge supervises the curator to act in the best interest of the creditors.
 
-Both these processes: 1. curator appointment and 2. curator supervision, have been topic of research[1-2], have raised concerns in the media[13-21] and have lead to court cases for not being transparent and/or not being adequate.
+The curator appointment process, the judge supervision capability and the curator-creditor interest alignment have been topic of research[[1-2]], raised concerns in the media \cite{dennis_meneer_2018:1} and have lead to court cases for not being transparent and/or not being adequate. Involved parties such as judges and curators as well as the creditors and insolvent itself would benefit from more transparency and information on these processes.
 
-The Dutch government has initiated a transparency program for the legal system using on-line forms to retrieve specific data and open data sources with technical APIs. But open data alone does not provide the open analysis that enables armchair auditing.
+The Dutch government has initiated a transparency program for the legal system. It provides on-line search form for a single insolvency case and provides open data sources with technical APIs supplying court publications and curator reports. But the search form is limited and not everyone with an interest can handle the raw data of the APIs. Instead of open data, the stakeholder needs open analysis to enable armchair auditing of insolvency processes to answer their questions.
 
-In this thesis an information system prototype will be developed to enable the auditing of insolvency processes. The system takes in relevant structured and unstructured data of insolvency procedures using open and publicly available data sources[22-28]. From this data the system builds and annotates a complete linked entity structure and makes it searchable. With a user friendly interface, a stakeholder can query and explore the linked data in order to explore insolvency processes and answer specific questions.
+In this thesis an information system prototype will be developed to enable the auditing of insolvency processes for non tech savvy users. The system takes in structured and unstructured data of insolvency procedures using open and publicly available data sources[[22-28]]. From this data the system builds and annotates a complete linked entity structure and unstructured data is made searchable on multiple levels. The stakeholder can query the linked data with a non-technical interface in order to explore insolvency processes and answer specific questions.
 \end{abstract}
 
 %
@@ -50,11 +43,12 @@ In this thesis an information system prototype will be developed to enable the a
 
 \keywords{keyword1, keyword2, keyword3}
 
-\maketitle
+\maketitle 
+
 
 \input{body}
 
 \bibliographystyle{ACM-Reference-Format}
-%\bibliography{sample-bibliography}
+\bibliography{bibliography}
 
 \end{document}

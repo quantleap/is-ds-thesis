@@ -1,49 +1,188 @@
 \section{Introduction}
+We propose an information system on insolvency processes
+- Introduction to the parties involved in an insolvency
+- Definition of the Persona representing the involved parties
+- Information needs of the Persona
 
-Bevat je onderzoeksvraag (of vragen)
-• Plaatst je vraag in de bestaande literatuur.
-Je onderzoeksvraag is leidend voor je hele scriptie. Alles wat je doet moet uiteindelijk terug te voeren zijn op 1 doel: het beantwoorden van die vraag.
-Typisch zal je het dan ook zo doen:
-Mijn onderzoeksvraag is onderverdeeld in de volgende deelvragen:
-RQ1 . . . We beantwoorden deze vraag door het volgende te doen/ antwoord op de volgende vragen te vinden/ . . .
-1. Vragen op dit niveau kan je echt beantwoorden, en dat doe je in je Evaluatie sectie 4.
-RQ2...
-RQ3...
-Je Evaluatie sectie 4 bevat evenveel subsecties als je deelvragen hebt. En in elke sectie beantwoord je dan die deelvraag met behulp van de vragen op het onderste niveau.
-In je conclusies kan je dan je hoofdvraag gaan beantwoorden op basis van al het eerder vergaarde bewijs.
+\subsection{Parties involved in the insolvency process}
+There are many parties involved in the insolvency process. Directly involved are the the administrator, the insolvent, the judge and the creditors. Indirectly involved or otherwise interested are the organistations of Recofa and Insolad and journalists. 
+
+\subsubsection{The Administrator (\textit{De Curator})}
+The administrator's task is to liquidate the bankrupt firm by selling the assets and from the proceeds pay off the creditors. A second task is to investigate the default and see if there is a case of mismanagement or fraud.
+
+\subsubsection{The Insolvent}
+The insolvent is declared bankrupt by a creditor or declared himself bankrupt. He might be interested in continuing the business and would not want to be persecuted for fraud or malpractice.
+
+\subsubsection{The Bankruptcy Judge (\textit{De Rechter-Commissaris})}
+The supervisory judge exercises supervision over the administrator which is appointed by the court and is entitled to grant him or her permissions for certain actions.
+
+\subsubsection{The Creditors}
+The creditor has a claim on the insolvent. There is a ranking of creditors from preferred creditors to unsecured creditors.
+
+\subsubsection{Insolad}
+Insolad is the association of lawyers in insolvency law (administrators). It provides up-to-date knowledge on the insolvency practise and the development of laws and regulations in the field.
+
+\subsubsection{\textit{Rechters-Commissarissen Insolventies} (Recofa)}
+Recofa is the consultative body under the council of justice, \textit{raad van de rechtspraak}, specifically for investigative judges working in insolvency law. It sets out policy guidelines for the courts and instructions (e.g. on reporting) for the administrators.
+
+The council of the justice system is tasked with improving the quality and efficacy of the jurisdiction. It performs research and shares research findings. It also supplies IT resources.
+
+\subsubsection{The Investigative Journalist}
+The investigative journalist is interested in informing the public on the balance of powers with the insolvency law and typically writes critically about cases where this balance is disrupted.
+
+\subsubsection{The Economic Journalist}
+The economic journalist is interested on the impact of the insolvencies and trends therein on the economy .
+
+\section{Introduction}
 
 \section{Related Work}
-Deze sectie bestaat uit een aantal ”blokken”, waarin je per blok de relevante literatuur beschrijft.
-Neem alleen literatuur op die van belang is voor jouw onderzoeksvraag en deelvragen.
-Typisch heb je 1 blok voor je hoofdvraag en per deelvraag RQi een blok.
 
-\subsection{RQ1}
+\begin{itemize}
+	\item Open Data within the government and armchair auditing
+	\item Classification using Natural Language Processing
+	\item GUI design
+	\item Open data and Linked Data, Resource Description Framework [optional]
+\end{itemize}
+
+\subsection{Research Questions}
+\subsubsection{Persona}
+So-called Persona are used to represent archetypical users of the information system to answer specific questions. The questions are distilled from the insolvency law, news articles, research papers, court cases [refs].
+
+The main Persona are: 
+\begin{itemize}
+\item \textbf{The Judge} representing the side of Recofa, \textit{Raad van de Rechtspraak} and The Bankruptcy Judge (\textit{Rechter-Commissaris})
+\item \textbf{The Administrator} representing the side of Insolad (Vereniging Insolventierecht Advocaten) and The Administrator (Curator) 
+\item \textbf{The Insolvent} representing the owner(s) of the defaulted company.
+\item \textbf{The Creditor} representing the Unsecured Creditor (\textit{De Concurrente Schuldeiser}).
+\item \textbf{The Journalist} representing the investigative and economic journalist.
+\end{itemize}
+
+In the following sections each Persona will be described and their questions to the system stated.
+
+\subsubsection{The Judge}
+The Persona of Judge is interested in the adherence to the insolvency law and to the Recofa policy guidelines. It is also interested in specific trends in the insolvency processes and operational issues such as work pressure for judges. On an individual judge level it is interested in supervising its active cases.
+
+Questions:
+\begin{itemize}
+	\item How many cases does a judge supervise at a certain point in time (now)
+	\begin{itemize}
+		\item … distribution over all judges at a certain court
+		\item … distribution over all judges at all courts
+	\end{itemize}
+	\item What is the process flow of cases through court: 
+	\begin{itemize}
+		\item What is the case time distribution from begin to end
+		\item How long does it take to set the verification meeting (law says < 14 days)
+		\item How long does it take to publish the plan of final distribution.
+		\item What percentage of cases:
+		\begin{itemize}
+			\item end early as there are no assets
+			\item end by paying all creditors
+			\item contain an agreement between insolvent and creditors (akkoord)
+			\item are following an simplified settlement (no meeting of creditors)	
+			\item are filed by the insolvent vs creditor
+		\end{itemize}
+		\item What are the experience factor (\textit{jaren praktijkervaring}) and estate factor (\textit{grootte actief}) for the cases determining the administrators hourly wage.
+	\end{itemize}
+	
+	\item Are administrators reporting according to the instructions:
+	\begin{itemize}
+		\item How often is the progress reporting deadline breached.
+		\item How often is the financial attachment omitted for all reports in a case.
+	\end{itemize}
+	\item Are administrators using the supplied template for progress report:
+	\item How often does insolvency fraud occur
+	\item \textit{What are the issues in progress reports that need the judge's attention}
+\end{itemize}
+
+\subsubsection{The Administrator}
+The Persona of Administrator is interested in the administrator appointment process of the courts and on issues that threaten its business or leave it powerless.
+
+Questions:
+\begin{itemize}
+	\item Which curators are on the court’s short list for appointment
+	\item Are insolvency cases distributed fairly over the curators on the list
+	\item How often do empty estates occur (an empty estate implicated work without pay)
+	\item To what degree do Banks claim all the proceeds from the assets.
+\end{itemize}
+
+\subsubsection{The Insolvent}
+The Persona of Insolvent could be interested in restarting the business. It also is afraid of being made personally liable for the bankruptcy claims.
+
+\begin{itemize}
+	\item -	How often are insolvent made personally liable (when there is little estate)
+	\item -	How often do insolvency restarts and prepacks occur
+\end{itemize}
+
+\subsubsection{The Creditor}
+The Persona of Creditor is interested in the recovery rate of its claim and the time of payout and the factors that influence those.
+
+\begin{itemize}
+	\item What is my expected recovery rate and time
+	\item -	How high is the administrator’s salary, is he eating up the proceeds.
+\end{itemize}
+
+\subsubsection{The Journalist}
+The Persona of Journalist is interested in searching for cases on the basis of a faceted search on keywords and indicator ranges. It is also interested on current trends and periodic reports
+
+\begin{itemize}
+	\item How well does faceted search on progress reports perform
+	\item How many defaults occurred over a recent period
+	\begin{itemize}
+		\item Total number of employees
+		\item Total turnover
+		\item .. per region (using company address)
+	\end{itemize}
+
+\end{itemize}
 
 \section{Methodology}
 \subsection{Description of the data}
-Data verzameling en beschrijving van de data
-Hoe is de data verzameld, en hoe heb jij die data verkregen?
-Wat staat er in de data? Niet alleen maar een technisch verhaal, maar ook
-inhoudelijk. DE lezer moet een goed idee krijgen over de technische inhoud en wat het betekent.
+\subsubsection{CIR Web service}
+The CIR web service provides updates in xml format. Most data is structured, some fields are text fields containing unstructured information. Not all data is normalized.
+\\
+CIR data contains the following entities:
+\begin{itemize}
+	\item Insolvents
+	\item Court Publications
+	\item Reports (in pdf format)
+	\item Judges (free text field)
+	\item Administrators (free text field)
+	\item Courts (free text field, but small number)
+	\item Law office ([postal] address only)
+\end{itemize}
+
+[Entity Relationship Diagram here]
+
+\subsubsection{Master Data Sources}
+The Judges and Administrators in the CIR data are not normalized and are supplied in the form of free text fields. Many variations of the names exist due to alternative forms of writing or spelling errors. The names must be de-duplicated and linked to master data records.
+\\
+Proposed master data sources:
+\begin{itemize}
+	\item Judges: 
+	\begin{itemize}
+		\item Register - Beroepsgegevens en nevenfuncties van rechters
+		\item or OpenState API using the data from the register.
+	\end{itemize}
+	\item Administrators: one of the following websites
+	\begin{itemize}
+		\item www.advocaatzoeken.nl
+		\item www.alleadvocateninnederland.nl
+		\item www.advocaten-gids.nl
+		\item www.linkedin.com
+	\end{itemize}
+\end{itemize}
+
+The definition of master data records for judges and administrators is important because it leads to complete entity graphs where insolvency cases and its data points can be associated and aggregated to graph identities and can be used to answer a number of user questions.
+
+The entity Law Office is out of scope as it does not relate to the research questions.
+
+The linked entities are not available as such on the web. The collected and curated graph data could be defined as an ontology and published as open linked data using an RDF (Resource Description Framework). [optional]
+
 
 \subsection{Methods}
-Hoe je je vraag gaat beantwoorden.
-Dit is de langste sectie van je scriptie.
-Als iets erg technisch wordt kan je een deel naar de Appendix verplaatsen. Probeer er een lopend verhaal van te maken.
-Het is heel handig dit ook weer op te delen nav je deelvragen
 \subsubsection{RQ1}
-
 \section{Evaluation}
-Met een subsectie voor elke deelvraag.
-In hoeverre is je vraag beantwoord?
-Een mooie graphic/visualisatie is hier heel gewenst. Hou het kort maar krachtig.
-
 \section{Conclusions}
-Hierin beantwoord je jouw hoofdvraag op basis van het eerder vergaarde bewijs.
-
 \subsection{Acknowledgements}
-Hier kan je bedanken wie je maar wilt.
-
-References
-Slides?
 
