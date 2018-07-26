@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -37,6 +37,88 @@
 \providecommand\natexlab[1]{#1}
 \providecommand\showeprint[2][]{arXiv:#2}
 
+\bibitem[\protect\citeauthoryear{??}{rec}{[n. d.]a}]%
+        {rechtspraak:2}
+ \bibinfo{year}{[n. d.]}\natexlab{a}.
+\newblock \bibinfo{title}{Beroepsgegevens en nevenfuncties van rechters}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://namenlijst.rechtspraak.nl}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{??}{rec}{[n. d.]b}]%
+        {rechtspraak:3}
+ \bibinfo{year}{[n. d.]}\natexlab{b}.
+\newblock \bibinfo{title}{Beroepsgegevens en nevenfuncties van rechters}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://www.rechtspraak.nl/Voor-advocaten-en-juristen/Reglementen-procedures-en-formulieren/Civiel/Insolventierecht/Paginas/Recofa-richtlijnen.aspx}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{??}{rec}{[n. d.]c}]%
+        {rechtspraak:1}
+ \bibinfo{year}{[n. d.]}\natexlab{c}.
+\newblock \bibinfo{title}{Centraal Insolventieregister}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://insolventies.rechtspraak.nl}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{??}{nov}{[n. d.]}]%
+        {nova:1}
+ \bibinfo{year}{[n. d.]}\natexlab{}.
+\newblock \bibinfo{title}{Nederlandse Orde van Advocated}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://www.advocatenorde.nl/over-de-nova}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{??}{sam}{2017}]%
+        {samr_2017:1}
+ \bibinfo{year}{2017}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{Klantwaardering Rechtspraak 2017}}.
+\newblock \bibinfo{type}{{T}echnical {R}eport}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Bölük}{Bölük}{2011}]%
+        {boluk_2011}
+\bibfield{author}{\bibinfo{person}{Burak Bölük}.}
+  \bibinfo{year}{2011}\natexlab{}.
+\newblock \emph{\bibinfo{title}{Is de benoeming van de curator door de
+  rechtbank en het toezicht op de curator door de rechter-commissaris aan een
+  verbetering toe?}}
+\newblock \bibinfo{thesistype}{Master's\ thesis}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Meneer}{Meneer}{2017}]%
+        {dennis_meneer_2017:1}
+\bibfield{author}{\bibinfo{person}{Dennis Meneer}.}
+  \bibinfo{year}{2017}\natexlab{}.
+\newblock \bibinfo{title}{Curatoren vluchten uit lege boedels}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://www.ftm.nl/artikelen/curatoren-slaan-op-de-vlucht-voor-lege-boedels}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{Accessed on 2018-06-14.}
+
+
 \bibitem[\protect\citeauthoryear{Meneer}{Meneer}{2018}]%
         {dennis_meneer_2018:1}
 \bibfield{author}{\bibinfo{person}{Dennis Meneer}.}
@@ -46,6 +128,36 @@
 \newblock
 \urldef\tempurl%
 \url{https://www.ftm.nl/artikelen/faillissementswet-schadelijkste-wet-van-nederland}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{Accessed on 2018-06-14.}
+
+
+\bibitem[\protect\citeauthoryear{O’Leary}{O’Leary}{2015}]%
+        {o_leary_2015}
+\bibfield{author}{\bibinfo{person}{Daniel~E. O’Leary}.}
+  \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Armchair Auditors: Crowdsourcing Analysis of
+  Government Expenditures}.
+\newblock \bibinfo{journal}{\emph{JOURNAL OF EMERGING TECHNOLOGIES IN
+  ACCOUNTING}}  \bibinfo{volume}{12} (\bibinfo{date}{jul}
+  \bibinfo{year}{2015}), \bibinfo{pages}{71--91}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.2308/jeta-51225}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Strop}{Strop}{2015}]%
+        {jan-hein_strop_2015:1}
+\bibfield{author}{\bibinfo{person}{Jan-Hein Strop}.}
+  \bibinfo{year}{2015}\natexlab{}.
+\newblock \bibinfo{title}{De schimmige benoeming van curatoren}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://www.ftm.nl/artikelen/de-schimmige-benoeming-van-curatoren}
 \showURL{%
 \tempurl}
 \newblock
