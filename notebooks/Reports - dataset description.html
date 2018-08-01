@@ -11781,19 +11781,21 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[83]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#import pdb; pdb.set_trace()</span>
 
 <span class="o">%</span><span class="k">matplotlib</span> inline  
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">psycopg2</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy.engine.url</span> <span class="k">import</span> <span class="n">URL</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
 
 <span class="c1"># connection to the database</span>
 <span class="c1"># connection string for use in pandas:</span>
@@ -11902,7 +11904,7 @@ div#notebook {
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x10ca4a320&gt;</pre>
+<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x10fcdc4e0&gt;</pre>
 </div>
 
 </div>
@@ -17672,6 +17674,14 @@ handelen.
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Hour-of-publishing-the-report">Hour of publishing the report<a class="anchor-link" href="#Hour-of-publishing-the-report">&#182;</a></h2>
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[39]:</div>
@@ -17806,18 +17816,44 @@ AAAASUVORK5CYII=
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Pull-a-case">Pull a case<a class="anchor-link" href="#Pull-a-case">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">select case_number, identification, publication_date</span>
+<span class="s2">from insolvents i join reports r on i.id = r.insolvent_id</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Reporting-Frequency-Distribution">Reporting Frequency Distribution<a class="anchor-link" href="#Reporting-Frequency-Distribution">&#182;</a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[43]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># first report</span>
 <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;with cte_reports as (</span>
-<span class="s2">             select ins.case_number, ins.start_date_insolvency, rep.publication_date, right(rep.identification, 2) as report_idx</span>
+<span class="s2">             select ins.case_number, ins.start_date_insolvency, rep.publication_date, </span>
+<span class="s2">                 right(rep.identification, 2) as report_idx</span>
 <span class="s2">             from reports rep join insolvents ins on rep.insolvent_id = ins.id</span>
 <span class="s2">             where publication_date &gt;= &#39;2015-01-01&#39;</span>
 <span class="s2">                 and publication_date &lt;= &#39;2018-06-01&#39;</span>
@@ -17850,7 +17886,7 @@ AAAASUVORK5CYII=
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[19]:</div>
+<div class="prompt output_prompt">Out[43]:</div>
 
 
 
@@ -17910,10 +17946,12 @@ AAAASUVORK5CYII=
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="prompt input_prompt">In&nbsp;[60]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;with cte_reports as (</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># subsequent periods</span>
+<span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;with cte_reports as (</span>
+<span class="s2">             -- select recent progress reports and define a report index</span>
 <span class="s2">             select ins.case_number, rep.publication_date, right(rep.identification, 2) as report_idx</span>
 <span class="s2">             from reports rep join insolvents ins on rep.insolvent_id = ins.id</span>
 <span class="s2">             where publication_date &gt;= &#39;2015-01-01&#39;</span>
@@ -17921,15 +17959,18 @@ AAAASUVORK5CYII=
 <span class="s2">                 and is_attachment is False</span>
 <span class="s2">             order by 1, 2),</span>
 <span class="s2">         intervals as (</span>
+<span class="s2">             -- transform into from-to intervals</span>
 <span class="s2">             select rep1.case_number, rep1.report_idx || &#39;-&#39; || rep2.report_idx as from_to, </span>
 <span class="s2">                 rep1.publication_date as pubdate1, rep2.publication_date as pubdate2,</span>
 <span class="s2">                 date_part(&#39;day&#39;, rep2.publication_date-rep1.publication_date) as days_interval</span>
-<span class="s2">             from cte_reports as rep1 join cte_reports as rep2 on rep1.case_number = rep2.case_number</span>
-<span class="s2">             and rep1.report_idx::integer = rep2.report_idx::integer - 1)</span>
+<span class="s2">             from cte_reports as rep1 </span>
+<span class="s2">             join cte_reports as rep2 on rep1.case_number = rep2.case_number</span>
+<span class="s2">             and rep1.report_idx::integer = rep2.report_idx::integer - 1)  -- join</span>
 <span class="s2">         select from_to, days_interval from intervals;</span>
 <span class="s2">        &quot;&quot;&quot;</span>
     
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))</span>
 <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 
@@ -17943,7 +17984,18 @@ AAAASUVORK5CYII=
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[20]:</div>
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>58094
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[60]:</div>
 
 
 
@@ -18663,6 +18715,1071 @@ T5oAAAAASUVORK5CYII=
 
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[107]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># try to accomplish the same thing in pandas</span>
+<span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">select ins.case_number, ins.start_date_insolvency, rep.publication_date, right(rep.identification, 2) as report_idx</span>
+<span class="s2">             from reports rep join insolvents ins on rep.insolvent_id = ins.id</span>
+<span class="s2">             where publication_date &gt;= &#39;2015-01-01&#39;</span>
+<span class="s2">                 and publication_date &lt;= &#39;2018-06-01&#39;</span>
+<span class="s2">                 and is_attachment is False;</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">start_date_insolvency</span><span class="o">.</span><span class="n">notnull</span><span class="p">()]</span>  <span class="c1"># remove records without start date</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;days_interval&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[107]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>104806</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[106]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># first period</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        intervals as (</span>
+<span class="sd">             select case_number, &#39;00-01&#39; as from_to, start_date_insolvency, publication_date,</span>
+<span class="sd">                 date_part(&#39;day&#39;, publication_date - start_date_insolvency) as days_interval</span>
+<span class="sd">             from cte_reports</span>
+<span class="sd">             where report_idx = &#39;01&#39; and start_date_insolvency is not NULL)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># set time interval first period</span>
+<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">df</span><span class="o">.</span><span class="n">report_idx</span> <span class="o">==</span> <span class="s1">&#39;01&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">start_date_insolvency</span><span class="o">.</span><span class="n">notnull</span><span class="p">()),</span> <span class="s1">&#39;days_interval&#39;</span><span class="p">]</span> <span class="o">=</span> \
+<span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">publication_date</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">)</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">start_date_insolvency</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;case_number&#39;</span><span class="p">,</span> <span class="s1">&#39;report_idx&#39;</span><span class="p">])</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[106]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>case_number</th>
+      <th>start_date_insolvency</th>
+      <th>publication_date</th>
+      <th>report_idx</th>
+      <th>days_interval</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>67906</th>
+      <td>F.01/05/129</td>
+      <td>2005-02-23</td>
+      <td>2015-02-04 11:16:18</td>
+      <td>06</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>71373</th>
+      <td>F.01/05/129</td>
+      <td>2005-02-23</td>
+      <td>2016-02-29 14:01:54</td>
+      <td>07</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>70861</th>
+      <td>F.01/05/129</td>
+      <td>2005-02-23</td>
+      <td>2016-07-13 09:10:42</td>
+      <td>08</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>68774</th>
+      <td>F.01/05/129</td>
+      <td>2005-02-23</td>
+      <td>2017-01-19 15:17:04</td>
+      <td>09</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>72321</th>
+      <td>F.01/05/129</td>
+      <td>2005-02-23</td>
+      <td>2018-03-12 16:03:49</td>
+      <td>10</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>24667</th>
+      <td>F.01/05/147</td>
+      <td>2005-02-25</td>
+      <td>2015-01-28 16:03:27</td>
+      <td>05</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>26644</th>
+      <td>F.01/05/147</td>
+      <td>2005-02-25</td>
+      <td>2016-02-29 14:04:53</td>
+      <td>06</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>26759</th>
+      <td>F.01/05/147</td>
+      <td>2005-02-25</td>
+      <td>2018-03-12 16:05:57</td>
+      <td>07</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>39875</th>
+      <td>F.01/05/171</td>
+      <td>2005-03-09</td>
+      <td>2015-01-28 11:23:30</td>
+      <td>05</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>39270</th>
+      <td>F.01/05/171</td>
+      <td>2005-03-09</td>
+      <td>2016-02-29 14:05:25</td>
+      <td>06</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>38846</th>
+      <td>F.01/05/171</td>
+      <td>2005-03-09</td>
+      <td>2018-03-12 16:08:21</td>
+      <td>07</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>103141</th>
+      <td>F.01/05/172</td>
+      <td>2005-03-09</td>
+      <td>2015-01-28 11:25:27</td>
+      <td>05</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>103946</th>
+      <td>F.01/05/172</td>
+      <td>2005-03-09</td>
+      <td>2016-02-29 14:02:30</td>
+      <td>06</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>104578</th>
+      <td>F.01/05/172</td>
+      <td>2005-03-09</td>
+      <td>2018-03-12 16:09:03</td>
+      <td>07</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>69859</th>
+      <td>F.01/05/217</td>
+      <td>2005-03-23</td>
+      <td>2015-01-28 11:24:31</td>
+      <td>05</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>73135</th>
+      <td>F.01/05/217</td>
+      <td>2005-03-23</td>
+      <td>2016-02-29 14:03:46</td>
+      <td>06</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>72741</th>
+      <td>F.01/05/217</td>
+      <td>2005-03-23</td>
+      <td>2018-03-12 16:09:43</td>
+      <td>07</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>49852</th>
+      <td>F.01/05/314</td>
+      <td>2005-04-27</td>
+      <td>2015-01-23 15:33:39</td>
+      <td>04</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>52097</th>
+      <td>F.01/05/314</td>
+      <td>2005-04-27</td>
+      <td>2016-02-29 14:00:06</td>
+      <td>05</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>50790</th>
+      <td>F.01/05/314</td>
+      <td>2005-04-27</td>
+      <td>2018-03-12 16:10:27</td>
+      <td>06</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>92351</th>
+      <td>F.01/06/103</td>
+      <td>2006-02-10</td>
+      <td>2015-01-23 15:32:50</td>
+      <td>05</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>90947</th>
+      <td>F.01/06/103</td>
+      <td>2006-02-10</td>
+      <td>2016-02-29 14:01:12</td>
+      <td>06</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>91107</th>
+      <td>F.01/06/103</td>
+      <td>2006-02-10</td>
+      <td>2018-03-12 16:14:16</td>
+      <td>07</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>10960</th>
+      <td>F.01/06/139</td>
+      <td>2006-02-28</td>
+      <td>2015-01-14 16:04:43</td>
+      <td>10</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>11600</th>
+      <td>F.01/06/139</td>
+      <td>2006-02-28</td>
+      <td>2015-10-13 10:03:28</td>
+      <td>11</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>12637</th>
+      <td>F.01/06/139</td>
+      <td>2006-02-28</td>
+      <td>2017-12-04 09:16:14</td>
+      <td>12</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>12189</th>
+      <td>F.01/06/139</td>
+      <td>2006-02-28</td>
+      <td>2017-12-04 09:17:22</td>
+      <td>13</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>62401</th>
+      <td>F.01/06/299</td>
+      <td>2006-05-01</td>
+      <td>2015-01-23 15:32:06</td>
+      <td>06</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>66714</th>
+      <td>F.01/06/299</td>
+      <td>2006-05-01</td>
+      <td>2016-02-29 14:06:47</td>
+      <td>07</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>64110</th>
+      <td>F.01/06/299</td>
+      <td>2006-05-01</td>
+      <td>2018-03-12 16:14:58</td>
+      <td>08</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>37269</th>
+      <td>S.16/13/17</td>
+      <td>2017-10-25</td>
+      <td>2016-01-20 15:37:10</td>
+      <td>11</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>38054</th>
+      <td>S.16/13/17</td>
+      <td>2017-10-25</td>
+      <td>2016-05-04 15:04:53</td>
+      <td>12</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>39091</th>
+      <td>S.16/13/17</td>
+      <td>2017-10-25</td>
+      <td>2016-09-02 14:22:14</td>
+      <td>13</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>38695</th>
+      <td>S.16/13/17</td>
+      <td>2017-10-25</td>
+      <td>2016-12-02 16:28:35</td>
+      <td>14</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>37472</th>
+      <td>S.16/13/17</td>
+      <td>2017-10-25</td>
+      <td>2017-03-03 09:47:50</td>
+      <td>15</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>39160</th>
+      <td>S.16/13/17</td>
+      <td>2017-10-25</td>
+      <td>2017-07-03 16:47:51</td>
+      <td>16</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>39733</th>
+      <td>S.16/13/17</td>
+      <td>2017-10-25</td>
+      <td>2017-10-25 14:40:45</td>
+      <td>17</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>78185</th>
+      <td>S.16/14/44</td>
+      <td>2017-10-25</td>
+      <td>2015-01-09 16:32:12</td>
+      <td>01</td>
+      <td>-1020 days</td>
+    </tr>
+    <tr>
+      <th>77454</th>
+      <td>S.16/14/44</td>
+      <td>2017-10-25</td>
+      <td>2015-04-22 16:04:46</td>
+      <td>02</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>78738</th>
+      <td>S.16/14/44</td>
+      <td>2017-10-25</td>
+      <td>2015-07-16 16:06:00</td>
+      <td>03</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>77379</th>
+      <td>S.16/14/44</td>
+      <td>2017-10-25</td>
+      <td>2015-10-15 09:58:48</td>
+      <td>04</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>77990</th>
+      <td>S.16/14/44</td>
+      <td>2017-10-25</td>
+      <td>2016-01-20 15:33:49</td>
+      <td>05</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>76894</th>
+      <td>S.16/14/44</td>
+      <td>2017-10-25</td>
+      <td>2016-05-04 15:00:57</td>
+      <td>06</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>77739</th>
+      <td>S.16/14/44</td>
+      <td>2017-10-25</td>
+      <td>2016-09-02 14:18:50</td>
+      <td>07</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>75923</th>
+      <td>S.16/14/44</td>
+      <td>2017-10-25</td>
+      <td>2016-12-02 16:24:26</td>
+      <td>08</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>79047</th>
+      <td>S.16/14/44</td>
+      <td>2017-10-25</td>
+      <td>2017-03-03 09:43:32</td>
+      <td>09</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>79953</th>
+      <td>S.16/14/44</td>
+      <td>2017-10-25</td>
+      <td>2017-07-03 16:43:30</td>
+      <td>10</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>79712</th>
+      <td>S.16/14/44</td>
+      <td>2017-10-25</td>
+      <td>2017-10-25 14:34:46</td>
+      <td>11</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>63997</th>
+      <td>S.16/14/75</td>
+      <td>2014-12-18</td>
+      <td>2015-02-03 13:36:41</td>
+      <td>01</td>
+      <td>47 days</td>
+    </tr>
+    <tr>
+      <th>63924</th>
+      <td>S.16/14/75</td>
+      <td>2014-12-18</td>
+      <td>2015-04-17 14:36:34</td>
+      <td>02</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>66639</th>
+      <td>S.16/14/75</td>
+      <td>2014-12-18</td>
+      <td>2015-07-21 12:00:27</td>
+      <td>03</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>62638</th>
+      <td>S.16/14/75</td>
+      <td>2014-12-18</td>
+      <td>2015-09-29 16:30:54</td>
+      <td>04</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>11752</th>
+      <td>S.16/14/76</td>
+      <td>2014-12-18</td>
+      <td>2015-02-03 13:37:12</td>
+      <td>01</td>
+      <td>47 days</td>
+    </tr>
+    <tr>
+      <th>11944</th>
+      <td>S.16/14/76</td>
+      <td>2014-12-18</td>
+      <td>2015-04-17 14:37:14</td>
+      <td>02</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>12370</th>
+      <td>S.16/14/76</td>
+      <td>2014-12-18</td>
+      <td>2015-07-21 12:01:22</td>
+      <td>03</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>9482</th>
+      <td>S.16/14/76</td>
+      <td>2014-12-18</td>
+      <td>2015-09-29 16:31:34</td>
+      <td>04</td>
+      <td>NaT</td>
+    </tr>
+    <tr>
+      <th>62835</th>
+      <td>S.16/15/16</td>
+      <td>2015-06-17</td>
+      <td>2015-05-01 15:21:16</td>
+      <td>01</td>
+      <td>-47 days</td>
+    </tr>
+    <tr>
+      <th>99723</th>
+      <td>S.16/15/29</td>
+      <td>2015-07-08</td>
+      <td>2015-05-19 14:25:00</td>
+      <td>01</td>
+      <td>-50 days</td>
+    </tr>
+    <tr>
+      <th>70989</th>
+      <td>S.16/16/37</td>
+      <td>2017-02-13</td>
+      <td>2017-02-14 09:16:35</td>
+      <td>01</td>
+      <td>1 days</td>
+    </tr>
+    <tr>
+      <th>70117</th>
+      <td>S.18/17/2</td>
+      <td>2017-05-01</td>
+      <td>2017-04-25 14:13:52</td>
+      <td>01</td>
+      <td>-6 days</td>
+    </tr>
+  </tbody>
+</table>
+<p>104806 rows × 5 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[41]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;next_report_idx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">report_idx</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># needed to self-join</span>
+
+<span class="n">df_r</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;case_number&#39;</span><span class="p">,</span> <span class="s1">&#39;start_date_insolvency&#39;</span><span class="p">,</span> <span class="s1">&#39;publication_date&#39;</span><span class="p">,</span> <span class="s1">&#39;report_idx&#39;</span><span class="p">]]</span>
+<span class="n">df_l</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;case_number&#39;</span><span class="p">,</span> <span class="s1">&#39;next_report_idx&#39;</span><span class="p">,</span> <span class="s1">&#39;publication_date&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;publication_date&#39;</span><span class="p">:</span> <span class="s1">&#39;next_publication_date&#39;</span><span class="p">})</span>   
+   
+<span class="n">df_l</span>
+<span class="n">df2</span> <span class="o">=</span> <span class="n">df_l</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_r</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;case_number&#39;</span><span class="p">,</span> <span class="s1">&#39;next_report_idx&#39;</span><span class="p">],</span> <span class="n">right_on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;case_number&#39;</span><span class="p">,</span> <span class="s1">&#39;report_idx&#39;</span><span class="p">])</span>
+<span class="n">df2</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[41]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>case_number</th>
+      <th>next_report_idx</th>
+      <th>next_publication_date</th>
+      <th>start_date_insolvency</th>
+      <th>publication_date</th>
+      <th>report_idx</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>F.16/12/815</td>
+      <td>3</td>
+      <td>2014-07-16 13:18:54</td>
+      <td>2012-12-21</td>
+      <td>2015-03-25 15:27:29</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>F.05/16/63</td>
+      <td>6</td>
+      <td>2017-05-29 09:19:59</td>
+      <td>2016-02-02</td>
+      <td>2017-12-14 16:14:18</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>F.09/14/747</td>
+      <td>2</td>
+      <td>2014-11-18 14:33:08</td>
+      <td>2014-10-17</td>
+      <td>2014-12-17 10:17:53</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>F.16/12/815</td>
+      <td>9</td>
+      <td>2017-03-15 15:58:40</td>
+      <td>2012-12-21</td>
+      <td>2017-10-23 12:52:34</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>F.09/14/747</td>
+      <td>4</td>
+      <td>2015-07-10 14:41:46</td>
+      <td>2014-10-17</td>
+      <td>2016-02-26 12:09:46</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>F.09/14/747</td>
+      <td>9</td>
+      <td>2017-04-12 11:25:18</td>
+      <td>2014-10-17</td>
+      <td>2017-06-20 17:05:23</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>F.16/12/815</td>
+      <td>8</td>
+      <td>2016-12-23 16:32:21</td>
+      <td>2012-12-21</td>
+      <td>2017-03-15 15:58:40</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>F.16/12/815</td>
+      <td>6</td>
+      <td>2015-10-29 15:10:11</td>
+      <td>2012-12-21</td>
+      <td>2016-05-02 12:14:20</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>F.10/16/396</td>
+      <td>4</td>
+      <td>2016-10-25 11:35:09</td>
+      <td>2016-07-26</td>
+      <td>2017-01-16 12:15:18</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>F.16/12/815</td>
+      <td>4</td>
+      <td>2015-03-25 15:27:29</td>
+      <td>2012-12-21</td>
+      <td>2015-05-04 16:29:56</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>F.09/09/651</td>
+      <td>8</td>
+      <td>2014-05-08 10:57:20</td>
+      <td>2009-09-15</td>
+      <td>2015-04-10 12:44:21</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>F.05/16/63</td>
+      <td>2</td>
+      <td>2016-02-15 09:14:31</td>
+      <td>2016-02-02</td>
+      <td>2016-05-09 12:03:30</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>F.16/12/815</td>
+      <td>10</td>
+      <td>2017-10-23 12:52:34</td>
+      <td>2012-12-21</td>
+      <td>2018-04-09 12:19:55</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>F.10/10/419</td>
+      <td>11</td>
+      <td>2015-07-14 17:02:36</td>
+      <td>2010-06-29</td>
+      <td>2016-01-13 16:54:58</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>F.05/16/63</td>
+      <td>4</td>
+      <td>2016-08-09 16:27:10</td>
+      <td>2016-02-02</td>
+      <td>2016-12-08 10:47:59</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>F.10/10/419</td>
+      <td>10</td>
+      <td>2015-01-14 16:05:24</td>
+      <td>2010-06-29</td>
+      <td>2015-07-14 17:02:36</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>F.10/10/419</td>
+      <td>13</td>
+      <td>2016-07-12 17:04:54</td>
+      <td>2010-06-29</td>
+      <td>2017-01-13 09:54:32</td>
+      <td>13</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>F.16/12/815</td>
+      <td>2</td>
+      <td>2014-01-15 10:02:39</td>
+      <td>2012-12-21</td>
+      <td>2014-07-16 13:18:54</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>F.10/10/419</td>
+      <td>9</td>
+      <td>2014-07-15 13:52:52</td>
+      <td>2010-06-29</td>
+      <td>2015-01-14 16:05:24</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>F.10/10/419</td>
+      <td>14</td>
+      <td>2017-01-13 09:54:32</td>
+      <td>2010-06-29</td>
+      <td>2017-07-07 17:46:07</td>
+      <td>14</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>F.09/09/651</td>
+      <td>14</td>
+      <td>2017-01-10 15:25:27</td>
+      <td>2009-09-15</td>
+      <td>2017-04-04 15:25:26</td>
+      <td>14</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>F.05/16/63</td>
+      <td>5</td>
+      <td>2016-12-08 10:47:59</td>
+      <td>2016-02-02</td>
+      <td>2017-05-29 09:19:59</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>F.09/09/651</td>
+      <td>10</td>
+      <td>2015-12-11 12:04:41</td>
+      <td>2009-09-15</td>
+      <td>2016-07-05 11:15:19</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>F.16/12/815</td>
+      <td>7</td>
+      <td>2016-05-02 12:14:20</td>
+      <td>2012-12-21</td>
+      <td>2016-12-23 16:32:21</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>F.10/10/419</td>
+      <td>12</td>
+      <td>2016-01-13 16:54:58</td>
+      <td>2010-06-29</td>
+      <td>2016-07-12 17:04:54</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>F.09/14/747</td>
+      <td>3</td>
+      <td>2014-12-17 10:17:53</td>
+      <td>2014-10-17</td>
+      <td>2015-07-10 14:41:46</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>F.10/10/419</td>
+      <td>8</td>
+      <td>2014-01-16 09:28:56</td>
+      <td>2010-06-29</td>
+      <td>2014-07-15 13:52:52</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>F.05/16/63</td>
+      <td>3</td>
+      <td>2016-05-09 12:03:30</td>
+      <td>2016-02-02</td>
+      <td>2016-08-09 16:27:10</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>F.09/09/651</td>
+      <td>9</td>
+      <td>2015-04-10 12:44:21</td>
+      <td>2009-09-15</td>
+      <td>2015-12-11 12:04:41</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>F.16/12/815</td>
+      <td>5</td>
+      <td>2015-05-04 16:29:56</td>
+      <td>2012-12-21</td>
+      <td>2015-10-29 15:10:11</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>F.10/13/1028</td>
+      <td>9</td>
+      <td>2015-11-24 15:03:32</td>
+      <td>2013-10-08</td>
+      <td>2016-05-11 12:07:55</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>F.10/13/1028</td>
+      <td>5</td>
+      <td>2014-06-24 15:53:46</td>
+      <td>2013-10-08</td>
+      <td>2014-12-15 16:27:27</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>F.10/13/1028</td>
+      <td>7</td>
+      <td>2014-12-15 16:29:08</td>
+      <td>2013-10-08</td>
+      <td>2015-06-02 12:13:34</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>F.06/12/228</td>
+      <td>8</td>
+      <td>2015-01-14 10:04:08</td>
+      <td>2012-05-15</td>
+      <td>2016-04-08 09:00:28</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>F.10/13/1028</td>
+      <td>3</td>
+      <td>2014-01-21 09:31:55</td>
+      <td>2013-10-08</td>
+      <td>2014-04-04 15:55:53</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>F.10/13/1028</td>
+      <td>8</td>
+      <td>2015-06-02 12:13:34</td>
+      <td>2013-10-08</td>
+      <td>2015-11-24 15:03:32</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>F.10/13/1028</td>
+      <td>6</td>
+      <td>2014-12-15 16:27:27</td>
+      <td>2013-10-08</td>
+      <td>2014-12-15 16:29:08</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>37</th>
+      <td>F.06/12/228</td>
+      <td>9</td>
+      <td>2016-04-08 09:00:28</td>
+      <td>2012-05-15</td>
+      <td>2016-10-24 12:27:21</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>F.06/12/228</td>
+      <td>10</td>
+      <td>2016-10-24 12:27:21</td>
+      <td>2012-05-15</td>
+      <td>2017-04-07 11:18:19</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>F.10/13/1028</td>
+      <td>4</td>
+      <td>2014-04-04 15:55:53</td>
+      <td>2013-10-08</td>
+      <td>2014-06-24 15:53:46</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>F.06/12/228</td>
+      <td>7</td>
+      <td>2014-07-11 09:43:20</td>
+      <td>2012-05-15</td>
+      <td>2015-01-14 10:04:08</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>F.06/12/228</td>
+      <td>6</td>
+      <td>2014-02-04 17:21:54</td>
+      <td>2012-05-15</td>
+      <td>2014-07-11 09:43:20</td>
+      <td>6</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+</div>
+</div>
+</div>
+
 </div>
     </div>
   </div>

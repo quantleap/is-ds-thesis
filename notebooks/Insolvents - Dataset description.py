@@ -3,13 +3,14 @@
 
 # #### Setup
 
-# In[21]:
+# In[5]:
 
 
 #import pdb; pdb.set_trace()
 
 get_ipython().run_line_magic('matplotlib', 'inline')
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import os
 import re
@@ -22,14 +23,53 @@ from sqlalchemy.engine.url import URL
 con = str(URL(drivername='postgresql', 
               username=os.environ['DB_QIR_USERNAME'], 
               password=os.environ['DB_QIR_PASSWORD'], 
-              #host='www.quantleap.nl', 
-              host='localhost', 
+              host='www.quantleap.nl', 
+              #host='localhost', 
               database='qir'))
 
 # cursor for use with psycopg2
 conn = psycopg2.connect(con)
 cur = conn.cursor()  
 print('CONNECTION ESTABLISHED')
+
+
+# # Insolvency types
+# insolvencies can be of different types:
+# - schuldsanering (R)
+# - surseance (S)
+# - Fallissement (F)
+# 
+# and can involve a (person_legal_personality)
+# - rechtspersoon 
+# - natuurlijk persoon
+
+# In[6]:
+
+
+sql = """select insolvency_type, person_legal_personality from insolvents;"""
+df = pd.read_sql(sql, con)
+
+pd.pivot_table(df, values='insolvency_type', index=['insolvency_type'],
+                    columns=['person_legal_personality'], aggfunc=lambda x: len(x))
+
+
+# We are interested in companies in bankrupcty, the F/rechtspersoon combination.
+# 
+
+# In[16]:
+
+
+# use views that filter F/rechtspersoon
+sql = """select count(*) from company_bankrupt_insolvents_view;"""
+pd.read_sql(sql, con)
+
+
+# In[14]:
+
+
+# .. of which currently active
+sql = """select count(*) from active_company_bankrupt_insolvents_view;"""
+pd.read_sql(sql, con)
 
 
 # # Process Mining of Insolvency Processes
@@ -46,17 +86,14 @@ print('CONNECTION ESTABLISHED')
 # 
 # ## start date insolvency completeness
 
-# In[5]:
+# In[10]:
 
 
-sql = """select * from insolvents 
-             where person_legal_personality = 'rechtspersoon' 
-                   --and is_removed is False 
-                   --and (end_findability is null or end_findability > current_date);"""
+sql = """select * from active_company_bankrupt_insolvents_view;"""
 df_available_insolvents = pd.read_sql(sql, con)
 
 
-# In[6]:
+# In[12]:
 
 
 s = df_available_insolvents.start_date_insolvency.notnull()
@@ -64,36 +101,24 @@ has_start_date = s.groupby(s).size()
 pd.DataFrame({'count': has_start_date, 'pct': has_start_date/has_start_date.sum()})
 
 
+# results start data insolvency from court publication on active insolvents:
+#                         count	pct
+# start_date_insolvency		
+# False	                973	    0.055676
+# True	                16503	0.944324
+
 # ### Result discussion
 # It appears that a small portion of unknown start dates is caused by the left censoring of data: the initial publication relating to the start of the default was not included in the dataset, CIR began slowly in 2010 and only fully around 2014.
 # 
 # But the analysis shown below suggests otherwise, most cases without start date are from the years 2014-2015. Needs further analysis, many cases are transferred to another court.
-
-# In[15]:
-
-
-sql = """with available_insolvents as 
-    (select * from insolvents where person_legal_personality = 'rechtspersoon' 
-     --and is_removed is False and (end_findability > current_date or end_findability is null)
-     ),
-  no_start_date_ins as (select * from available_insolvents where start_date_insolvency is NULL),
-  min_pub_dates as (select case_number, (select pub.date from publications pub
-                                             join insolvents ins on pub.insolvent_id = ins.id
-                                             where ins.case_number = no_start_date_ins.case_number
-                                             order by pub.date asc
-                                             limit 1) as min_pub_date
-                    from no_start_date_ins),
-  overgedragen as (select distinct i.id, i.case_number from no_start_date_ins i join publications p on p.insolvent_id = i.id
-                   where p.type_code = '1334')
-select to_char(min_pub_date, 'YYYY') as year_first_available_publication, count(*) from min_pub_dates
-group by 1
-order by 1;"""
-pd.read_sql(sql, con)
-
+# 
+# Other sources for the start date are:
+# 1. start date administrator
+# 2. start date address insolvent
 
 # ### how do cases start out
 
-# In[51]:
+# In[ ]:
 
 
 sql = """
@@ -110,7 +135,7 @@ insert into publication_types (type_code, description) values
   ('1306', 'uitspraak faillissement na beëindiging surseance '),
   ('3313', 'Beëindiging door omzetting in faillissement');
 with available_insolvents as 
-    (select * from insolvents where person_legal_personality = 'rechtspersoon' 
+    (select * from insolvents where person_legal_personality = 'rechtspersoon' and type = 'F'
      --and is_removed is False and (end_findability > current_date or end_findability is null)
      ),
 with_start_date_ins as (select * from insolvents where start_date_insolvency is not NULL)
@@ -132,7 +157,7 @@ df.style
 
 # ### how do cases end
 
-# In[16]:
+# In[ ]:
 
 
 sql = """
@@ -149,7 +174,7 @@ insert into publication_types (type_code, description) values
 ('1333', 'Faillissement omgezet in schuldsanering');
 
 with available_insolvents as 
-    (select * from insolvents where person_legal_personality = 'rechtspersoon' 
+    (select * from insolvents where person_legal_personality = 'rechtspersoon' and type='F'
      --and is_removed is False and (end_findability > current_date or end_findability is null)
      ),
 with_end_date_ins as (select * from insolvents where end_date_insolvency is not NULL)
@@ -171,12 +196,12 @@ df.style.set_properties()
 # ### when are verification meetings set
 # Verfification meetings are supposed to be schedules (not held) within 14 days after the publication of bankruptcy. This demand is seen as a dead letter to be changed with the new law from 2019-1-1 onwards. From the distribution is can be seen that this deadline is almost never met, on the contrary, it appears breached up to a point that it needs further inspection.
 
-# In[37]:
+# In[ ]:
 
 
 sql = """
 with available_insolvents as
-  (select * from insolvents where person_legal_personality = 'rechtspersoon'
+  (select * from insolvents where person_legal_personality = 'rechtspersoon' and type='F'
                              and start_date_insolvency is not null
                              and is_removed is False
                              and (end_findability > current_date or end_findability is null)
@@ -197,13 +222,13 @@ order by 1 desc, 2, 3 desc;"""
 df = pd.read_sql(sql, con)
 
 
-# In[38]:
+# In[ ]:
 
 
-df.days_after_start.plot.hist(bins=50)
+df.days_after_start.plot.hist(bins=50);
 
 
-# In[45]:
+# In[ ]:
 
 
 # see recent breaches
@@ -212,7 +237,7 @@ df[df.start_date_insolvency > datetime.date(2016, 1, 1)].plot.hist(bins=50)
 # this data is right censored, cases which not yet had a verification meeting publication are not seen.
 
 
-# In[46]:
+# In[ ]:
 
 
 # see recent breaches
@@ -220,7 +245,7 @@ import datetime
 df[df.start_date_insolvency > datetime.date(2016, 1, 1)].sort_values(by=['days_after_start'], ascending=False).head(20)
 
 
-# In[50]:
+# In[ ]:
 
 
 # pull a file e.g. the second

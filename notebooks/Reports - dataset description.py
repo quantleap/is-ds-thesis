@@ -3,19 +3,21 @@
 
 # #### Setup
 
-# In[2]:
+# In[83]:
 
 
 #import pdb; pdb.set_trace()
 
 get_ipython().run_line_magic('matplotlib', 'inline')
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import os
 import re
 import json
 import psycopg2
 from sqlalchemy.engine.url import URL
+import datetime
 
 # connection to the database
 # connection string for use in pandas:
@@ -477,6 +479,8 @@ else:
 # 2. werkt het: via de use cases.
 
 
+# ## Hour of publishing the report
+
 # In[39]:
 
 
@@ -492,14 +496,27 @@ plt.figure()
 plt.bar(np.arange(23), df.cnt.values)
 
 
+# ## Pull a case
+
+# In[ ]:
+
+
+sql = """
+select case_number, identification, publication_date
+from insolvents i join reports r on i.id = r.insolvent_id
+"""
+pd.read_sql('')
+
+
 # ## Reporting Frequency Distribution
 
-# In[19]:
+# In[43]:
 
 
 # first report
 sql = """with cte_reports as (
-             select ins.case_number, ins.start_date_insolvency, rep.publication_date, right(rep.identification, 2) as report_idx
+             select ins.case_number, ins.start_date_insolvency, rep.publication_date, 
+                 right(rep.identification, 2) as report_idx
              from reports rep join insolvents ins on rep.insolvent_id = ins.id
              where publication_date >= '2015-01-01'
                  and publication_date <= '2018-06-01'
@@ -522,10 +539,12 @@ df_initial_period = pd.read_sql(sql, con)
 df_initial_period.head(n=5)
 
 
-# In[20]:
+# In[60]:
 
 
+# subsequent periods
 sql = """with cte_reports as (
+             -- select recent progress reports and define a report index
              select ins.case_number, rep.publication_date, right(rep.identification, 2) as report_idx
              from reports rep join insolvents ins on rep.insolvent_id = ins.id
              where publication_date >= '2015-01-01'
@@ -533,15 +552,18 @@ sql = """with cte_reports as (
                  and is_attachment is False
              order by 1, 2),
          intervals as (
+             -- transform into from-to intervals
              select rep1.case_number, rep1.report_idx || '-' || rep2.report_idx as from_to, 
                  rep1.publication_date as pubdate1, rep2.publication_date as pubdate2,
                  date_part('day', rep2.publication_date-rep1.publication_date) as days_interval
-             from cte_reports as rep1 join cte_reports as rep2 on rep1.case_number = rep2.case_number
-             and rep1.report_idx::integer = rep2.report_idx::integer - 1)
+             from cte_reports as rep1 
+             join cte_reports as rep2 on rep1.case_number = rep2.case_number
+             and rep1.report_idx::integer = rep2.report_idx::integer - 1)  -- join
          select from_to, days_interval from intervals;
         """
     
 df = pd.read_sql(sql, con)
+print(len(df))
 df.head(n=5)
 
 
@@ -573,3 +595,57 @@ ax = df[df.from_to == '09-10'].days_interval.plot.hist(ax=axes[9], bins=bins).se
 # Judges could use this information to rank the administrators on delivery on time.
 # 
 # Approved deadline extensions are not extractable to my knowledge.
+
+# In[107]:
+
+
+# try to accomplish the same thing in pandas
+sql = """
+select ins.case_number, ins.start_date_insolvency, rep.publication_date, right(rep.identification, 2) as report_idx
+             from reports rep join insolvents ins on rep.insolvent_id = ins.id
+             where publication_date >= '2015-01-01'
+                 and publication_date <= '2018-06-01'
+                 and is_attachment is False;
+"""
+
+df = pd.read_sql(sql, con)
+df = df[df.start_date_insolvency.notnull()]  # remove records without start date
+df['days_interval'] = np.nan
+len(df)
+
+
+# In[106]:
+
+
+# first period
+
+"""
+        intervals as (
+             select case_number, '00-01' as from_to, start_date_insolvency, publication_date,
+                 date_part('day', publication_date - start_date_insolvency) as days_interval
+             from cte_reports
+             where report_idx = '01' and start_date_insolvency is not NULL)
+"""
+# set time interval first period
+df.loc[(df.report_idx == '01') & (df.start_date_insolvency.notnull()), 'days_interval'] = (df.publication_date.apply(datetime.datetime.date) - df.start_date_insolvency)
+df.sort_values(by=['case_number', 'report_idx'])
+
+
+# In[41]:
+
+
+df['next_report_idx'] = df.report_idx + 1  # needed to self-join
+
+df_r = df[['case_number', 'start_date_insolvency', 'publication_date', 'report_idx']]
+df_l = df[['case_number', 'next_report_idx', 'publication_date']].rename(columns={'publication_date': 'next_publication_date'})   
+   
+df_l
+df2 = df_l.merge(df_r, left_on=['case_number', 'next_report_idx'], right_on=['case_number', 'report_idx'])
+df2
+
+
+# In[ ]:
+
+
+
+

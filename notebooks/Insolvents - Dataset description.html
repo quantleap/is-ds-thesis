@@ -11781,13 +11781,14 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#import pdb; pdb.set_trace()</span>
 
 <span class="o">%</span><span class="k">matplotlib</span> inline  
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
@@ -11800,8 +11801,8 @@ div#notebook {
 <span class="n">con</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">URL</span><span class="p">(</span><span class="n">drivername</span><span class="o">=</span><span class="s1">&#39;postgresql&#39;</span><span class="p">,</span> 
               <span class="n">username</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;DB_QIR_USERNAME&#39;</span><span class="p">],</span> 
               <span class="n">password</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;DB_QIR_PASSWORD&#39;</span><span class="p">],</span> 
-              <span class="c1">#host=&#39;www.quantleap.nl&#39;, </span>
-              <span class="n">host</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> 
+              <span class="n">host</span><span class="o">=</span><span class="s1">&#39;www.quantleap.nl&#39;</span><span class="p">,</span> 
+              <span class="c1">#host=&#39;localhost&#39;, </span>
               <span class="n">database</span><span class="o">=</span><span class="s1">&#39;qir&#39;</span><span class="p">))</span>
 
 <span class="c1"># cursor for use with psycopg2</span>
@@ -11837,42 +11838,31 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Process-Mining-of-Insolvency-Processes">Process Mining of Insolvency Processes<a class="anchor-link" href="#Process-Mining-of-Insolvency-Processes">&#182;</a></h1><p>Using process mining we like to get information on the flow of insolvency cases through the court system. 
-There are two sources where the state of the insolvency case is logged:</p>
-<ol>
-<li>structured: in the court publication description and type code</li>
-<li>unstructuctured: a variety of information in the progress reports</li>
-</ol>
-<h1 id="set-start-date-insolvency-using-publication.type_code">set start date insolvency using publication.type_code<a class="anchor-link" href="#set-start-date-insolvency-using-publication.type_code">&#182;</a></h1><p>This field is derived from the publication type code. Certain type codes indicate the start of the insolvency, other the end.</p>
-<h2 id="start-date-insolvency-completeness">start date insolvency completeness<a class="anchor-link" href="#start-date-insolvency-completeness">&#182;</a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select * from insolvents </span>
-<span class="s2">             where person_legal_personality = &#39;rechtspersoon&#39; </span>
-<span class="s2">                   --and is_removed is False </span>
-<span class="s2">                   --and (end_findability is null or end_findability &gt; current_date);&quot;&quot;&quot;</span>
-<span class="n">df_available_insolvents</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">)</span>
-</pre></div>
+<h1 id="Insolvency-types">Insolvency types<a class="anchor-link" href="#Insolvency-types">&#182;</a></h1><p>insolvencies can be of different types:</p>
+<ul>
+<li>schuldsanering (R)</li>
+<li>surseance (S)</li>
+<li>Fallissement (F)</li>
+</ul>
+<p>and can involve a (person_legal_personality)</p>
+<ul>
+<li>rechtspersoon </li>
+<li>natuurlijk persoon</li>
+</ul>
 
 </div>
 </div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="n">df_available_insolvents</span><span class="o">.</span><span class="n">start_date_insolvency</span><span class="o">.</span><span class="n">notnull</span><span class="p">()</span>
-<span class="n">has_start_date</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
-<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;count&#39;</span><span class="p">:</span> <span class="n">has_start_date</span><span class="p">,</span> <span class="s1">&#39;pct&#39;</span><span class="p">:</span> <span class="n">has_start_date</span><span class="o">/</span><span class="n">has_start_date</span><span class="o">.</span><span class="n">sum</span><span class="p">()})</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select insolvency_type, person_legal_personality from insolvents;&quot;&quot;&quot;</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">)</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s1">&#39;insolvency_type&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;insolvency_type&#39;</span><span class="p">],</span>
+                    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;person_legal_personality&#39;</span><span class="p">],</span> <span class="n">aggfunc</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
 </pre></div>
 
 </div>
@@ -11891,17 +11881,263 @@ There are two sources where the state of the insolvency case is logged:</p>
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
     }
 
     .dataframe tbody tr th {
         vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>person_legal_personality</th>
+      <th>natuurlijk persoon</th>
+      <th>rechtspersoon</th>
+    </tr>
+    <tr>
+      <th>insolvency_type</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>D</th>
+      <td>NaN</td>
+      <td>4.0</td>
+    </tr>
+    <tr>
+      <th>F</th>
+      <td>17821.0</td>
+      <td>49151.0</td>
+    </tr>
+    <tr>
+      <th>R</th>
+      <td>94806.0</td>
+      <td>17.0</td>
+    </tr>
+    <tr>
+      <th>S</th>
+      <td>88.0</td>
+      <td>1703.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We are interested in companies in bankrupcty, the F/rechtspersoon combination.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># use views that filter F/rechtspersoon</span>
+<span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select count(*) from company_bankrupt_insolvents_view;&quot;&quot;&quot;</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[16]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>49151</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># .. of which currently active</span>
+<span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select count(*) from active_company_bankrupt_insolvents_view;&quot;&quot;&quot;</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[14]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>17476</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Process-Mining-of-Insolvency-Processes">Process Mining of Insolvency Processes<a class="anchor-link" href="#Process-Mining-of-Insolvency-Processes">&#182;</a></h1><p>Using process mining we like to get information on the flow of insolvency cases through the court system. 
+There are two sources where the state of the insolvency case is logged:</p>
+<ol>
+<li>structured: in the court publication description and type code</li>
+<li>unstructuctured: a variety of information in the progress reports</li>
+</ol>
+<h1 id="set-start-date-insolvency-using-publication.type_code">set start date insolvency using publication.type_code<a class="anchor-link" href="#set-start-date-insolvency-using-publication.type_code">&#182;</a></h1><p>This field is derived from the publication type code. Certain type codes indicate the start of the insolvency, other the end.</p>
+<h2 id="start-date-insolvency-completeness">start date insolvency completeness<a class="anchor-link" href="#start-date-insolvency-completeness">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select * from active_company_bankrupt_insolvents_view;&quot;&quot;&quot;</span>
+<span class="n">df_available_insolvents</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="n">df_available_insolvents</span><span class="o">.</span><span class="n">start_date_insolvency</span><span class="o">.</span><span class="n">notnull</span><span class="p">()</span>
+<span class="n">has_start_date</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;count&#39;</span><span class="p">:</span> <span class="n">has_start_date</span><span class="p">,</span> <span class="s1">&#39;pct&#39;</span><span class="p">:</span> <span class="n">has_start_date</span><span class="o">/</span><span class="n">has_start_date</span><span class="o">.</span><span class="n">sum</span><span class="p">()})</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[12]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
     }
 </style>
 <table border="1" class="dataframe">
@@ -11920,13 +12156,13 @@ There are two sources where the state of the insolvency case is logged:</p>
   <tbody>
     <tr>
       <th>False</th>
-      <td>3934</td>
-      <td>0.077554</td>
+      <td>973</td>
+      <td>0.055676</td>
     </tr>
     <tr>
       <th>True</th>
-      <td>46792</td>
-      <td>0.922446</td>
+      <td>16503</td>
+      <td>0.944324</td>
     </tr>
   </tbody>
 </table>
@@ -11943,159 +12179,29 @@ There are two sources where the state of the insolvency case is logged:</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>results start data insolvency from court publication on active insolvents:
+                        count   pct
+start_date_insolvency<br>
+False                   973     0.055676
+True                    16503   0.944324</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Result-discussion">Result discussion<a class="anchor-link" href="#Result-discussion">&#182;</a></h3><p>It appears that a small portion of unknown start dates is caused by the left censoring of data: the initial publication relating to the start of the default was not included in the dataset, CIR began slowly in 2010 and only fully around 2014.</p>
 <p>But the analysis shown below suggests otherwise, most cases without start date are from the years 2014-2015. Needs further analysis, many cases are transferred to another court.</p>
+<p>Other sources for the start date are:</p>
+<ol>
+<li>start date administrator</li>
+<li>start date address insolvent</li>
+</ol>
 
 </div>
 </div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;with available_insolvents as </span>
-<span class="s2">    (select * from insolvents where person_legal_personality = &#39;rechtspersoon&#39; </span>
-<span class="s2">     --and is_removed is False and (end_findability &gt; current_date or end_findability is null)</span>
-<span class="s2">     ),</span>
-<span class="s2">  no_start_date_ins as (select * from available_insolvents where start_date_insolvency is NULL),</span>
-<span class="s2">  min_pub_dates as (select case_number, (select pub.date from publications pub</span>
-<span class="s2">                                             join insolvents ins on pub.insolvent_id = ins.id</span>
-<span class="s2">                                             where ins.case_number = no_start_date_ins.case_number</span>
-<span class="s2">                                             order by pub.date asc</span>
-<span class="s2">                                             limit 1) as min_pub_date</span>
-<span class="s2">                    from no_start_date_ins),</span>
-<span class="s2">  overgedragen as (select distinct i.id, i.case_number from no_start_date_ins i join publications p on p.insolvent_id = i.id</span>
-<span class="s2">                   where p.type_code = &#39;1334&#39;)</span>
-<span class="s2">select to_char(min_pub_date, &#39;YYYY&#39;) as year_first_available_publication, count(*) from min_pub_dates</span>
-<span class="s2">group by 1</span>
-<span class="s2">order by 1;&quot;&quot;&quot;</span>
-<span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[15]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>year_first_available_publication</th>
-      <th>count</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>2005</td>
-      <td>22</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2006</td>
-      <td>55</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2007</td>
-      <td>28</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>2008</td>
-      <td>86</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>2009</td>
-      <td>145</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>2010</td>
-      <td>132</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>2011</td>
-      <td>117</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>2012</td>
-      <td>58</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>2013</td>
-      <td>347</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>2014</td>
-      <td>717</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>2015</td>
-      <td>657</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>2016</td>
-      <td>475</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>2017</td>
-      <td>446</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>2018</td>
-      <td>193</td>
-    </tr>
-    <tr>
-      <th>14</th>
-      <td>None</td>
-      <td>456</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
@@ -12107,7 +12213,7 @@ There are two sources where the state of the insolvency case is logged:</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[51]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
@@ -12124,7 +12230,7 @@ There are two sources where the state of the insolvency case is logged:</p>
 <span class="s2">  (&#39;1306&#39;, &#39;uitspraak faillissement na beëindiging surseance &#39;),</span>
 <span class="s2">  (&#39;3313&#39;, &#39;Beëindiging door omzetting in faillissement&#39;);</span>
 <span class="s2">with available_insolvents as </span>
-<span class="s2">    (select * from insolvents where person_legal_personality = &#39;rechtspersoon&#39; </span>
+<span class="s2">    (select * from insolvents where person_legal_personality = &#39;rechtspersoon&#39; and type = &#39;F&#39;</span>
 <span class="s2">     --and is_removed is False and (end_findability &gt; current_date or end_findability is null)</span>
 <span class="s2">     ),</span>
 <span class="s2">with_start_date_ins as (select * from insolvents where start_date_insolvency is not NULL)</span>
@@ -12141,75 +12247,6 @@ There are two sources where the state of the insolvency case is logged:</p>
 </pre></div>
 
 </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[51]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<style  type="text/css" >
-</style>  
-<table id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7" > 
-<thead>    <tr> 
-        <th class="blank level0" ></th> 
-        <th class="col_heading level0 col0" >type_code</th> 
-        <th class="col_heading level0 col1" >description</th> 
-        <th class="col_heading level0 col2" >count</th> 
-    </tr></thead> 
-<tbody>    <tr> 
-        <th id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7level0_row0" class="row_heading level0 row0" >0</th> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row0_col0" class="data row0 col0" >1300</td> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row0_col1" class="data row0 col1" >uitspraak faillissement</td> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row0_col2" class="data row0 col2" >57504</td> 
-    </tr>    <tr> 
-        <th id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7level0_row1" class="row_heading level0 row1" >1</th> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row1_col0" class="data row1 col0" >1306</td> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row1_col1" class="data row1 col1" >uitspraak faillissement na beëindiging surseance </td> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row1_col2" class="data row1 col2" >2960</td> 
-    </tr>    <tr> 
-        <th id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7level0_row2" class="row_heading level0 row2" >2</th> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row2_col0" class="data row2 col0" >1301</td> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row2_col1" class="data row2 col1" >uitspraak faillissement door tussentijdse beëindiging schuldsanering</td> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row2_col2" class="data row2 col2" >2113</td> 
-    </tr>    <tr> 
-        <th id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7level0_row3" class="row_heading level0 row3" >3</th> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row3_col0" class="data row3 col0" >3313</td> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row3_col1" class="data row3 col1" >Beëindiging door omzetting in faillissement</td> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row3_col2" class="data row3 col2" >1103</td> 
-    </tr>    <tr> 
-        <th id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7level0_row4" class="row_heading level0 row4" >4</th> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row4_col0" class="data row4 col0" >1100</td> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row4_col1" class="data row4 col1" >uitspraak faillissement in hoger beroep</td> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row4_col2" class="data row4 col2" >266</td> 
-    </tr>    <tr> 
-        <th id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7level0_row5" class="row_heading level0 row5" >5</th> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row5_col0" class="data row5 col0" >1302</td> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row5_col1" class="data row5 col1" >uitspraak faillissement tijdens schuldsanering</td> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row5_col2" class="data row5 col2" >234</td> 
-    </tr>    <tr> 
-        <th id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7level0_row6" class="row_heading level0 row6" >6</th> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row6_col0" class="data row6 col0" >1304</td> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row6_col1" class="data row6 col1" >heropening faillissement door ontbinding akkoord in faillissement</td> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row6_col2" class="data row6 col2" >7</td> 
-    </tr>    <tr> 
-        <th id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7level0_row7" class="row_heading level0 row7" >7</th> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row7_col0" class="data row7 col0" >1200</td> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row7_col1" class="data row7 col1" >uitspraak faillissement in cassatie</td> 
-        <td id="T_e49c28f8_8507_11e8_b5cb_f40f243770f7row7_col2" class="data row7 col2" >3</td> 
-    </tr></tbody> 
-</table> 
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -12234,7 +12271,7 @@ Using a stacked area graph it can be shown how cases endings change over time.</
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
@@ -12251,7 +12288,7 @@ Using a stacked area graph it can be shown how cases endings change over time.</
 <span class="s2">(&#39;1333&#39;, &#39;Faillissement omgezet in schuldsanering&#39;);</span>
 
 <span class="s2">with available_insolvents as </span>
-<span class="s2">    (select * from insolvents where person_legal_personality = &#39;rechtspersoon&#39; </span>
+<span class="s2">    (select * from insolvents where person_legal_personality = &#39;rechtspersoon&#39; and type=&#39;F&#39;</span>
 <span class="s2">     --and is_removed is False and (end_findability &gt; current_date or end_findability is null)</span>
 <span class="s2">     ),</span>
 <span class="s2">with_end_date_ins as (select * from insolvents where end_date_insolvency is not NULL)</span>
@@ -12271,80 +12308,6 @@ Using a stacked area graph it can be shown how cases endings change over time.</
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[16]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<style  type="text/css" >
-</style>  
-<table id="T_9794d342_84ef_11e8_a3f9_f40f243770f7" > 
-<thead>    <tr> 
-        <th class="blank level0" ></th> 
-        <th class="col_heading level0 col0" >type_code</th> 
-        <th class="col_heading level0 col1" >description</th> 
-        <th class="col_heading level0 col2" >count</th> 
-    </tr></thead> 
-<tbody>    <tr> 
-        <th id="T_9794d342_84ef_11e8_a3f9_f40f243770f7level0_row0" class="row_heading level0 row0" >0</th> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row0_col0" class="data row0 col0" >1316</td> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row0_col1" class="data row0 col1" >opheffing faillissement wegens gebrek aan baten</td> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row0_col2" class="data row0 col2" >31525</td> 
-    </tr>    <tr> 
-        <th id="T_9794d342_84ef_11e8_a3f9_f40f243770f7level0_row1" class="row_heading level0 row1" >1</th> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row1_col0" class="data row1 col0" >1317</td> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row1_col1" class="data row1 col1" >einde faillissement door verbindende uitdelingslijst</td> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row1_col2" class="data row1 col2" >10571</td> 
-    </tr>    <tr> 
-        <th id="T_9794d342_84ef_11e8_a3f9_f40f243770f7level0_row2" class="row_heading level0 row2" >2</th> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row2_col0" class="data row2 col0" >1333</td> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row2_col1" class="data row2 col1" >Faillissement omgezet in schuldsanering</td> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row2_col2" class="data row2 col2" >3133</td> 
-    </tr>    <tr> 
-        <th id="T_9794d342_84ef_11e8_a3f9_f40f243770f7level0_row3" class="row_heading level0 row3" >3</th> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row3_col0" class="data row3 col0" >1318</td> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row3_col1" class="data row3 col1" >einde faillissement door goedkeuring akkoord</td> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row3_col2" class="data row3 col2" >814</td> 
-    </tr>    <tr> 
-        <th id="T_9794d342_84ef_11e8_a3f9_f40f243770f7level0_row4" class="row_heading level0 row4" >4</th> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row4_col0" class="data row4 col0" >1320</td> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row4_col1" class="data row4 col1" >vernietiging faillissement na verzet</td> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row4_col2" class="data row4 col2" >727</td> 
-    </tr>    <tr> 
-        <th id="T_9794d342_84ef_11e8_a3f9_f40f243770f7level0_row5" class="row_heading level0 row5" >5</th> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row5_col0" class="data row5 col0" >1102</td> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row5_col1" class="data row5 col1" >vernietiging faillissement in hoger beroep</td> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row5_col2" class="data row5 col2" >214</td> 
-    </tr>    <tr> 
-        <th id="T_9794d342_84ef_11e8_a3f9_f40f243770f7level0_row6" class="row_heading level0 row6" >6</th> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row6_col0" class="data row6 col0" >1319</td> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row6_col1" class="data row6 col1" >einde faillissement door verbindende uitdelingslijst na verzet</td> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row6_col2" class="data row6 col2" >39</td> 
-    </tr>    <tr> 
-        <th id="T_9794d342_84ef_11e8_a3f9_f40f243770f7level0_row7" class="row_heading level0 row7" >7</th> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row7_col0" class="data row7 col0" >1324</td> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row7_col1" class="data row7 col1" >einde faillissement door voldoen van alle schulden</td> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row7_col2" class="data row7 col2" >9</td> 
-    </tr>    <tr> 
-        <th id="T_9794d342_84ef_11e8_a3f9_f40f243770f7level0_row8" class="row_heading level0 row8" >8</th> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row8_col0" class="data row8 col0" >1202</td> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row8_col1" class="data row8 col1" >vernietiging faillissement in cassatie</td> 
-        <td id="T_9794d342_84ef_11e8_a3f9_f40f243770f7row8_col2" class="data row8 col2" >6</td> 
-    </tr></tbody> 
-</table> 
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div>
@@ -12358,12 +12321,12 @@ Using a stacked area graph it can be shown how cases endings change over time.</
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">with available_insolvents as</span>
-<span class="s2">  (select * from insolvents where person_legal_personality = &#39;rechtspersoon&#39;</span>
+<span class="s2">  (select * from insolvents where person_legal_personality = &#39;rechtspersoon&#39; and type=&#39;F&#39;</span>
 <span class="s2">                             and start_date_insolvency is not null</span>
 <span class="s2">                             and is_removed is False</span>
 <span class="s2">                             and (end_findability &gt; current_date or end_findability is null)</span>
@@ -12391,135 +12354,20 @@ Using a stacked area graph it can be shown how cases endings change over time.</
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[38]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">days_after_start</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">days_after_start</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">);</span>
 </pre></div>
 
 </div>
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[38]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x11600b668&gt;</pre>
-</div>
-
-</div>
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-
-
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
-UWo7M7+nTR4AAAAASUVORK5CYII=
-"
->
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[45]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># see recent breaches</span>
@@ -12532,145 +12380,10 @@ UWo7M7+nTR4AAAAASUVORK5CYII=
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[45]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1176b7908&gt;</pre>
-</div>
-
-</div>
-
-<div class="output_area">
-
-<div class="prompt"></div>
-
-
-
-
-<div class="output_png output_subarea ">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYIAAAD8CAYAAAB6paOMAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
-AAALEgAACxIB0t1+/AAAFehJREFUeJzt3X2UFfWd5/H3N4AhqBtFe12EMJBdg1GkAZs1iqOiQU10
-CDFGRZwIEyU56/i0k6j4EB1NznGybozGbBKNSuJoYERnfB6fJs64R1cF7aMoMSaREXwYGSKKUcOD
-3/3jFogMNLebvrearvfrnD7cqlu3ft9bXdxPV/3q/ioyE0lSdX2k7AIkSeUyCCSp4gwCSao4g0CS
-Ks4gkKSKMwgkqeIMAkmqOINAkirOIJCkiutbdgH12HnnnXPYsGFllyFJW5X58+f/e2a2bG65rSII
-hg0bxrx588ouQ5K2KhHxr/Us56khSao4g0CSKs4gkKSK2yr6CCR1r1WrVrFkyRLee++9sktRN+jf
-vz9DhgyhX79+XXq9QSBV0JIlS9h+++0ZNmwYEVF2OdoCmcmyZctYsmQJw4cP79I6PDUkVdB7773H
-TjvtZAj0AhHBTjvttEVHdwaBVFGGQO+xpb9Lg0CSKs4+AkkMO+eubl3fokuP6Nb1qbEMAqkOm/qg
-9AOve1x00UVst912fOMb32h621OmTOHZZ59l+vTp7Ljjjhx66KHsuuuuDWmrvb2dV155hc9//vOd
-et2iRYt45JFHOP744xtSl6eGJFXWa6+9xhNPPMHTTz/NmWeeyaxZs3jllVc6tY7Vq1fXvWx7ezt3
-3313p9e/aNEibrrppk69rjMMAkml+M53vsOnPvUp9t9/f55//nkArrnmGsaNG0draytf+tKXeOed
-d1ixYgXDhw9n1apVALz11lvrpq+88kr22GMPRo0axXHHHbfJth5//HH23XdfxowZw3777beuvUMP
-PZSXX36Z0aNHc8kllzBv3jymTp3K6NGjeffdd5k/fz4HHngge++9N4cddhivvvoqAAcddBBnnHEG
-bW1tXHHFFRtt8+abb2bkyJG0trZywAEHsHLlSr71rW8xZ84cRo8ezZw5czZZ16xZs5g0aRIHH3ww
-hxxyCOeccw4PP/wwo0eP5vLLL++238FanhqS1HTz589n9uzZtLe3s3r1asaOHcvee+/NUUcdxckn
-nwzA+eefz7XXXsupp57KQQcdxF133cXkyZOZPXs2Rx11FP369ePSSy/lxRdf5KMf/SjLly/fZHu7
-7747Dz/8MH379uWBBx7g3HPP5ZZbbuH222/nyCOPpL29HYAHH3yQyy67jLa2NlatWsWpp57Kbbfd
-RktLC3PmzOG8887juuuuA2DlypUdDoZ58cUXc++99zJ48GCWL1/ONttsw8UXX8y8efO46qqrgFqo
-bawugCeffJKnn36agQMH8tBDD3HZZZdx5513dsv235BBIKnpHn74Yb74xS8yYMAAACZNmgTAggUL
-OP/881m+fDlvv/02hx12GAAnnXQS3/3ud5k8eTLXX38911xzDQCjRo1i6tSpTJ48mcmTJ2+yvTff
-fJMTTzyRF154gYhYd3TRkeeff54FCxYwceJEANasWcOgQYPWPX/sscd2+Prx48czbdo0jjnmGI46
-6qhO1zVx4kQGDhy42Tq7g6eGJPUY06ZN46qrruKZZ57hwgsvXPclqfHjx7No0SIeeugh1qxZw8iR
-IwG46667OOWUU3jyyScZN27cJs/XX3DBBUyYMIEFCxZwxx131PXlq8xkzz33pL29nfb2dp555hnu
-u+++dc9vu+22Hb7+xz/+Md/+9rdZvHgxe++9N8uWLetUXZtbf3fyiEBS069+OuCAA5g2bRozZ85k
-9erV3HHHHXzta19jxYoVDBo0iFWrVnHjjTcyePDgda/5yle+wvHHH88FF1wAwPvvv8/ixYuZMGEC
-+++/P7Nnz+btt99mhx12+A/tvfnmm+vWNWvWrE3Wtf3227NixQoARowYwdKlS3n00UfZd999WbVq
-Fb/+9a/Zc88963qPv/3tb9lnn33YZ599uOeee1i8ePGH1t/VuhrBIwJJTTd27FiOPfZYWltb+dzn
-Pse4ceMAuOSSS9hnn30YP348u++++4deM3XqVN544w2mTJkC1E7VnHDCCey1116MGTOG0047baMh
-AHDWWWcxc+ZMxowZ0+FVPtOmTePrX/86o0ePZs2aNcydO5ezzz6b1tZWRo8ezSOPPFL3e/zmN7/J
-XnvtxciRI9lvv/1obW1lwoQJPPfcc+s6i+uta9SoUfTp04fW1taGdBZHZnb7SrtbW1tbeocylam3
-fY9g4cKFfPrTny67jE6ZO3cut912GzfccEPZpfRIG/udRsT8zGzb3Gs9NSSpxzv11FO55557On0N
-vupjEEjq8X7wgx/Utdz111//H67rHz9+PD/84Q8bURZQ+z7EzTff/KF5X/7ylznvvPMa1mZ3Mwik
-isrMXjcC6fTp05k+fXpT2zzvvPNK/9Df0lP8DessjojrIuL1iFiw3rz/FRG/ioinI+LvI2LjPTuS
-Gqp///4sW7Zsiz9AVL61N6bp379/l9fRyCOCWcBVwM/Xm3c/MDMzV0fE3wAzgbMbWIOkjRgyZAhL
-lixh6dKlZZeibrD2VpVd1bAgyMx/iYhhG8y7b73J/wcc3aj2JW1av379unxbQ/U+ZX6P4C+Ae0ps
-X5JESUEQEecBq4EbO1hmRkTMi4h5Hr5KUuM0PQgiYhpwJDA1O+ipysyrM7MtM9taWlqaVp8kVU1T
-Lx+NiMOBs4ADM/OdZrYtSdq4Rl4++gvgUWBERCyJiK9Su4poe+D+iGiPiB83qn1JUn0aedXQlI3M
-vrZR7UmSusbRRyWp4gwCSao4g0CSKs4gkKSKMwgkqeIMAkmqOINAkirOIJCkijMIJKniDAJJqjiD
-QJIqziCQpIozCCSp4gwCSao4g0CSKs4gkKSKMwgkqeIMAkmqOINAkirOIJCkijMIJKniDAJJqjiD
-QJIqrmFBEBHXRcTrEbFgvXkDI+L+iHih+HfHRrUvSapPI48IZgGHbzDvHODBzNwNeLCYliSVqGFB
-kJn/Avx+g9lfAH5WPP4ZMLlR7UuS6tPsPoJdMvPV4vFrwC5Nbl+StIHSOoszM4Hc1PMRMSMi5kXE
-vKVLlzaxMkmqlmYHwb9FxCCA4t/XN7VgZl6dmW2Z2dbS0tK0AiWpapodBLcDJxaPTwRua3L7kqQN
-NPLy0V8AjwIjImJJRHwVuBSYGBEvAJ8tpiVJJerbqBVn5pRNPHVIo9qUJHWe3yyWpIozCCSp4gwC
-Sao4g0CSKs4gkKSKMwgkqeIMAkmqOINAkirOIJCkijMIJKniDAJJqjiDQJIqziCQpIozCCSp4gwC
-Sao4g0CSKs4gkKSKMwgkqeIMAkmqOINAkirOIJCkiqsrCCJir0YXIkkqR71HBP8nIh6PiP8RER9v
-aEWSpKaqKwgy80+BqcAngPkRcVNETOxqoxFxZkQ8GxELIuIXEdG/q+uSJG2ZuvsIMvMF4HzgbOBA
-4MqI+FVEHNWZBiNiMHAa0JaZI4E+wHGdWYckqfvU20cwKiIuBxYCBwN/lpmfLh5f3oV2+wIfi4i+
-wADglS6sQ5LUDfrWudwPgJ8C52bmu2tnZuYrEXF+ZxrMzJcj4jLgJeBd4L7MvG/D5SJiBjADYOjQ
-oZ1pQj3QsHPu2uj8RZce0SvblbYm9Z4aOgK4aW0IRMRHImIAQGbe0JkGI2JH4AvAcGBXYNuIOGHD
-5TLz6sxsy8y2lpaWzjQhSeqEeoPgAeBj600PKOZ1xWeBFzNzaWauAm4F9uviuiRJW6jeIOifmW+v
-nSgeD+himy8Bn4mIARERwCHU+h4kSSWoNwj+EBFj105ExN7Uzu93WmY+BswFngSeKWq4uivrkiRt
-uXo7i88Abo6IV4AA/gtwbFcbzcwLgQu7+npJUvepKwgy84mI2B0YUcx6vji/L0naytV7RAAwDhhW
-vGZsRJCZP29IVZKkpqkrCCLiBuC/Au3AmmJ2AgaBJG3l6j0iaAP2yMxsZDGSpOar96qhBdQ6iCVJ
-vUy9RwQ7A89FxOPAH9fOzMxJDalKktQ09QbBRY0sQpJUnnovH/3niPgTYLfMfKAYZ6hPY0uTJDVD
-vcNQn0zt28A/KWYNBv6hUUVJkpqn3s7iU4DxwFuw7iY1/7lRRUmSmqfePoI/ZubK2hhxUNxQxktJ
-1TDeR6B8nf0d+DvbetV7RPDPEXEutbuKTQRuBu5oXFmSpGapNwjOAZZSGy30a8Dd1O5fLEnaytV7
-1dD7wDXFjySpF6l3rKEX2UifQGZ+stsrkiQ1VWfGGlqrP/BlYGD3lyNJara6+ggyc9l6Py9n5vep
-3dBekrSVq/fU0Nj1Jj9C7QihM/cykCT1UPV+mP/v9R6vBhYBx3R7NZKkpqv3qqEJjS5EklSOek8N
-/c+Ons/M73VPOZKkZuvMVUPjgNuL6T8DHgdeaERRkqTmqTcIhgBjM3MFQERcBNyVmSc0qjBJUnPU
-O8TELsDK9aZXFvO6JCJ2iIi5EfGriFgYEft2dV2SpC1T7xHBz4HHI+Lvi+nJwM+2oN0rgH/MzKMj
-YhtgwBasS5K0Beq9aug7EXEP8KfFrOmZ+VRXGoyIjwMHANOKda/kw0cbkqQm6syXwgYAb2Xm9RHR
-EhHDM/PFLrQ5nNpIptdHRCswHzg9M/+w/kIRMQOYATB06NAuNKMq2dRY+JI2r95bVV4InA3MLGb1
-A/62i232BcYCP8rMMcAfqA1z/SGZeXVmtmVmW0tLSxebkiRtTr2dxV8EJlH70CYzXwG272KbS4Al
-mflYMT2XWjBIkkpQbxCszMykGIo6IrbtaoOZ+RqwOCJGFLMOAZ7r6vokSVum3j6Cv4uInwA7RMTJ
-wF+wZTepORW4sbhi6HfA9C1YlyRpC9R71dBlxb2K3wJGAN/KzPu72mhmtvPhexxIkkqy2SCIiD7A
-A8XAc13+8Jck9Uyb7SPIzDXA+8X1/5KkXqbePoK3gWci4n6KK4cAMvO0hlQlSWqaeoPg1uJHktTL
-dBgEETE0M1/KzC0ZV0iS1INtro/gH9Y+iIhbGlyLJKkEmwuCWO/xJxtZiCSpHJsLgtzEY0lSL7G5
-zuLWiHiL2pHBx4rHFNOZmf+podVJkhquwyDIzD7NKkSSVI7O3I9AW4lNjc2/6NIjSml3a2qjN9/X
-oKz9Qj1fvaOPSpJ6KYNAkirOIJCkijMIJKniDAJJqjiDQJIqziCQpIozCCSp4gwCSao4g0CSKs4g
-kKSKKy0IIqJPRDwVEXeWVYMkqdwjgtOBhSW2L0mipCCIiCHAEcBPy2hfkvSBso4Ivg+cBbxfUvuS
-pELT70cQEUcCr2fm/Ig4qIPlZgAzAIYOHdqk6no3x6PX1s59uDHKOCIYD0yKiEXAbODgiPjbDRfK
-zKszsy0z21paWppdoyRVRtODIDNnZuaQzBwGHAf8U2ae0Ow6JEk1fo9Akiqu1HsWZ+ZDwENl1iBJ
-VecRgSRVnEEgSRVnEEhSxRkEklRxBoEkVZxBIEkVZxBIUsUZBJJUcQaBJFWcQSBJFWcQSFLFlTrW
-kLS168r4+J19zaaW3xTH5ldneUQgSRVnEEhSxRkEklRxBoEkVZxBIEkVZxBIUsUZBJJUcQaBJFWc
-QSBJFWcQSFLFGQSSVHFND4KI+ERE/DIinouIZyPi9GbXIEn6QBmDzq0G/iozn4yI7YH5EXF/Zj5X
-Qi2SVHlNPyLIzFcz88ni8QpgITC42XVIkmpK7SOIiGHAGOCxMuuQpCor7X4EEbEdcAtwRma+tZHn
-ZwAzAIYOHdq0upoxvnx31dRojX5fHbWxtSvzfW0t27SjOht9T4Vm7Ntbk1KOCCKiH7UQuDEzb93Y
-Mpl5dWa2ZWZbS0tLcwuUpAop46qhAK4FFmbm95rdviTpw8o4IhgP/DlwcES0Fz+fL6EOSRIl9BFk
-5v8FotntSpI2zm8WS1LFGQSSVHEGgSRVnEEgSRVnEEhSxRkEklRxBoEkVZxBIEkVZxBIUsUZBJJU
-cQaBJFVcafcjaJbuGne8O8d439rHQt9axrvvSG94D2Xp7LbrDfdmKPNzpBmfCx4RSFLFGQSSVHEG
-gSRVnEEgSRVnEEhSxRkEklRxBoEkVZxBIEkVZxBIUsUZBJJUcQaBJFVcKUEQEYdHxPMR8ZuIOKeM
-GiRJNU0PgojoA/wQ+BywBzAlIvZodh2SpJoyjgj+O/CbzPxdZq4EZgNfKKEOSRLlBMFgYPF600uK
-eZKkEkRmNrfBiKOBwzPzpGL6z4F9MvMvN1huBjCjmBwBPN/UQnu+nYF/L7uIHszt0zG3T8d6y/b5
-k8xs2dxCZdyY5mXgE+tNDynmfUhmXg1c3ayitjYRMS8z28quo6dy+3TM7dOxqm2fMk4NPQHsFhHD
-I2Ib4Djg9hLqkCRRwhFBZq6OiL8E7gX6ANdl5rPNrkOSVFPKPYsz827g7jLa7kU8bdYxt0/H3D4d
-q9T2aXpnsSSpZ3GICUmqOIOgB4qIT0TELyPiuYh4NiJOL+YPjIj7I+KF4t8di/kREVcWQ3Y8HRFj
-y30HzRERfSLiqYi4s5geHhGPFdthTnExAhHx0WL6N8Xzw8qsuxkiYoeImBsRv4qIhRGxr/vPByLi
-zOL/1oKI+EVE9K/y/mMQ9Eyrgb/KzD2AzwCnFMNwnAM8mJm7AQ8W01AbrmO34mcG8KPml1yK04GF
-603/DXB5Zv434A3gq8X8rwJvFPMvL5br7a4A/jEzdwdaqW0n9x8gIgYDpwFtmTmS2kUrx1Hl/Scz
-/enhP8BtwERqX6obVMwbBDxfPP4JMGW95dct11t/qH3/5EHgYOBOIKh9Aahv8fy+wL3F43uBfYvH
-fYvlouz30MBt83HgxQ3fo/vPuve3dnSDgcX+cCdwWJX3H48IerjiMHQM8BiwS2a+Wjz1GrBL8biK
-w3Z8HzgLeL+Y3glYnpmri+n1t8G67VM8/2axfG81HFgKXF+cOvtpRGyL+w8AmfkycBnwEvAqtf1h
-PhXefwyCHiwitgNuAc7IzLfWfy5rf55U8pKviDgSeD0z55ddSw/VFxgL/CgzxwB/4IPTQEDl958d
-qQ10ORzYFdgWOLzUokpmEPRQEdGPWgjcmJm3FrP/LSIGFc8PAl4v5tc1bEcvMh6YFBGLqI1eezC1
-c+I7RMTa78asvw3WbZ/i+Y8Dy5pZcJMtAZZk5mPF9FxqweD+U/NZ4MXMXJqZq4Bbqe1Tld1/DIIe
-KCICuBZYmJnfW++p24ETi8cnUus7WDv/K8XVH58B3lzvFECvk5kzM3NIZg6j1sn3T5k5FfglcHSx
-2IbbZ+12O7pYvtf+NZyZrwGLI2JEMesQ4Dncf9Z6CfhMRAwo/q+t3T6V3X/8QlkPFBH7Aw8Dz/DB
-OfBzqfUT/B0wFPhX4JjM/H2xM19F7fD2HWB6Zs5reuEliIiDgG9k5pER8UlqRwgDgaeAEzLzjxHR
-H7iBWl/L74HjMvN3ZdXcDBExGvgpsA3wO2A6tT/83H+AiPhr4FhqV+g9BZxErS+gkvuPQSBJFeep
-IUmqOINAkirOIJCkijMIJKniDAJJqjiDQJIqziCQpIozCCSp4v4/V8mgjzhv9I4AAAAASUVORK5C
-YII=
-"
->
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[46]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># see recent breaches</span>
@@ -12682,175 +12395,10 @@ YII=
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[46]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>start_date_insolvency</th>
-      <th>case_number</th>
-      <th>days_after_start</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>130</th>
-      <td>2016-01-19</td>
-      <td>F.13/16/28</td>
-      <td>895</td>
-    </tr>
-    <tr>
-      <th>126</th>
-      <td>2016-01-26</td>
-      <td>F.03/16/31</td>
-      <td>875</td>
-    </tr>
-    <tr>
-      <th>124</th>
-      <td>2016-02-02</td>
-      <td>F.09/16/61</td>
-      <td>819</td>
-    </tr>
-    <tr>
-      <th>125</th>
-      <td>2016-02-02</td>
-      <td>F.09/16/65</td>
-      <td>793</td>
-    </tr>
-    <tr>
-      <th>121</th>
-      <td>2016-02-09</td>
-      <td>F.10/16/97</td>
-      <td>784</td>
-    </tr>
-    <tr>
-      <th>115</th>
-      <td>2016-03-08</td>
-      <td>F.16/16/164</td>
-      <td>764</td>
-    </tr>
-    <tr>
-      <th>84</th>
-      <td>2016-06-14</td>
-      <td>F.05/16/398</td>
-      <td>738</td>
-    </tr>
-    <tr>
-      <th>85</th>
-      <td>2016-06-14</td>
-      <td>F.05/16/399</td>
-      <td>738</td>
-    </tr>
-    <tr>
-      <th>111</th>
-      <td>2016-03-15</td>
-      <td>F.09/16/161</td>
-      <td>728</td>
-    </tr>
-    <tr>
-      <th>83</th>
-      <td>2016-06-15</td>
-      <td>F.15/16/241</td>
-      <td>728</td>
-    </tr>
-    <tr>
-      <th>93</th>
-      <td>2016-05-31</td>
-      <td>F.10/16/284</td>
-      <td>707</td>
-    </tr>
-    <tr>
-      <th>100</th>
-      <td>2016-05-03</td>
-      <td>F.10/16/253</td>
-      <td>700</td>
-    </tr>
-    <tr>
-      <th>75</th>
-      <td>2016-08-02</td>
-      <td>F.09/16/367</td>
-      <td>682</td>
-    </tr>
-    <tr>
-      <th>120</th>
-      <td>2016-02-16</td>
-      <td>F.09/16/85</td>
-      <td>673</td>
-    </tr>
-    <tr>
-      <th>102</th>
-      <td>2016-04-19</td>
-      <td>F.05/16/260</td>
-      <td>667</td>
-    </tr>
-    <tr>
-      <th>110</th>
-      <td>2016-03-15</td>
-      <td>F.09/16/160</td>
-      <td>667</td>
-    </tr>
-    <tr>
-      <th>113</th>
-      <td>2016-03-15</td>
-      <td>F.17/16/50</td>
-      <td>666</td>
-    </tr>
-    <tr>
-      <th>101</th>
-      <td>2016-04-26</td>
-      <td>F.05/16/276</td>
-      <td>665</td>
-    </tr>
-    <tr>
-      <th>86</th>
-      <td>2016-06-14</td>
-      <td>F.05/16/401</td>
-      <td>664</td>
-    </tr>
-    <tr>
-      <th>92</th>
-      <td>2016-06-07</td>
-      <td>F.15/16/227</td>
-      <td>659</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[50]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># pull a file e.g. the second</span>
@@ -12864,65 +12412,6 @@ YII=
 </pre></div>
 
 </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[50]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<style  type="text/css" >
-</style>  
-<table id="T_dab5515c_8507_11e8_afdb_f40f243770f7" > 
-<thead>    <tr> 
-        <th class="blank level0" ></th> 
-        <th class="col_heading level0 col0" >case_number</th> 
-        <th class="col_heading level0 col1" >date</th> 
-        <th class="col_heading level0 col2" >type_code</th> 
-        <th class="col_heading level0 col3" >description</th> 
-        <th class="col_heading level0 col4" >start_date_insolvency</th> 
-    </tr></thead> 
-<tbody>    <tr> 
-        <th id="T_dab5515c_8507_11e8_afdb_f40f243770f7level0_row0" class="row_heading level0 row0" >0</th> 
-        <td id="T_dab5515c_8507_11e8_afdb_f40f243770f7row0_col0" class="data row0 col0" >F.03/16/31</td> 
-        <td id="T_dab5515c_8507_11e8_afdb_f40f243770f7row0_col1" class="data row0 col1" >2016-01-28</td> 
-        <td id="T_dab5515c_8507_11e8_afdb_f40f243770f7row0_col2" class="data row0 col2" >1300</td> 
-        <td id="T_dab5515c_8507_11e8_afdb_f40f243770f7row0_col3" class="data row0 col3" >Uitspraak faillissement op 26 januari 2016</td> 
-        <td id="T_dab5515c_8507_11e8_afdb_f40f243770f7row0_col4" class="data row0 col4" >2016-01-26</td> 
-    </tr>    <tr> 
-        <th id="T_dab5515c_8507_11e8_afdb_f40f243770f7level0_row1" class="row_heading level0 row1" >1</th> 
-        <td id="T_dab5515c_8507_11e8_afdb_f40f243770f7row1_col0" class="data row1 col0" >F.03/16/31</td> 
-        <td id="T_dab5515c_8507_11e8_afdb_f40f243770f7row1_col1" class="data row1 col1" >2016-11-24</td> 
-        <td id="T_dab5515c_8507_11e8_afdb_f40f243770f7row1_col2" class="data row1 col2" >1307</td> 
-        <td id="T_dab5515c_8507_11e8_afdb_f40f243770f7row1_col3" class="data row1 col3" >vervanging curator mr. B.P.J. Tillemans door mr. J.T.J. Gorissen</td> 
-        <td id="T_dab5515c_8507_11e8_afdb_f40f243770f7row1_col4" class="data row1 col4" >2016-01-26</td> 
-    </tr>    <tr> 
-        <th id="T_dab5515c_8507_11e8_afdb_f40f243770f7level0_row2" class="row_heading level0 row2" >2</th> 
-        <td id="T_dab5515c_8507_11e8_afdb_f40f243770f7row2_col0" class="data row2 col0" >F.03/16/31</td> 
-        <td id="T_dab5515c_8507_11e8_afdb_f40f243770f7row2_col1" class="data row2 col1" >2017-05-08</td> 
-        <td id="T_dab5515c_8507_11e8_afdb_f40f243770f7row2_col2" class="data row2 col2" >1328</td> 
-        <td id="T_dab5515c_8507_11e8_afdb_f40f243770f7row2_col3" class="data row2 col3" >vervanging rechter-commissaris mr. M.E.M.W. Nuijts  door mr. J.J. Groen.</td> 
-        <td id="T_dab5515c_8507_11e8_afdb_f40f243770f7row2_col4" class="data row2 col4" >2016-01-26</td> 
-    </tr>    <tr> 
-        <th id="T_dab5515c_8507_11e8_afdb_f40f243770f7level0_row3" class="row_heading level0 row3" >3</th> 
-        <td id="T_dab5515c_8507_11e8_afdb_f40f243770f7row3_col0" class="data row3 col0" >F.03/16/31</td> 
-        <td id="T_dab5515c_8507_11e8_afdb_f40f243770f7row3_col1" class="data row3 col1" >2018-06-19</td> 
-        <td id="T_dab5515c_8507_11e8_afdb_f40f243770f7row3_col2" class="data row3 col2" >1309</td> 
-        <td id="T_dab5515c_8507_11e8_afdb_f40f243770f7row3_col3" class="data row3 col3" >Verificatievergadering: op 26 juni 2018 om 11:30</td> 
-        <td id="T_dab5515c_8507_11e8_afdb_f40f243770f7row3_col4" class="data row3 col4" >2016-01-26</td> 
-    </tr></tbody> 
-</table> 
-</div>
-
-</div>
-
 </div>
 </div>
 

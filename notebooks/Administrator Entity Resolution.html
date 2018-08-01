@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>Entity Deduplication</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>Administrator Entity Resolution</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 <style type="text/css">
@@ -11775,9 +11775,53 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Setup">Setup<a class="anchor-link" href="#Setup">&#182;</a></h1>
+<h1 id="Administrator-Entity-Deduplication-and-Resolution">Administrator Entity Deduplication and Resolution<a class="anchor-link" href="#Administrator-Entity-Deduplication-and-Resolution">&#182;</a></h1><p>The CIR register publishes administrator by name and office address. These data fields are free text fields and contain many typos and alternative ways of writing. We would like to uniquely define a administrator and link the insolvency cases to this entity.</p>
+<p>The chosen golden standard for the administrator entity is the Bar/Tableau where lawyers are registered, maintained by the Nederlandse Orde van Advocaten (NOvA).</p>
+<p>To resolve CIR administratore to NOvA lawyers we:
+First we deduplicate administrator names by following a number of normalization rules.<br>
+Secondly we resolve the normalized name to the most relevant lawyer found in the NOvA register</p>
+<p>For results we check the amount of deduplication occurring, the recall of lawyers and the precision.</p>
+
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># append project root to sys.path to import modules</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">project_dir</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">project_dir</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">project_dir</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;adding </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">project_dir</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">project_dir</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>/Users/Tom/Dropbox/workspace/faillissementsdata_db
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -11799,12 +11843,15 @@ div#notebook {
 <span class="c1"># set username/password here:</span>
 <span class="n">db</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;username&#39;</span><span class="p">:</span> <span class="s1">&#39;dbusr&#39;</span><span class="p">,</span>  <span class="c1">#os.environ[&#39;USERNAME_11323671&#39;],</span>
       <span class="s1">&#39;password&#39;</span><span class="p">:</span> <span class="s1">&#39;dbpw&#39;</span><span class="p">,</span>  <span class="c1">#os.environ[&#39;PASSWORD_11323671&#39;],</span>
-      <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span>  <span class="c1"># &#39;quantleap.nl:5432&#39;,</span>
+      <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span>  <span class="c1"># &#39;quantleap.nl:5432&#39;, # </span>
       <span class="s1">&#39;catalog&#39;</span><span class="p">:</span> <span class="s1">&#39;qir&#39;</span><span class="p">}</span>
 
 <span class="n">con</span> <span class="o">=</span> <span class="s1">&#39;postgresql://</span><span class="si">{username}</span><span class="s1">:</span><span class="si">{password}</span><span class="s1">@</span><span class="si">{host}</span><span class="s1">/</span><span class="si">{catalog}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">db</span><span class="p">)</span>
 <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="n">con</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;CONNECTION ESTABLISHED&#39;</span><span class="p">)</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;display.max_rows&quot;</span><span class="p">,</span><span class="mi">1500</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">get_option</span><span class="p">(</span><span class="s2">&quot;display.max_rows&quot;</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -11828,14 +11875,15 @@ div#notebook {
 
 <div class="output_area">
 
-<div class="prompt"></div>
+<div class="prompt output_prompt">Out[1]:</div>
 
 
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>/Users/Tom/Dropbox/datascience/_thesis/is-ds-thesis/venv/lib/python3.6/site-packages/psycopg2/__init__.py:144: UserWarning: The psycopg2 wheel package will be renamed from release 2.8; in order to keep installing from binary please use &#34;pip install psycopg2-binary&#34; instead. For details see: &lt;http://initd.org/psycopg/docs/install.html#binary-install-from-pypi&gt;.
-  &#34;&#34;&#34;)
-</pre>
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>1500</pre>
 </div>
+
 </div>
 
 </div>
@@ -11846,80 +11894,44 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Judges">Judges<a class="anchor-link" href="#Judges">&#182;</a></h1>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Example-of-non-normalized-judge-names:">Example of non normalized judge names:<a class="anchor-link" href="#Example-of-non-normalized-judge-names:">&#182;</a></h2><ul>
-<li>"mr. W.J.  Geurts - de Veld"</li>
-<li>"mr. W.J. Geurts - de Veld"</li>
-<li>"mr. W.J. Geurts-deVeld"</li>
-<li>"mr. W.J. Geurts-de Veld"</li>
-<li>"mr. W.J.Geurts-de Veld"</li>
-<li>"mr.W.J. Geurts-de Veld"</li>
-<li>"mr. W.J. Geurts-de Veld (Rotterdam)"</li>
-<li>"mr W.J.Geurts-de Veld"</li>
-<li><p>"W.J.Geurts-de Veld"</p>
-<p>correct: "mr. W.J. Geurts-de Veld"
-normalized: "wj geurts-de veld"</p>
-<p>normalization steps:</p>
-</li>
-<li>make lowercase</li>
-<li>remove leading mr[.]</li>
-<li>remove spaces around dash</li>
-<li>remove dots</li>
-<li>replace double spaces by single space</li>
-<li>remove parentheses and text within</li>
-<li>strip leading and trailing spaces </li>
+<h2 id="Deduplication-by-normalization-of-administrator-name">Deduplication by normalization of administrator name<a class="anchor-link" href="#Deduplication-by-normalization-of-administrator-name">&#182;</a></h2><h3 id="initials">initials<a class="anchor-link" href="#initials">&#182;</a></h3><ul>
+<li>make lowercase and strip</li>
+<li>replace commas with periods</li>
+<li>make double names into single names (e.g. albert-jan: a-j. -&gt; a.j.)</li>
+<li>make double character name into single character name (e.g. theodor: th. -&gt; t.)</li>
+<li>ensure all characters are followed by a period</li>
 </ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="normalisering-van-de-namen">normalisering van de namen<a class="anchor-link" href="#normalisering-van-de-namen">&#182;</a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="golden-standard---nevenfunctieregister,-already-scraped-by-openstate-(up-to-date?)">golden standard - nevenfunctieregister, already scraped by openstate (up to date?)<a class="anchor-link" href="#golden-standard---nevenfunctieregister,-already-scraped-by-openstate-(up-to-date?)">&#182;</a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="API-voor-nevenfuncties">API voor nevenfuncties<a class="anchor-link" href="#API-voor-nevenfuncties">&#182;</a></h2><p>Open Rechtspraak bevat nu tevens ook een heuse API (application programming interface) voor nevenfuncties. Dit is een RESTFULL api welke twee apicalls ondersteunt:</p>
-<ol>
-<li><p><a href="http://ors.openstate.eu/index.php/relations/json">http://ors.openstate.eu/index.php/relations/json</a> geeft een overzicht van alle nevenfuncties met URL's naar de JSON pagina</p>
-</li>
-<li><p><a href="http://ors.openstate.eu/relations/instantie/RECHTBANK/NAAM/json">http://ors.openstate.eu/relations/instantie/RECHTBANK/NAAM/json</a> Naam en Rechtbank dienen in URL ENCODE gecodeerd te zijn, cf. de lijst van punt 1.</p>
-</li>
-</ol>
-<p>Voorbeeld: <a href="http://ors.openstate.eu/relations/instantie/Rechtbank+Amsterdam/mw.+mr.+J.F.+Aalders+/json">http://ors.openstate.eu/relations/instantie/Rechtbank+Amsterdam/mw.+mr.+J.F.+Aalders+/json</a></p>
+<h3 id="middle-part">middle part<a class="anchor-link" href="#middle-part">&#182;</a></h3><ul>
+<li>move middle part to family name (prevent double occurence)</li>
+</ul>
+<h3 id="family-name">family name<a class="anchor-link" href="#family-name">&#182;</a></h3><ul>
+<li>make lowercase and strip</li>
+<li>remove accents</li>
+<li>remove titles (jhr, baron, llm, mba, etc)</li>
+<li>remove initials </li>
+<li>remove CIR specific comments</li>
+<li>remove periods</li>
+<li>remove spaces around hyphens</li>
+</ul>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># rechters_df = pd.read_html(&#39;http://ors.openstate.eu/relations&#39;)[0]</span>
-<span class="n">rechters_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;http://ors.openstate.eu/relations/json&#39;</span><span class="p">)</span>
-<span class="n">rechters_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">select distinct a.person_initials as initials, a.person_middle_part as middle_part, a.person_family_name as family_name</span>
+<span class="s2">from active_company_bankrupt_insolvents_view i</span>
+<span class="s2">  join administrators_receivers a on a.insolvent_id = i.id</span>
+<span class="s2">order by 3, 1;</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> items&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
 </div>
@@ -11932,64 +11944,8112 @@ normalized: "wj geurts-de veld"</p>
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[3]:</div>
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>1459 items
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[11]:</div>
 
 
 
 <div class="output_html rendered_html output_subarea output_execute_result">
 <div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
     }
 
     .dataframe tbody tr th {
         vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
     }
 </style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>name</th>
-      <th>set</th>
-      <th>uri</th>
+      <th>initials</th>
+      <th>middle_part</th>
+      <th>family_name</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>mw. mr. J.F. Aalders</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+      <td>F.B.M.</td>
+      <td>van</td>
+      <td>Aanhold</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>mw. mr. L.Z. Achouak El Idrissi</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+      <td>H.</td>
+      <td>None</td>
+      <td>Aarnink</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>dhr. mr. M.J. Alink</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+      <td>F.H.C.</td>
+      <td>None</td>
+      <td>Aarts</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>mw. mr. L.C. Bachrach</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+      <td>F.W.</td>
+      <td>None</td>
+      <td>Aartsen</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>dhr. mr. J.J. Bade</td>
-      <td>Rechtbank Amsterdam</td>
-      <td>http://ors.openstate.eu/relations/instantie/Re...</td>
+      <td>T.</td>
+      <td>None</td>
+      <td>Abbo</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Initials">Initials<a class="anchor-link" href="#Initials">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># normalizing initials, check deviations</span>
+<span class="n">initials</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">initials</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="n">initials</span><span class="p">[</span><span class="n">initials</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)]</span>
+<span class="c1"># these are so called double names Jan-Pieter, which officially is a single name.</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[18]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>268      A-J.
+275      J-P.
+596     L.-M.
+1339     J-P.
+1428      A-J
+1429     A-J.
+Name: initials, dtype: object</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Deduplicaton-results">Deduplicaton results<a class="anchor-link" href="#Deduplicaton-results">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[62]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">nova.normalize_name</span> <span class="k">import</span> <span class="n">normalize_initials</span><span class="p">,</span> <span class="n">move_middle_part_to_family_name</span><span class="p">,</span> <span class="n">normalize_family_name</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;normalized_initials&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;normalized_family_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+<span class="c1"># normalize initials</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;normalized_initials&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">normalize_initials</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;initials&#39;</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># move middle part</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;normalized_family_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">move_middle_part_to_family_name</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;middle_part&#39;</span><span class="p">],</span>
+                                                                                    <span class="n">row</span><span class="p">[</span><span class="s1">&#39;family_name&#39;</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>                       
+<span class="c1"># normalize family name</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;normalized_family_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">normalize_family_name</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;family_name&#39;</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">df_normalized</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;initials&#39;</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">normalized_initials</span><span class="p">,</span> <span class="s1">&#39;family_name&#39;</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">normalized_family_name</span><span class="p">},</span> 
+                             <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;initials&#39;</span><span class="p">,</span> <span class="s1">&#39;family_name&#39;</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;before dedup: </span><span class="si">%d</span><span class="s1"> items&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_normalized</span><span class="p">))</span>
+<span class="n">df_normalized</span> <span class="o">=</span> <span class="n">df_normalized</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;after dedup: </span><span class="si">%d</span><span class="s1"> items&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_normalized</span><span class="p">))</span>
+
+<span class="n">df_normalized</span>  <span class="c1">#.head()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>before dedup: 1459 items
+after dedup: 1376 items
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[62]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>initials</th>
+      <th>family_name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>f.b.m.</td>
+      <td>aanhold</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>h.</td>
+      <td>aarnink</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>f.h.c.</td>
+      <td>aarts</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>f.w.</td>
+      <td>aartsen</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>t.</td>
+      <td>abbo</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>d.e.a.f.</td>
+      <td>aertssen</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td></td>
+      <td>aertssen</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>h.j.</td>
+      <td>alberts</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>a.f.</td>
+      <td>ammerlaan</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>w.j.m.</td>
+      <td>andel</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>p.j.</td>
+      <td>antons</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>g.t.c.</td>
+      <td>apeldoorn</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>j.c.</td>
+      <td>apeldoorn</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>j.l.j.</td>
+      <td>apeldoorn</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>l.j.</td>
+      <td>apeldoorn</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>b.g.</td>
+      <td>arends</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>r.</td>
+      <td>arnoldus</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>j.l.m.</td>
+      <td>arts</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>p.c.</td>
+      <td>as</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>e.</td>
+      <td>asselt-pronk</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>m.</td>
+      <td>aukema</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>r.m.</td>
+      <td>avezaat</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>s.</td>
+      <td>ayoubi</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td></td>
+      <td>muurmans</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>j.g.c.</td>
+      <td>baar</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>e.w.</td>
+      <td>baart</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>a.c.a.d.</td>
+      <td>bakker</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>h.j.</td>
+      <td>bakker</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>m.</td>
+      <td>bakker</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>n.</td>
+      <td>bakker</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>p.t.</td>
+      <td>bakker</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>j.p.</td>
+      <td>bakkers</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>b.a.i.</td>
+      <td>baks</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>e.</td>
+      <td>baldan</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>r.a.</td>
+      <td>baltes</td>
+    </tr>
+    <tr>
+      <th>37</th>
+      <td>g.</td>
+      <td>barendregt</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>r.g.</td>
+      <td>snouckaert van schauburg</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>n.p.</td>
+      <td>barske-gelling</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>j.f.h.m.</td>
+      <td>bartels</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>n.f.</td>
+      <td>barthel</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>d.a.</td>
+      <td>beck</td>
+    </tr>
+    <tr>
+      <th>43</th>
+      <td>b.</td>
+      <td>beekman</td>
+    </tr>
+    <tr>
+      <th>44</th>
+      <td>g.</td>
+      <td>beekman</td>
+    </tr>
+    <tr>
+      <th>45</th>
+      <td>m.j.</td>
+      <td>beekman</td>
+    </tr>
+    <tr>
+      <th>46</th>
+      <td>r.</td>
+      <td>beekman</td>
+    </tr>
+    <tr>
+      <th>47</th>
+      <td>e.j.g.</td>
+      <td>beerdsen</td>
+    </tr>
+    <tr>
+      <th>48</th>
+      <td>j.</td>
+      <td>beerens</td>
+    </tr>
+    <tr>
+      <th>49</th>
+      <td>p.</td>
+      <td>beerens</td>
+    </tr>
+    <tr>
+      <th>50</th>
+      <td>y.s.</td>
+      <td>beerepoot</td>
+    </tr>
+    <tr>
+      <th>51</th>
+      <td>k.e.</td>
+      <td>beerlage</td>
+    </tr>
+    <tr>
+      <th>52</th>
+      <td>g.j.h.</td>
+      <td>beernink</td>
+    </tr>
+    <tr>
+      <th>53</th>
+      <td>h.a.</td>
+      <td>beilen</td>
+    </tr>
+    <tr>
+      <th>54</th>
+      <td>m.a.</td>
+      <td>belle</td>
+    </tr>
+    <tr>
+      <th>55</th>
+      <td>a.</td>
+      <td>ben daoued</td>
+    </tr>
+    <tr>
+      <th>56</th>
+      <td>j.</td>
+      <td>benavente prieto-lachheb</td>
+    </tr>
+    <tr>
+      <th>57</th>
+      <td>h.m.d.</td>
+      <td>bentfort van valkenburg</td>
+    </tr>
+    <tr>
+      <th>58</th>
+      <td>w.j.b.</td>
+      <td>berendsen</td>
+    </tr>
+    <tr>
+      <th>59</th>
+      <td>d.j.a.</td>
+      <td>berg</td>
+    </tr>
+    <tr>
+      <th>60</th>
+      <td>g.f.</td>
+      <td>berg</td>
+    </tr>
+    <tr>
+      <th>61</th>
+      <td>j.a.t.</td>
+      <td>berg</td>
+    </tr>
+    <tr>
+      <th>62</th>
+      <td>p.a.m.t.</td>
+      <td>berg</td>
+    </tr>
+    <tr>
+      <th>63</th>
+      <td>p.c.</td>
+      <td>berg</td>
+    </tr>
+    <tr>
+      <th>64</th>
+      <td>p.e.</td>
+      <td>berg</td>
+    </tr>
+    <tr>
+      <th>65</th>
+      <td>s.</td>
+      <td>berg</td>
+    </tr>
+    <tr>
+      <th>66</th>
+      <td>r.</td>
+      <td>berg jeths</td>
+    </tr>
+    <tr>
+      <th>67</th>
+      <td>e.a.h.</td>
+      <td>berge</td>
+    </tr>
+    <tr>
+      <th>68</th>
+      <td>s.f.m.</td>
+      <td>berge</td>
+    </tr>
+    <tr>
+      <th>69</th>
+      <td>a.j.</td>
+      <td>bergen</td>
+    </tr>
+    <tr>
+      <th>70</th>
+      <td>p.c.j.m.</td>
+      <td>berger</td>
+    </tr>
+    <tr>
+      <th>71</th>
+      <td>c.</td>
+      <td>bergh</td>
+    </tr>
+    <tr>
+      <th>72</th>
+      <td>w.j.</td>
+      <td>berghuis</td>
+    </tr>
+    <tr>
+      <th>73</th>
+      <td>p.m.m.</td>
+      <td>bergmans</td>
+    </tr>
+    <tr>
+      <th>74</th>
+      <td>j.r.</td>
+      <td>berkenbosch</td>
+    </tr>
+    <tr>
+      <th>75</th>
+      <td>r.m.</td>
+      <td>berntsen</td>
+    </tr>
+    <tr>
+      <th>76</th>
+      <td>a.r.m.</td>
+      <td>berntsen</td>
+    </tr>
+    <tr>
+      <th>77</th>
+      <td>c.</td>
+      <td>besten</td>
+    </tr>
+    <tr>
+      <th>78</th>
+      <td>j.r.</td>
+      <td>beversluis</td>
+    </tr>
+    <tr>
+      <th>79</th>
+      <td>a.e.m.</td>
+      <td>bierens</td>
+    </tr>
+    <tr>
+      <th>80</th>
+      <td>g.</td>
+      <td>biesebeek</td>
+    </tr>
+    <tr>
+      <th>81</th>
+      <td>m.j.</td>
+      <td>biesheuvel</td>
+    </tr>
+    <tr>
+      <th>82</th>
+      <td>j.b.</td>
+      <td>biezen</td>
+    </tr>
+    <tr>
+      <th>83</th>
+      <td>j.j.c.</td>
+      <td>bijen</td>
+    </tr>
+    <tr>
+      <th>84</th>
+      <td>c.</td>
+      <td>bijl</td>
+    </tr>
+    <tr>
+      <th>85</th>
+      <td>j.a.m.</td>
+      <td>bijlholt</td>
+    </tr>
+    <tr>
+      <th>86</th>
+      <td>l.</td>
+      <td>bijlsma</td>
+    </tr>
+    <tr>
+      <th>87</th>
+      <td>e.j.</td>
+      <td>bink</td>
+    </tr>
+    <tr>
+      <th>88</th>
+      <td>a.j.g.</td>
+      <td>bisscheroux</td>
+    </tr>
+    <tr>
+      <th>89</th>
+      <td>r.a.d.</td>
+      <td>blaauw</td>
+    </tr>
+    <tr>
+      <th>90</th>
+      <td>a.c.</td>
+      <td>blankestijn</td>
+    </tr>
+    <tr>
+      <th>91</th>
+      <td>f.j.</td>
+      <td>bleker</td>
+    </tr>
+    <tr>
+      <th>92</th>
+      <td>m.</td>
+      <td>blok</td>
+    </tr>
+    <tr>
+      <th>93</th>
+      <td>m.j.</td>
+      <td>blommaert</td>
+    </tr>
+    <tr>
+      <th>94</th>
+      <td>j.a.</td>
+      <td>bloo</td>
+    </tr>
+    <tr>
+      <th>95</th>
+      <td>n.e.</td>
+      <td>bobbert</td>
+    </tr>
+    <tr>
+      <th>96</th>
+      <td>g.j.</td>
+      <td>bock</td>
+    </tr>
+    <tr>
+      <th>97</th>
+      <td>j.w.</td>
+      <td>boddaert</td>
+    </tr>
+    <tr>
+      <th>98</th>
+      <td>l.l.</td>
+      <td>boef</td>
+    </tr>
+    <tr>
+      <th>99</th>
+      <td>a.</td>
+      <td>boender</td>
+    </tr>
+    <tr>
+      <th>100</th>
+      <td>l.t.a.</td>
+      <td>boender</td>
+    </tr>
+    <tr>
+      <th>102</th>
+      <td>e.a.</td>
+      <td>boer</td>
+    </tr>
+    <tr>
+      <th>103</th>
+      <td>h.</td>
+      <td>boer</td>
+    </tr>
+    <tr>
+      <th>104</th>
+      <td>j.p.</td>
+      <td>boer</td>
+    </tr>
+    <tr>
+      <th>105</th>
+      <td>w.h.</td>
+      <td>boer</td>
+    </tr>
+    <tr>
+      <th>106</th>
+      <td>j.a.a.</td>
+      <td>boers</td>
+    </tr>
+    <tr>
+      <th>107</th>
+      <td>m.h.</td>
+      <td>boersen</td>
+    </tr>
+    <tr>
+      <th>108</th>
+      <td>g.g.</td>
+      <td>boeve</td>
+    </tr>
+    <tr>
+      <th>109</th>
+      <td>j.p.w.</td>
+      <td>bohemen</td>
+    </tr>
+    <tr>
+      <th>110</th>
+      <td>r.j.r.m.</td>
+      <td>bok</td>
+    </tr>
+    <tr>
+      <th>111</th>
+      <td>r.</td>
+      <td>bom</td>
+    </tr>
+    <tr>
+      <th>112</th>
+      <td>m.</td>
+      <td>bommel</td>
+    </tr>
+    <tr>
+      <th>113</th>
+      <td>w.m.</td>
+      <td>bond-stroek</td>
+    </tr>
+    <tr>
+      <th>114</th>
+      <td>m.</td>
+      <td>bonefaas</td>
+    </tr>
+    <tr>
+      <th>115</th>
+      <td>j.</td>
+      <td>bontenbal</td>
+    </tr>
+    <tr>
+      <th>116</th>
+      <td>g.w.</td>
+      <td>boogaard</td>
+    </tr>
+    <tr>
+      <th>117</th>
+      <td>m.g.</td>
+      <td>boogerd</td>
+    </tr>
+    <tr>
+      <th>118</th>
+      <td>p.j.m.</td>
+      <td>boomaars</td>
+    </tr>
+    <tr>
+      <th>119</th>
+      <td>n.n.</td>
+      <td>boonstra</td>
+    </tr>
+    <tr>
+      <th>120</th>
+      <td>e.j.e.</td>
+      <td>boot</td>
+    </tr>
+    <tr>
+      <th>121</th>
+      <td>s.w.h.</td>
+      <td>bootsma</td>
+    </tr>
+    <tr>
+      <th>122</th>
+      <td>r.j.</td>
+      <td>borghans</td>
+    </tr>
+    <tr>
+      <th>123</th>
+      <td>a.r.j.</td>
+      <td>borsboom</td>
+    </tr>
+    <tr>
+      <th>124</th>
+      <td>j.p.m.</td>
+      <td>borsboom</td>
+    </tr>
+    <tr>
+      <th>125</th>
+      <td>d.j.</td>
+      <td>bos</td>
+    </tr>
+    <tr>
+      <th>126</th>
+      <td>j.</td>
+      <td>bos</td>
+    </tr>
+    <tr>
+      <th>127</th>
+      <td>p.j.</td>
+      <td>bos</td>
+    </tr>
+    <tr>
+      <th>128</th>
+      <td>r.</td>
+      <td>bos</td>
+    </tr>
+    <tr>
+      <th>129</th>
+      <td>v.</td>
+      <td>bos</td>
+    </tr>
+    <tr>
+      <th>130</th>
+      <td>c.</td>
+      <td>bosland</td>
+    </tr>
+    <tr>
+      <th>131</th>
+      <td>f.b.</td>
+      <td>bosvelt</td>
+    </tr>
+    <tr>
+      <th>132</th>
+      <td>j.w.</td>
+      <td>both</td>
+    </tr>
+    <tr>
+      <th>133</th>
+      <td>a.m.a.</td>
+      <td>bouwens</td>
+    </tr>
+    <tr>
+      <th>134</th>
+      <td>h.</td>
+      <td>boven</td>
+    </tr>
+    <tr>
+      <th>135</th>
+      <td>r.p.</td>
+      <td>boven</td>
+    </tr>
+    <tr>
+      <th>136</th>
+      <td>a.j.w.</td>
+      <td>bovenmars-wilmink</td>
+    </tr>
+    <tr>
+      <th>137</th>
+      <td>m.m.e.</td>
+      <td>bowmer</td>
+    </tr>
+    <tr>
+      <th>138</th>
+      <td>a.g.</td>
+      <td>braamhaar</td>
+    </tr>
+    <tr>
+      <th>139</th>
+      <td>n.</td>
+      <td>brands</td>
+    </tr>
+    <tr>
+      <th>140</th>
+      <td>h.c.</td>
+      <td>brandsma</td>
+    </tr>
+    <tr>
+      <th>141</th>
+      <td>b.h.a.</td>
+      <td>brauers</td>
+    </tr>
+    <tr>
+      <th>142</th>
+      <td>a.j.t.</td>
+      <td>bree</td>
+    </tr>
+    <tr>
+      <th>143</th>
+      <td>r.j.m.</td>
+      <td>bree</td>
+    </tr>
+    <tr>
+      <th>144</th>
+      <td>b.</td>
+      <td>breederveld</td>
+    </tr>
+    <tr>
+      <th>145</th>
+      <td>j.a.</td>
+      <td>breeman</td>
+    </tr>
+    <tr>
+      <th>146</th>
+      <td>m.s.</td>
+      <td>breeman</td>
+    </tr>
+    <tr>
+      <th>147</th>
+      <td>c.m.</td>
+      <td>breet</td>
+    </tr>
+    <tr>
+      <th>148</th>
+      <td>a.t.m.</td>
+      <td>brekelmans</td>
+    </tr>
+    <tr>
+      <th>149</th>
+      <td>r.</td>
+      <td>bremer</td>
+    </tr>
+    <tr>
+      <th>151</th>
+      <td>g.w.</td>
+      <td>breuker</td>
+    </tr>
+    <tr>
+      <th>152</th>
+      <td>a.j.</td>
+      <td>brink</td>
+    </tr>
+    <tr>
+      <th>153</th>
+      <td>b.p.w.</td>
+      <td>brink</td>
+    </tr>
+    <tr>
+      <th>154</th>
+      <td>p.w.m.</td>
+      <td>broekmans</td>
+    </tr>
+    <tr>
+      <th>155</th>
+      <td>s.h.</td>
+      <td>broeseliske</td>
+    </tr>
+    <tr>
+      <th>156</th>
+      <td>p.m.c.</td>
+      <td>brouns</td>
+    </tr>
+    <tr>
+      <th>157</th>
+      <td>a.t.</td>
+      <td>brouwer</td>
+    </tr>
+    <tr>
+      <th>158</th>
+      <td>j.j.</td>
+      <td>brouwer</td>
+    </tr>
+    <tr>
+      <th>159</th>
+      <td>e.h.</td>
+      <td>bruggink</td>
+    </tr>
+    <tr>
+      <th>160</th>
+      <td>c.a.m.</td>
+      <td>bruijn</td>
+    </tr>
+    <tr>
+      <th>161</th>
+      <td>r.p.</td>
+      <td>bruin</td>
+    </tr>
+    <tr>
+      <th>162</th>
+      <td>w.b.</td>
+      <td>bruins</td>
+    </tr>
+    <tr>
+      <th>163</th>
+      <td>t.h.</td>
+      <td>bruning</td>
+    </tr>
+    <tr>
+      <th>164</th>
+      <td>r.w.a.</td>
+      <td>brunninkhuis</td>
+    </tr>
+    <tr>
+      <th>165</th>
+      <td>m.a.a.m.</td>
+      <td>brunschot-van der sanden</td>
+    </tr>
+    <tr>
+      <th>166</th>
+      <td>w.p.</td>
+      <td>brussaard</td>
+    </tr>
+    <tr>
+      <th>167</th>
+      <td>w.b.</td>
+      <td>brusse</td>
+    </tr>
+    <tr>
+      <th>168</th>
+      <td>s.</td>
+      <td>buddingh</td>
+    </tr>
+    <tr>
+      <th>169</th>
+      <td>p.</td>
+      <td>buijs</td>
+    </tr>
+    <tr>
+      <th>170</th>
+      <td>f.j.b.</td>
+      <td>buitenhuis</td>
+    </tr>
+    <tr>
+      <th>171</th>
+      <td>s.h.j.</td>
+      <td>buitenkamp</td>
+    </tr>
+    <tr>
+      <th>172</th>
+      <td>s.h.l.</td>
+      <td>buitenkamp</td>
+    </tr>
+    <tr>
+      <th>173</th>
+      <td>m.a.</td>
+      <td>buld</td>
+    </tr>
+    <tr>
+      <th>174</th>
+      <td>j.s.</td>
+      <td>burg</td>
+    </tr>
+    <tr>
+      <th>175</th>
+      <td>k.h.</td>
+      <td>burg</td>
+    </tr>
+    <tr>
+      <th>176</th>
+      <td>e.r.</td>
+      <td>butin bik</td>
+    </tr>
+    <tr>
+      <th>177</th>
+      <td>p.e.</td>
+      <td>butterman</td>
+    </tr>
+    <tr>
+      <th>182</th>
+      <td>r.j.a.f.</td>
+      <td>caris</td>
+    </tr>
+    <tr>
+      <th>184</th>
+      <td>r.p.p.</td>
+      <td>caubo</td>
+    </tr>
+    <tr>
+      <th>185</th>
+      <td>h.m.j.t.</td>
+      <td>ceelen</td>
+    </tr>
+    <tr>
+      <th>186</th>
+      <td>k.a.</td>
+      <td>cerutti</td>
+    </tr>
+    <tr>
+      <th>187</th>
+      <td>e.a.m.</td>
+      <td>claassen</td>
+    </tr>
+    <tr>
+      <th>188</th>
+      <td>m.e.j.</td>
+      <td>claessens</td>
+    </tr>
+    <tr>
+      <th>189</th>
+      <td>a.m.h.j.l.</td>
+      <td>claus</td>
+    </tr>
+    <tr>
+      <th>190</th>
+      <td>w.h.m.</td>
+      <td>cnossen</td>
+    </tr>
+    <tr>
+      <th>191</th>
+      <td>s.f.</td>
+      <td>coelingh bennink</td>
+    </tr>
+    <tr>
+      <th>192</th>
+      <td>w.c.m.</td>
+      <td>coenen</td>
+    </tr>
+    <tr>
+      <th>193</th>
+      <td>s.</td>
+      <td>coerts</td>
+    </tr>
+    <tr>
+      <th>194</th>
+      <td>j.m.t.</td>
+      <td>coffeng</td>
+    </tr>
+    <tr>
+      <th>195</th>
+      <td>d.</td>
+      <td>cohen tervaert</td>
+    </tr>
+    <tr>
+      <th>196</th>
+      <td>h.</td>
+      <td>coninck-smolders</td>
+    </tr>
+    <tr>
+      <th>199</th>
+      <td>m.j.</td>
+      <td>cools</td>
+    </tr>
+    <tr>
+      <th>200</th>
+      <td>n.g.</td>
+      <td>cornelissen</td>
+    </tr>
+    <tr>
+      <th>201</th>
+      <td>h.c.j.</td>
+      <td>coumou</td>
+    </tr>
+    <tr>
+      <th>202</th>
+      <td>d.p.w.h.</td>
+      <td>cremers</td>
+    </tr>
+    <tr>
+      <th>203</th>
+      <td>j.l.</td>
+      <td>crom</td>
+    </tr>
+    <tr>
+      <th>204</th>
+      <td>c.l.p.j.</td>
+      <td>crombag</td>
+    </tr>
+    <tr>
+      <th>205</th>
+      <td>r.j.h.m.</td>
+      <td>crombaghs</td>
+    </tr>
+    <tr>
+      <th>206</th>
+      <td>f.d.</td>
+      <td>crul</td>
+    </tr>
+    <tr>
+      <th>207</th>
+      <td>m.p.e.</td>
+      <td>d'haene</td>
+    </tr>
+    <tr>
+      <th>208</th>
+      <td>g.c.</td>
+      <td>daal</td>
+    </tr>
+    <tr>
+      <th>209</th>
+      <td>f.</td>
+      <td>daemen</td>
+    </tr>
+    <tr>
+      <th>210</th>
+      <td>a.d.</td>
+      <td>dalen</td>
+    </tr>
+    <tr>
+      <th>211</th>
+      <td>n.m.k.</td>
+      <td>damen</td>
+    </tr>
+    <tr>
+      <th>212</th>
+      <td>n.j.</td>
+      <td>damstra</td>
+    </tr>
+    <tr>
+      <th>213</th>
+      <td>j.a.d.m.</td>
+      <td>daniels</td>
+    </tr>
+    <tr>
+      <th>215</th>
+      <td>j.p.</td>
+      <td>davids</td>
+    </tr>
+    <tr>
+      <th>216</th>
+      <td>h.</td>
+      <td>de coninck-smolders</td>
+    </tr>
+    <tr>
+      <th>217</th>
+      <td>p.r.</td>
+      <td>dekker</td>
+    </tr>
+    <tr>
+      <th>218</th>
+      <td>j.m.</td>
+      <td>delft</td>
+    </tr>
+    <tr>
+      <th>219</th>
+      <td>m.m.</td>
+      <td>dellebeke</td>
+    </tr>
+    <tr>
+      <th>220</th>
+      <td>a.a.m.</td>
+      <td>deterink</td>
+    </tr>
+    <tr>
+      <th>221</th>
+      <td>t.e.a.</td>
+      <td>detmar</td>
+    </tr>
+    <tr>
+      <th>222</th>
+      <td>j.j.</td>
+      <td>deventer</td>
+    </tr>
+    <tr>
+      <th>223</th>
+      <td>j.p.m.</td>
+      <td>dexters</td>
+    </tr>
+    <tr>
+      <th>224</th>
+      <td>d.d.</td>
+      <td>dielissen-breukers</td>
+    </tr>
+    <tr>
+      <th>226</th>
+      <td>h.</td>
+      <td>diepeveen</td>
+    </tr>
+    <tr>
+      <th>227</th>
+      <td>s.m.</td>
+      <td>diepeveen-goldhoorn</td>
+    </tr>
+    <tr>
+      <th>228</th>
+      <td>j.a.m.</td>
+      <td>dieren</td>
+    </tr>
+    <tr>
+      <th>229</th>
+      <td>b.j.</td>
+      <td>dijen</td>
+    </tr>
+    <tr>
+      <th>230</th>
+      <td>p.j.c.d.</td>
+      <td>dijk</td>
+    </tr>
+    <tr>
+      <th>231</th>
+      <td>r.</td>
+      <td>dijk</td>
+    </tr>
+    <tr>
+      <th>232</th>
+      <td>w.t.</td>
+      <td>dijk</td>
+    </tr>
+    <tr>
+      <th>233</th>
+      <td>j.b.</td>
+      <td>dijkema</td>
+    </tr>
+    <tr>
+      <th>234</th>
+      <td>v.</td>
+      <td>dijken</td>
+    </tr>
+    <tr>
+      <th>235</th>
+      <td>h.</td>
+      <td>dijks</td>
+    </tr>
+    <tr>
+      <th>236</th>
+      <td>m.</td>
+      <td>dijsselhof</td>
+    </tr>
+    <tr>
+      <th>237</th>
+      <td>j.p.</td>
+      <td>dijstelberge</td>
+    </tr>
+    <tr>
+      <th>238</th>
+      <td>e.e.a.</td>
+      <td>dijxhoorn</td>
+    </tr>
+    <tr>
+      <th>239</th>
+      <td>c.j.</td>
+      <td>diks</td>
+    </tr>
+    <tr>
+      <th>240</th>
+      <td>j.j.</td>
+      <td>dingemans</td>
+    </tr>
+    <tr>
+      <th>242</th>
+      <td>h.m.l.</td>
+      <td>dings</td>
+    </tr>
+    <tr>
+      <th>243</th>
+      <td>p.g.s.</td>
+      <td>disberg</td>
+    </tr>
+    <tr>
+      <th>244</th>
+      <td>f.p.g.</td>
+      <td>dix</td>
+    </tr>
+    <tr>
+      <th>245</th>
+      <td>d.j.</td>
+      <td>dongen</td>
+    </tr>
+    <tr>
+      <th>246</th>
+      <td>d.t.</td>
+      <td>donk</td>
+    </tr>
+    <tr>
+      <th>247</th>
+      <td>k.</td>
+      <td>donkers</td>
+    </tr>
+    <tr>
+      <th>248</th>
+      <td>c.f.h.</td>
+      <td>donners</td>
+    </tr>
+    <tr>
+      <th>249</th>
+      <td>j.c.</td>
+      <td>dood</td>
+    </tr>
+    <tr>
+      <th>250</th>
+      <td>a.a.</td>
+      <td>dooijeweerd</td>
+    </tr>
+    <tr>
+      <th>251</th>
+      <td>b.c.</td>
+      <td>doolaard</td>
+    </tr>
+    <tr>
+      <th>252</th>
+      <td>r.a.l.m.</td>
+      <td>dooren</td>
+    </tr>
+    <tr>
+      <th>253</th>
+      <td>s.m.m.</td>
+      <td>dooren</td>
+    </tr>
+    <tr>
+      <th>255</th>
+      <td>e.</td>
+      <td>doornhein</td>
+    </tr>
+    <tr>
+      <th>256</th>
+      <td>m.p.</td>
+      <td>doorten</td>
+    </tr>
+    <tr>
+      <th>257</th>
+      <td>j.c.</td>
+      <td>dorrepaal</td>
+    </tr>
+    <tr>
+      <th>258</th>
+      <td>a.s.</td>
+      <td>douma</td>
+    </tr>
+    <tr>
+      <th>259</th>
+      <td>e.</td>
+      <td>douma</td>
+    </tr>
+    <tr>
+      <th>260</th>
+      <td>j.j.</td>
+      <td>douwes</td>
+    </tr>
+    <tr>
+      <th>261</th>
+      <td>b.</td>
+      <td>drenth</td>
+    </tr>
+    <tr>
+      <th>262</th>
+      <td>s.j.b.</td>
+      <td>drijber</td>
+    </tr>
+    <tr>
+      <th>263</th>
+      <td>m.j.</td>
+      <td>drop</td>
+    </tr>
+    <tr>
+      <th>264</th>
+      <td>a.p.</td>
+      <td>drosten</td>
+    </tr>
+    <tr>
+      <th>265</th>
+      <td>f.j.m.</td>
+      <td>drykoningen</td>
+    </tr>
+    <tr>
+      <th>266</th>
+      <td>e.j.</td>
+      <td>dubbeldam</td>
+    </tr>
+    <tr>
+      <th>267</th>
+      <td>r.</td>
+      <td>dufour</td>
+    </tr>
+    <tr>
+      <th>268</th>
+      <td>a.j.</td>
+      <td>duijn schouten</td>
+    </tr>
+    <tr>
+      <th>269</th>
+      <td>h.</td>
+      <td>dulack</td>
+    </tr>
+    <tr>
+      <th>270</th>
+      <td>c.</td>
+      <td>dullaart</td>
+    </tr>
+    <tr>
+      <th>271</th>
+      <td>j.a.</td>
+      <td>dullaart</td>
+    </tr>
+    <tr>
+      <th>272</th>
+      <td>k.t.w.h.</td>
+      <td>dungen</td>
+    </tr>
+    <tr>
+      <th>273</th>
+      <td>a.</td>
+      <td>dunsbergen</td>
+    </tr>
+    <tr>
+      <th>274</th>
+      <td>a.h.j.</td>
+      <td>dunselman</td>
+    </tr>
+    <tr>
+      <th>275</th>
+      <td>j.p.</td>
+      <td>dyck</td>
+    </tr>
+    <tr>
+      <th>277</th>
+      <td>e.s.</td>
+      <td>ebels</td>
+    </tr>
+    <tr>
+      <th>278</th>
+      <td>j.d.</td>
+      <td>edens</td>
+    </tr>
+    <tr>
+      <th>279</th>
+      <td>m.p.</td>
+      <td>eeden-van harskamp</td>
+    </tr>
+    <tr>
+      <th>280</th>
+      <td>m.</td>
+      <td>eefting</td>
+    </tr>
+    <tr>
+      <th>281</th>
+      <td>l.j.</td>
+      <td>eeghen</td>
+    </tr>
+    <tr>
+      <th>282</th>
+      <td>j.</td>
+      <td>eelman</td>
+    </tr>
+    <tr>
+      <th>283</th>
+      <td>j.a.m.</td>
+      <td>egberink</td>
+    </tr>
+    <tr>
+      <th>284</th>
+      <td>j.</td>
+      <td>egberts</td>
+    </tr>
+    <tr>
+      <th>285</th>
+      <td>h.m.</td>
+      <td>eijking</td>
+    </tr>
+    <tr>
+      <th>286</th>
+      <td>w.l.</td>
+      <td>eikendal</td>
+    </tr>
+    <tr>
+      <th>287</th>
+      <td>f.i.</td>
+      <td>eikenhorst</td>
+    </tr>
+    <tr>
+      <th>288</th>
+      <td>r.</td>
+      <td>ekdom</td>
+    </tr>
+    <tr>
+      <th>289</th>
+      <td>s.</td>
+      <td>el hadouchi</td>
+    </tr>
+    <tr>
+      <th>291</th>
+      <td>f.</td>
+      <td>el houzi</td>
+    </tr>
+    <tr>
+      <th>292</th>
+      <td>a.j.</td>
+      <td>elema</td>
+    </tr>
+    <tr>
+      <th>293</th>
+      <td>n.t.</td>
+      <td>elferink</td>
+    </tr>
+    <tr>
+      <th>294</th>
+      <td>e.h.</td>
+      <td>elgersma</td>
+    </tr>
+    <tr>
+      <th>295</th>
+      <td>p.p.j.</td>
+      <td>elshof</td>
+    </tr>
+    <tr>
+      <th>296</th>
+      <td>s.l.</td>
+      <td>elzinga</td>
+    </tr>
+    <tr>
+      <th>297</th>
+      <td>j.j.j.a.m.</td>
+      <td>emstede</td>
+    </tr>
+    <tr>
+      <th>299</th>
+      <td>v.g.t.</td>
+      <td>emstede</td>
+    </tr>
+    <tr>
+      <th>300</th>
+      <td>m.s.</td>
+      <td>engbers</td>
+    </tr>
+    <tr>
+      <th>301</th>
+      <td>j.</td>
+      <td>engels</td>
+    </tr>
+    <tr>
+      <th>302</th>
+      <td>j.w.e.m.</td>
+      <td>engels-jansen</td>
+    </tr>
+    <tr>
+      <th>303</th>
+      <td>w.a.</td>
+      <td>entzinger</td>
+    </tr>
+    <tr>
+      <th>304</th>
+      <td>j.m.</td>
+      <td>eringa</td>
+    </tr>
+    <tr>
+      <th>305</th>
+      <td>s.h.</td>
+      <td>erk</td>
+    </tr>
+    <tr>
+      <th>306</th>
+      <td>w.j.a.</td>
+      <td>es</td>
+    </tr>
+    <tr>
+      <th>307</th>
+      <td>v.c.a.</td>
+      <td>eschauzier-van wijk</td>
+    </tr>
+    <tr>
+      <th>309</th>
+      <td>e.</td>
+      <td>eshuis</td>
+    </tr>
+    <tr>
+      <th>310</th>
+      <td>e.f.e.</td>
+      <td>essen</td>
+    </tr>
+    <tr>
+      <th>311</th>
+      <td>m.c.g.</td>
+      <td>essen</td>
+    </tr>
+    <tr>
+      <th>312</th>
+      <td>m.m.</td>
+      <td>eveleens</td>
+    </tr>
+    <tr>
+      <th>313</th>
+      <td>j.r.</td>
+      <td>everhardus</td>
+    </tr>
+    <tr>
+      <th>314</th>
+      <td>e.g.m.</td>
+      <td>ewijk</td>
+    </tr>
+    <tr>
+      <th>315</th>
+      <td>r.c.</td>
+      <td>faase</td>
+    </tr>
+    <tr>
+      <th>316</th>
+      <td>j.r.</td>
+      <td>feenstra</td>
+    </tr>
+    <tr>
+      <th>317</th>
+      <td>r.f.</td>
+      <td>feenstra</td>
+    </tr>
+    <tr>
+      <th>318</th>
+      <td>m.j.g.a.</td>
+      <td>filemon</td>
+    </tr>
+    <tr>
+      <th>319</th>
+      <td>j.g.d.</td>
+      <td>fleers</td>
+    </tr>
+    <tr>
+      <th>320</th>
+      <td>h.k.</td>
+      <td>folkerts</td>
+    </tr>
+    <tr>
+      <th>321</th>
+      <td>p.j.</td>
+      <td>fousert</td>
+    </tr>
+    <tr>
+      <th>322</th>
+      <td>m.j.m.</td>
+      <td>franken</td>
+    </tr>
+    <tr>
+      <th>323</th>
+      <td>r.w.m.</td>
+      <td>franken</td>
+    </tr>
+    <tr>
+      <th>324</th>
+      <td>r.</td>
+      <td>frankfort</td>
+    </tr>
+    <tr>
+      <th>325</th>
+      <td>c.a.e.</td>
+      <td>frankhuijzen</td>
+    </tr>
+    <tr>
+      <th>326</th>
+      <td>r.j.</td>
+      <td>frans</td>
+    </tr>
+    <tr>
+      <th>327</th>
+      <td>f.f.j.</td>
+      <td>froger</td>
+    </tr>
+    <tr>
+      <th>328</th>
+      <td>a.s.</td>
+      <td>frommelt</td>
+    </tr>
+    <tr>
+      <th>329</th>
+      <td>i.</td>
+      <td>gaasterland</td>
+    </tr>
+    <tr>
+      <th>330</th>
+      <td>r.j.</td>
+      <td>galen</td>
+    </tr>
+    <tr>
+      <th>331</th>
+      <td>l.v.</td>
+      <td>gardingen</td>
+    </tr>
+    <tr>
+      <th>332</th>
+      <td>f.h.</td>
+      <td>garretsen</td>
+    </tr>
+    <tr>
+      <th>333</th>
+      <td>d.m.</td>
+      <td>geel</td>
+    </tr>
+    <tr>
+      <th>334</th>
+      <td>r.j.c.</td>
+      <td>geelen</td>
+    </tr>
+    <tr>
+      <th>335</th>
+      <td>r.a.a.</td>
+      <td>geene</td>
+    </tr>
+    <tr>
+      <th>336</th>
+      <td>a.j.h.</td>
+      <td>geense</td>
+    </tr>
+    <tr>
+      <th>337</th>
+      <td>c.</td>
+      <td>geffroy</td>
+    </tr>
+    <tr>
+      <th>339</th>
+      <td>j.o.</td>
+      <td>gelderloos</td>
+    </tr>
+    <tr>
+      <th>340</th>
+      <td>m.c.</td>
+      <td>genugten</td>
+    </tr>
+    <tr>
+      <th>341</th>
+      <td>w.j.t.b.</td>
+      <td>gerlag</td>
+    </tr>
+    <tr>
+      <th>342</th>
+      <td>m.m.</td>
+      <td>gerrits</td>
+    </tr>
+    <tr>
+      <th>343</th>
+      <td>p.e.a.m.</td>
+      <td>gerritse</td>
+    </tr>
+    <tr>
+      <th>344</th>
+      <td>s.</td>
+      <td>gessel</td>
+    </tr>
+    <tr>
+      <th>345</th>
+      <td>c.b.</td>
+      <td>geurink</td>
+    </tr>
+    <tr>
+      <th>346</th>
+      <td>n.</td>
+      <td>gevel</td>
+    </tr>
+    <tr>
+      <th>347</th>
+      <td>j.j.</td>
+      <td>gevers</td>
+    </tr>
+    <tr>
+      <th>348</th>
+      <td>a.p.g.</td>
+      <td>gielen</td>
+    </tr>
+    <tr>
+      <th>349</th>
+      <td>f.g.j.w.c.</td>
+      <td>gielen</td>
+    </tr>
+    <tr>
+      <th>350</th>
+      <td>p.g.</td>
+      <td>gilhuis</td>
+    </tr>
+    <tr>
+      <th>351</th>
+      <td>g.h.</td>
+      <td>gispen</td>
+    </tr>
+    <tr>
+      <th>352</th>
+      <td>a.</td>
+      <td>glijnis</td>
+    </tr>
+    <tr>
+      <th>353</th>
+      <td>l.a.e.</td>
+      <td>gloudemans</td>
+    </tr>
+    <tr>
+      <th>354</th>
+      <td>s.m.</td>
+      <td>goldhoorn</td>
+    </tr>
+    <tr>
+      <th>355</th>
+      <td>j.j.m.</td>
+      <td>goltstein</td>
+    </tr>
+    <tr>
+      <th>356</th>
+      <td>p.j.g.m.</td>
+      <td>gool</td>
+    </tr>
+    <tr>
+      <th>357</th>
+      <td>j.t.j.</td>
+      <td>gorissen</td>
+    </tr>
+    <tr>
+      <th>358</th>
+      <td>p.</td>
+      <td>gorter</td>
+    </tr>
+    <tr>
+      <th>359</th>
+      <td>h.m.</td>
+      <td>gotink</td>
+    </tr>
+    <tr>
+      <th>360</th>
+      <td>r.m.</td>
+      <td>goudberg</td>
+    </tr>
+    <tr>
+      <th>361</th>
+      <td>p.</td>
+      <td>graaf</td>
+    </tr>
+    <tr>
+      <th>362</th>
+      <td>r.</td>
+      <td>grand</td>
+    </tr>
+    <tr>
+      <th>363</th>
+      <td>a.</td>
+      <td>gras</td>
+    </tr>
+    <tr>
+      <th>365</th>
+      <td>s.d.w.</td>
+      <td>gratama</td>
+    </tr>
+    <tr>
+      <th>366</th>
+      <td>a.</td>
+      <td>greef</td>
+    </tr>
+    <tr>
+      <th>367</th>
+      <td>h.l.m.</td>
+      <td>grijpink</td>
+    </tr>
+    <tr>
+      <th>368</th>
+      <td>i.</td>
+      <td>grijpma</td>
+    </tr>
+    <tr>
+      <th>370</th>
+      <td>h.l.j.m.</td>
+      <td>grinsven</td>
+    </tr>
+    <tr>
+      <th>371</th>
+      <td>j.m.j.</td>
+      <td>grinten</td>
+    </tr>
+    <tr>
+      <th>373</th>
+      <td>m.j.m.</td>
+      <td>groen</td>
+    </tr>
+    <tr>
+      <th>374</th>
+      <td>w.p.</td>
+      <td>groenendijk</td>
+    </tr>
+    <tr>
+      <th>375</th>
+      <td>j.l.m.</td>
+      <td>groenewegen</td>
+    </tr>
+    <tr>
+      <th>376</th>
+      <td>c.</td>
+      <td>groenewoud</td>
+    </tr>
+    <tr>
+      <th>379</th>
+      <td>p.a.</td>
+      <td>groenhuis</td>
+    </tr>
+    <tr>
+      <th>380</th>
+      <td>a.</td>
+      <td>grolle</td>
+    </tr>
+    <tr>
+      <th>381</th>
+      <td>c.</td>
+      <td>grondsma</td>
+    </tr>
+    <tr>
+      <th>382</th>
+      <td>s.c.l.</td>
+      <td>groosman</td>
+    </tr>
+    <tr>
+      <th>383</th>
+      <td>a.</td>
+      <td>groot</td>
+    </tr>
+    <tr>
+      <th>384</th>
+      <td>h.j.</td>
+      <td>groot</td>
+    </tr>
+    <tr>
+      <th>385</th>
+      <td>m.n.</td>
+      <td>groot</td>
+    </tr>
+    <tr>
+      <th>386</th>
+      <td>v.j.</td>
+      <td>groot</td>
+    </tr>
+    <tr>
+      <th>387</th>
+      <td>h.</td>
+      <td>grootjans</td>
+    </tr>
+    <tr>
+      <th>388</th>
+      <td>e.</td>
+      <td>gruijthuijsen</td>
+    </tr>
+    <tr>
+      <th>389</th>
+      <td>a.a.c.</td>
+      <td>guillaume</td>
+    </tr>
+    <tr>
+      <th>390</th>
+      <td>m.j.</td>
+      <td>guit</td>
+    </tr>
+    <tr>
+      <th>391</th>
+      <td>d.d.j.m.</td>
+      <td>gulpers</td>
+    </tr>
+    <tr>
+      <th>392</th>
+      <td>p.m.</td>
+      <td>gunning</td>
+    </tr>
+    <tr>
+      <th>393</th>
+      <td>r.j.l.</td>
+      <td>gustenhoven</td>
+    </tr>
+    <tr>
+      <th>395</th>
+      <td>c.r.g.</td>
+      <td>gabler</td>
+    </tr>
+    <tr>
+      <th>396</th>
+      <td>w.h.j.m.</td>
+      <td>haafkes</td>
+    </tr>
+    <tr>
+      <th>397</th>
+      <td>d.h.</td>
+      <td>haan</td>
+    </tr>
+    <tr>
+      <th>398</th>
+      <td>h.p.</td>
+      <td>haan</td>
+    </tr>
+    <tr>
+      <th>399</th>
+      <td>s.a.</td>
+      <td>haarlem</td>
+    </tr>
+    <tr>
+      <th>400</th>
+      <td>f.e.</td>
+      <td>haas</td>
+    </tr>
+    <tr>
+      <th>401</th>
+      <td>m.</td>
+      <td>haasjes</td>
+    </tr>
+    <tr>
+      <th>402</th>
+      <td>m.</td>
+      <td>habernickel</td>
+    </tr>
+    <tr>
+      <th>403</th>
+      <td>s.</td>
+      <td>hadouchi</td>
+    </tr>
+    <tr>
+      <th>404</th>
+      <td>c.a.</td>
+      <td>hage</td>
+    </tr>
+    <tr>
+      <th>405</th>
+      <td>i.j.g.h.</td>
+      <td>hage</td>
+    </tr>
+    <tr>
+      <th>406</th>
+      <td>g.j.</td>
+      <td>hagen</td>
+    </tr>
+    <tr>
+      <th>407</th>
+      <td>j.r.</td>
+      <td>hagendoorn</td>
+    </tr>
+    <tr>
+      <th>408</th>
+      <td>c.f.w.a.</td>
+      <td>hamm</td>
+    </tr>
+    <tr>
+      <th>409</th>
+      <td>a.c.j.</td>
+      <td>hanrath</td>
+    </tr>
+    <tr>
+      <th>410</th>
+      <td>l.j.a.m.</td>
+      <td>hanssen</td>
+    </tr>
+    <tr>
+      <th>411</th>
+      <td>t.p.j.</td>
+      <td>hanssen</td>
+    </tr>
+    <tr>
+      <th>413</th>
+      <td>b.h.m.</td>
+      <td>harbers</td>
+    </tr>
+    <tr>
+      <th>414</th>
+      <td>s.v.</td>
+      <td>hardonk</td>
+    </tr>
+    <tr>
+      <th>415</th>
+      <td>b.g.</td>
+      <td>haren</td>
+    </tr>
+    <tr>
+      <th>416</th>
+      <td>c.m.</td>
+      <td>harmsen</td>
+    </tr>
+    <tr>
+      <th>417</th>
+      <td>m.g.e.</td>
+      <td>hart</td>
+    </tr>
+    <tr>
+      <th>418</th>
+      <td>s.</td>
+      <td>hart</td>
+    </tr>
+    <tr>
+      <th>419</th>
+      <td>j.d.</td>
+      <td>hartgring</td>
+    </tr>
+    <tr>
+      <th>420</th>
+      <td>c.h.</td>
+      <td>hartsuiker</td>
+    </tr>
+    <tr>
+      <th>421</th>
+      <td>s.a.</td>
+      <td>hattink</td>
+    </tr>
+    <tr>
+      <th>422</th>
+      <td>j.n.</td>
+      <td>heeringa</td>
+    </tr>
+    <tr>
+      <th>423</th>
+      <td>a.</td>
+      <td>hees</td>
+    </tr>
+    <tr>
+      <th>424</th>
+      <td>m.c.</td>
+      <td>hees</td>
+    </tr>
+    <tr>
+      <th>425</th>
+      <td>d.</td>
+      <td>heeten</td>
+    </tr>
+    <tr>
+      <th>426</th>
+      <td>a.j.j.</td>
+      <td>heiden</td>
+    </tr>
+    <tr>
+      <th>427</th>
+      <td>r.w.f.</td>
+      <td>heijmeriks</td>
+    </tr>
+    <tr>
+      <th>428</th>
+      <td>b.g.w.p.</td>
+      <td>heijne</td>
+    </tr>
+    <tr>
+      <th>429</th>
+      <td>e.j.</td>
+      <td>heijnen</td>
+    </tr>
+    <tr>
+      <th>430</th>
+      <td>r.</td>
+      <td>heinen</td>
+    </tr>
+    <tr>
+      <th>431</th>
+      <td>d.</td>
+      <td>heitman</td>
+    </tr>
+    <tr>
+      <th>432</th>
+      <td>w.</td>
+      <td>hekkelman</td>
+    </tr>
+    <tr>
+      <th>433</th>
+      <td>t.</td>
+      <td>hekman</td>
+    </tr>
+    <tr>
+      <th>434</th>
+      <td>j.</td>
+      <td>hel</td>
+    </tr>
+    <tr>
+      <th>435</th>
+      <td>j.</td>
+      <td>hellendoorn</td>
+    </tr>
+    <tr>
+      <th>436</th>
+      <td>p.l.</td>
+      <td>hellinga</td>
+    </tr>
+    <tr>
+      <th>437</th>
+      <td>g.j.</td>
+      <td>helmig</td>
+    </tr>
+    <tr>
+      <th>438</th>
+      <td>m.</td>
+      <td>helmstrijd</td>
+    </tr>
+    <tr>
+      <th>439</th>
+      <td>j.h.</td>
+      <td>hemmes</td>
+    </tr>
+    <tr>
+      <th>440</th>
+      <td>g.</td>
+      <td>hendriks</td>
+    </tr>
+    <tr>
+      <th>441</th>
+      <td>h.c.m.</td>
+      <td>hendriks</td>
+    </tr>
+    <tr>
+      <th>442</th>
+      <td>f.a.a.e.j.</td>
+      <td>hengst</td>
+    </tr>
+    <tr>
+      <th>443</th>
+      <td>s.w.a.m.</td>
+      <td>henselmans</td>
+    </tr>
+    <tr>
+      <th>444</th>
+      <td>c.m.j.</td>
+      <td>herings</td>
+    </tr>
+    <tr>
+      <th>445</th>
+      <td>r.g.b.</td>
+      <td>hermsen</td>
+    </tr>
+    <tr>
+      <th>446</th>
+      <td>j.c.a.</td>
+      <td>herstel</td>
+    </tr>
+    <tr>
+      <th>447</th>
+      <td>y.c.m.</td>
+      <td>heruer</td>
+    </tr>
+    <tr>
+      <th>448</th>
+      <td>a.f.t.m.</td>
+      <td>heutink</td>
+    </tr>
+    <tr>
+      <th>449</th>
+      <td>j.d.e.</td>
+      <td>heuvel</td>
+    </tr>
+    <tr>
+      <th>450</th>
+      <td>r.r.m.</td>
+      <td>heuvel</td>
+    </tr>
+    <tr>
+      <th>451</th>
+      <td>j.f.m.</td>
+      <td>heuvelmans</td>
+    </tr>
+    <tr>
+      <th>452</th>
+      <td>e.</td>
+      <td>heuzeveldt</td>
+    </tr>
+    <tr>
+      <th>453</th>
+      <td>j.</td>
+      <td>hielkema</td>
+    </tr>
+    <tr>
+      <th>455</th>
+      <td>m.j.</td>
+      <td>hielkema</td>
+    </tr>
+    <tr>
+      <th>456</th>
+      <td>f.t.</td>
+      <td>hiemstra</td>
+    </tr>
+    <tr>
+      <th>457</th>
+      <td>n.</td>
+      <td>hijmans</td>
+    </tr>
+    <tr>
+      <th>458</th>
+      <td>r.m.</td>
+      <td>hilbrink</td>
+    </tr>
+    <tr>
+      <th>459</th>
+      <td>a.s.</td>
+      <td>hilten</td>
+    </tr>
+    <tr>
+      <th>460</th>
+      <td>c.h.c.</td>
+      <td>hocks</td>
+    </tr>
+    <tr>
+      <th>461</th>
+      <td>e.h.</td>
+      <td>hoeksma</td>
+    </tr>
+    <tr>
+      <th>462</th>
+      <td>f.</td>
+      <td>hoff</td>
+    </tr>
+    <tr>
+      <th>463</th>
+      <td>r.j.</td>
+      <td>hoff</td>
+    </tr>
+    <tr>
+      <th>464</th>
+      <td>c.g.h.</td>
+      <td>hofland</td>
+    </tr>
+    <tr>
+      <th>465</th>
+      <td>m.h.</td>
+      <td>hogeman</td>
+    </tr>
+    <tr>
+      <th>466</th>
+      <td>r.f.j.</td>
+      <td>holland</td>
+    </tr>
+    <tr>
+      <th>467</th>
+      <td>p.s.</td>
+      <td>hollander</td>
+    </tr>
+    <tr>
+      <th>468</th>
+      <td>j.a.</td>
+      <td>holsbrink</td>
+    </tr>
+    <tr>
+      <th>469</th>
+      <td>r.g.</td>
+      <td>holtz</td>
+    </tr>
+    <tr>
+      <th>470</th>
+      <td>j.e.p.a.</td>
+      <td>hooff</td>
+    </tr>
+    <tr>
+      <th>471</th>
+      <td>f.a.m.</td>
+      <td>hooft</td>
+    </tr>
+    <tr>
+      <th>472</th>
+      <td>r.</td>
+      <td>hooft</td>
+    </tr>
+    <tr>
+      <th>473</th>
+      <td>a.l.</td>
+      <td>hoog</td>
+    </tr>
+    <tr>
+      <th>474</th>
+      <td>k.p.</td>
+      <td>hoogenboezem</td>
+    </tr>
+    <tr>
+      <th>475</th>
+      <td>e.</td>
+      <td>hoogendam</td>
+    </tr>
+    <tr>
+      <th>476</th>
+      <td>h.f.c.</td>
+      <td>hoogendoorn</td>
+    </tr>
+    <tr>
+      <th>477</th>
+      <td>m.</td>
+      <td>hoogendoorn</td>
+    </tr>
+    <tr>
+      <th>478</th>
+      <td>l.h.</td>
+      <td>hooites</td>
+    </tr>
+    <tr>
+      <th>479</th>
+      <td>f.</td>
+      <td>hoppe</td>
+    </tr>
+    <tr>
+      <th>480</th>
+      <td>s.h.f.</td>
+      <td>hoppenbrouwers</td>
+    </tr>
+    <tr>
+      <th>481</th>
+      <td>m.f.</td>
+      <td>horck</td>
+    </tr>
+    <tr>
+      <th>482</th>
+      <td>f.j.</td>
+      <td>hordijk</td>
+    </tr>
+    <tr>
+      <th>483</th>
+      <td>m.k.</td>
+      <td>horst</td>
+    </tr>
+    <tr>
+      <th>484</th>
+      <td>s.g.a.</td>
+      <td>horst</td>
+    </tr>
+    <tr>
+      <th>485</th>
+      <td>s.</td>
+      <td>hossaini</td>
+    </tr>
+    <tr>
+      <th>486</th>
+      <td>h.l.m.</td>
+      <td>houben</td>
+    </tr>
+    <tr>
+      <th>487</th>
+      <td>c.w.</td>
+      <td>houtman</td>
+    </tr>
+    <tr>
+      <th>488</th>
+      <td>f.</td>
+      <td>houzi</td>
+    </tr>
+    <tr>
+      <th>489</th>
+      <td>m.m.</td>
+      <td>hoving</td>
+    </tr>
+    <tr>
+      <th>490</th>
+      <td>m.w.</td>
+      <td>huijzer</td>
+    </tr>
+    <tr>
+      <th>491</th>
+      <td>a.c.</td>
+      <td>huisman</td>
+    </tr>
+    <tr>
+      <th>492</th>
+      <td>m.l.</td>
+      <td>huisman</td>
+    </tr>
+    <tr>
+      <th>493</th>
+      <td>j.m.l.c.</td>
+      <td>huisman-de jong</td>
+    </tr>
+    <tr>
+      <th>494</th>
+      <td>p.j.p.</td>
+      <td>huizen</td>
+    </tr>
+    <tr>
+      <th>495</th>
+      <td>j.j.m.c.</td>
+      <td>huppertz</td>
+    </tr>
+    <tr>
+      <th>497</th>
+      <td>j.h.</td>
+      <td>huybens</td>
+    </tr>
+    <tr>
+      <th>498</th>
+      <td>j.m.r.</td>
+      <td>ijpma</td>
+    </tr>
+    <tr>
+      <th>499</th>
+      <td>s.a.</td>
+      <td>ierssel</td>
+    </tr>
+    <tr>
+      <th>500</th>
+      <td>m.</td>
+      <td>inan</td>
+    </tr>
+    <tr>
+      <th>501</th>
+      <td>m.j.w.</td>
+      <td>ingen</td>
+    </tr>
+    <tr>
+      <th>502</th>
+      <td>p.</td>
+      <td>ingwersen</td>
+    </tr>
+    <tr>
+      <th>503</th>
+      <td>r.a.</td>
+      <td>jaarsma</td>
+    </tr>
+    <tr>
+      <th>504</th>
+      <td>s.m.p.</td>
+      <td>jacobs</td>
+    </tr>
+    <tr>
+      <th>505</th>
+      <td>c.j.</td>
+      <td>jager</td>
+    </tr>
+    <tr>
+      <th>506</th>
+      <td>w.r.h.</td>
+      <td>jager</td>
+    </tr>
+    <tr>
+      <th>507</th>
+      <td>e.</td>
+      <td>jansberg</td>
+    </tr>
+    <tr>
+      <th>508</th>
+      <td>r.</td>
+      <td>janse</td>
+    </tr>
+    <tr>
+      <th>509</th>
+      <td>r.l.t.p.</td>
+      <td>janse</td>
+    </tr>
+    <tr>
+      <th>510</th>
+      <td>a.j.a.</td>
+      <td>jansen</td>
+    </tr>
+    <tr>
+      <th>511</th>
+      <td>e.a.s.</td>
+      <td>jansen</td>
+    </tr>
+    <tr>
+      <th>512</th>
+      <td>j.b.a.</td>
+      <td>jansen</td>
+    </tr>
+    <tr>
+      <th>513</th>
+      <td>m.</td>
+      <td>jansen</td>
+    </tr>
+    <tr>
+      <th>514</th>
+      <td>m.j.r.</td>
+      <td>jansen</td>
+    </tr>
+    <tr>
+      <th>515</th>
+      <td>p.c.h.</td>
+      <td>jansen</td>
+    </tr>
+    <tr>
+      <th>517</th>
+      <td>s.</td>
+      <td>jansen</td>
+    </tr>
+    <tr>
+      <th>518</th>
+      <td>g.w.m.</td>
+      <td>janssen</td>
+    </tr>
+    <tr>
+      <th>519</th>
+      <td>m.g.f.a.</td>
+      <td>janssen</td>
+    </tr>
+    <tr>
+      <th>520</th>
+      <td>m.h.</td>
+      <td>janssen</td>
+    </tr>
+    <tr>
+      <th>521</th>
+      <td>w.</td>
+      <td>janssen-van kesteren</td>
+    </tr>
+    <tr>
+      <th>522</th>
+      <td>i.j.</td>
+      <td>janssens</td>
+    </tr>
+    <tr>
+      <th>523</th>
+      <td>t.v.</td>
+      <td>janssens</td>
+    </tr>
+    <tr>
+      <th>524</th>
+      <td>w.l.h.</td>
+      <td>janssens</td>
+    </tr>
+    <tr>
+      <th>525</th>
+      <td>m.</td>
+      <td>jasper</td>
+    </tr>
+    <tr>
+      <th>526</th>
+      <td>w.s.t.</td>
+      <td>joha</td>
+    </tr>
+    <tr>
+      <th>527</th>
+      <td>c.</td>
+      <td>jong</td>
+    </tr>
+    <tr>
+      <th>529</th>
+      <td>k.</td>
+      <td>jong</td>
+    </tr>
+    <tr>
+      <th>530</th>
+      <td>l.c.</td>
+      <td>jong</td>
+    </tr>
+    <tr>
+      <th>531</th>
+      <td>l.m.</td>
+      <td>jong</td>
+    </tr>
+    <tr>
+      <th>532</th>
+      <td>m.</td>
+      <td>jong</td>
+    </tr>
+    <tr>
+      <th>533</th>
+      <td>g.d.</td>
+      <td>jongen</td>
+    </tr>
+    <tr>
+      <th>534</th>
+      <td>w.j.p.</td>
+      <td>jongepier</td>
+    </tr>
+    <tr>
+      <th>535</th>
+      <td>v.f.m.</td>
+      <td>jongerius</td>
+    </tr>
+    <tr>
+      <th>536</th>
+      <td>a.m.</td>
+      <td>jongerman</td>
+    </tr>
+    <tr>
+      <th>537</th>
+      <td>r.d.c.</td>
+      <td>jonker</td>
+    </tr>
+    <tr>
+      <th>538</th>
+      <td>f.n.</td>
+      <td>jorritsma</td>
+    </tr>
+    <tr>
+      <th>539</th>
+      <td>r.j.</td>
+      <td>joustra</td>
+    </tr>
+    <tr>
+      <th>540</th>
+      <td>r.a.w.</td>
+      <td>jungschlager</td>
+    </tr>
+    <tr>
+      <th>541</th>
+      <td></td>
+      <td>burg</td>
+    </tr>
+    <tr>
+      <th>542</th>
+      <td>m.d.</td>
+      <td>kalmijn</td>
+    </tr>
+    <tr>
+      <th>543</th>
+      <td>a.y.</td>
+      <td>kiefte</td>
+    </tr>
+    <tr>
+      <th>544</th>
+      <td>r.j.</td>
+      <td>kaas</td>
+    </tr>
+    <tr>
+      <th>545</th>
+      <td>p.c.h.h.</td>
+      <td>kager</td>
+    </tr>
+    <tr>
+      <th>546</th>
+      <td>j.</td>
+      <td>kalisvaart</td>
+    </tr>
+    <tr>
+      <th>548</th>
+      <td>f.a.l.</td>
+      <td>kamps</td>
+    </tr>
+    <tr>
+      <th>549</th>
+      <td>s.d.</td>
+      <td>kant</td>
+    </tr>
+    <tr>
+      <th>550</th>
+      <td>c.</td>
+      <td>karharman</td>
+    </tr>
+    <tr>
+      <th>551</th>
+      <td>r.w.</td>
+      <td>karskens</td>
+    </tr>
+    <tr>
+      <th>552</th>
+      <td>f.a.</td>
+      <td>kasteele</td>
+    </tr>
+    <tr>
+      <th>553</th>
+      <td>h.h.</td>
+      <td>keereweer</td>
+    </tr>
+    <tr>
+      <th>554</th>
+      <td>a.j.</td>
+      <td>keizers</td>
+    </tr>
+    <tr>
+      <th>555</th>
+      <td>f.</td>
+      <td>kemp</td>
+    </tr>
+    <tr>
+      <th>556</th>
+      <td>m.a.j.</td>
+      <td>kemps</td>
+    </tr>
+    <tr>
+      <th>557</th>
+      <td>r.h.g.m.</td>
+      <td>kerckhoffs</td>
+    </tr>
+    <tr>
+      <th>558</th>
+      <td>j.a.m.</td>
+      <td>kerf</td>
+    </tr>
+    <tr>
+      <th>559</th>
+      <td>p.j.f.m.</td>
+      <td>kerf</td>
+    </tr>
+    <tr>
+      <th>560</th>
+      <td>m.a.</td>
+      <td>kerkdijk</td>
+    </tr>
+    <tr>
+      <th>561</th>
+      <td>g.h.h.</td>
+      <td>kerkhof</td>
+    </tr>
+    <tr>
+      <th>562</th>
+      <td>p.a.</td>
+      <td>kerkhof</td>
+    </tr>
+    <tr>
+      <th>563</th>
+      <td>f.j.c.m.</td>
+      <td>kessels</td>
+    </tr>
+    <tr>
+      <th>564</th>
+      <td>p.j.h.</td>
+      <td>keulers</td>
+    </tr>
+    <tr>
+      <th>565</th>
+      <td>j.</td>
+      <td>keupink</td>
+    </tr>
+    <tr>
+      <th>566</th>
+      <td>b.</td>
+      <td>keybeck</td>
+    </tr>
+    <tr>
+      <th>568</th>
+      <td>j.f.e.</td>
+      <td>kikken</td>
+    </tr>
+    <tr>
+      <th>569</th>
+      <td>r.</td>
+      <td>klarus</td>
+    </tr>
+    <tr>
+      <th>571</th>
+      <td>f.p.</td>
+      <td>klaver</td>
+    </tr>
+    <tr>
+      <th>572</th>
+      <td>m.a.t.</td>
+      <td>klaver</td>
+    </tr>
+    <tr>
+      <th>573</th>
+      <td>s.</td>
+      <td>kleerebezem</td>
+    </tr>
+    <tr>
+      <th>574</th>
+      <td>b.r.</td>
+      <td>kleij</td>
+    </tr>
+    <tr>
+      <th>575</th>
+      <td>r.</td>
+      <td>klein</td>
+    </tr>
+    <tr>
+      <th>576</th>
+      <td>j.j.y.</td>
+      <td>kleingeld</td>
+    </tr>
+    <tr>
+      <th>577</th>
+      <td>k.e.h.</td>
+      <td>klerk</td>
+    </tr>
+    <tr>
+      <th>578</th>
+      <td>a.c.a.</td>
+      <td>klerks-valks</td>
+    </tr>
+    <tr>
+      <th>579</th>
+      <td>c.g.</td>
+      <td>klomp</td>
+    </tr>
+    <tr>
+      <th>580</th>
+      <td>l.c.e.</td>
+      <td>kloos</td>
+    </tr>
+    <tr>
+      <th>581</th>
+      <td>c.f.</td>
+      <td>klooster</td>
+    </tr>
+    <tr>
+      <th>582</th>
+      <td>j.</td>
+      <td>kloots</td>
+    </tr>
+    <tr>
+      <th>583</th>
+      <td>i.c.j.c.</td>
+      <td>klundert</td>
+    </tr>
+    <tr>
+      <th>584</th>
+      <td>r.h.</td>
+      <td>knegtering</td>
+    </tr>
+    <tr>
+      <th>585</th>
+      <td>a.j.</td>
+      <td>knijff</td>
+    </tr>
+    <tr>
+      <th>586</th>
+      <td>j.</td>
+      <td>knotter</td>
+    </tr>
+    <tr>
+      <th>587</th>
+      <td>b.f.m.</td>
+      <td>knuppe</td>
+    </tr>
+    <tr>
+      <th>588</th>
+      <td>g.j.</td>
+      <td>koers</td>
+    </tr>
+    <tr>
+      <th>589</th>
+      <td>d.</td>
+      <td>koerselman</td>
+    </tr>
+    <tr>
+      <th>590</th>
+      <td>s.</td>
+      <td>koerselman</td>
+    </tr>
+    <tr>
+      <th>591</th>
+      <td>b.i.</td>
+      <td>kok</td>
+    </tr>
+    <tr>
+      <th>592</th>
+      <td>j.</td>
+      <td>kok</td>
+    </tr>
+    <tr>
+      <th>593</th>
+      <td>w.</td>
+      <td>kolk</td>
+    </tr>
+    <tr>
+      <th>594</th>
+      <td>f.</td>
+      <td>kolkman</td>
+    </tr>
+    <tr>
+      <th>595</th>
+      <td>e.</td>
+      <td>kommer</td>
+    </tr>
+    <tr>
+      <th>596</th>
+      <td>l.m.</td>
+      <td>komp</td>
+    </tr>
+    <tr>
+      <th>597</th>
+      <td>c.m.a.</td>
+      <td>koning</td>
+    </tr>
+    <tr>
+      <th>598</th>
+      <td>j.m.</td>
+      <td>koning</td>
+    </tr>
+    <tr>
+      <th>599</th>
+      <td>p.</td>
+      <td>koning</td>
+    </tr>
+    <tr>
+      <th>600</th>
+      <td>r.e.p.</td>
+      <td>koning</td>
+    </tr>
+    <tr>
+      <th>601</th>
+      <td>c.o.</td>
+      <td>koningsberger</td>
+    </tr>
+    <tr>
+      <th>602</th>
+      <td>m.</td>
+      <td>kooiman</td>
+    </tr>
+    <tr>
+      <th>603</th>
+      <td>l.a.</td>
+      <td>kooten-hendriks</td>
+    </tr>
+    <tr>
+      <th>604</th>
+      <td>f.j.m.e.</td>
+      <td>koppenol</td>
+    </tr>
+    <tr>
+      <th>605</th>
+      <td>m.</td>
+      <td>koria</td>
+    </tr>
+    <tr>
+      <th>606</th>
+      <td>w.w.</td>
+      <td>korteweg</td>
+    </tr>
+    <tr>
+      <th>607</th>
+      <td>m.c.m.</td>
+      <td>kossen</td>
+    </tr>
+    <tr>
+      <th>608</th>
+      <td>p.w.f.</td>
+      <td>kostons</td>
+    </tr>
+    <tr>
+      <th>609</th>
+      <td>p.j.</td>
+      <td>kouwenberg</td>
+    </tr>
+    <tr>
+      <th>610</th>
+      <td>r.l.g.</td>
+      <td>kraaijvanger</td>
+    </tr>
+    <tr>
+      <th>611</th>
+      <td>m.o.</td>
+      <td>kraamwinkel</td>
+    </tr>
+    <tr>
+      <th>612</th>
+      <td>h.</td>
+      <td>kraimi</td>
+    </tr>
+    <tr>
+      <th>613</th>
+      <td>h.h.</td>
+      <td>kreikamp</td>
+    </tr>
+    <tr>
+      <th>614</th>
+      <td>g.a.</td>
+      <td>krol</td>
+    </tr>
+    <tr>
+      <th>615</th>
+      <td>a.y.</td>
+      <td>kroll</td>
+    </tr>
+    <tr>
+      <th>616</th>
+      <td>v.h.b.</td>
+      <td>kruit</td>
+    </tr>
+    <tr>
+      <th>617</th>
+      <td>c.a.g.</td>
+      <td>kruger</td>
+    </tr>
+    <tr>
+      <th>618</th>
+      <td>e.</td>
+      <td>kuhl</td>
+    </tr>
+    <tr>
+      <th>619</th>
+      <td>i.</td>
+      <td>kuijken</td>
+    </tr>
+    <tr>
+      <th>620</th>
+      <td>g.</td>
+      <td>kuijper</td>
+    </tr>
+    <tr>
+      <th>621</th>
+      <td>a.</td>
+      <td>kuijpers</td>
+    </tr>
+    <tr>
+      <th>622</th>
+      <td>f.r.h.</td>
+      <td>kuiper</td>
+    </tr>
+    <tr>
+      <th>623</th>
+      <td>j.s.</td>
+      <td>kuiper</td>
+    </tr>
+    <tr>
+      <th>624</th>
+      <td>l.</td>
+      <td>kuiper</td>
+    </tr>
+    <tr>
+      <th>625</th>
+      <td>j.</td>
+      <td>kuiper</td>
+    </tr>
+    <tr>
+      <th>626</th>
+      <td>o.p.</td>
+      <td>kuit</td>
+    </tr>
+    <tr>
+      <th>627</th>
+      <td>l.j.m.g.</td>
+      <td>kunzeler</td>
+    </tr>
+    <tr>
+      <th>629</th>
+      <td>e.j.</td>
+      <td>kuper</td>
+    </tr>
+    <tr>
+      <th>630</th>
+      <td>b.m.</td>
+      <td>konig</td>
+    </tr>
+    <tr>
+      <th>632</th>
+      <td>m.e.g.</td>
+      <td>murris</td>
+    </tr>
+    <tr>
+      <th>633</th>
+      <td>r.</td>
+      <td>laan</td>
+    </tr>
+    <tr>
+      <th>634</th>
+      <td>m.</td>
+      <td>laarse</td>
+    </tr>
+    <tr>
+      <th>636</th>
+      <td>b.t.g.m.</td>
+      <td>lamers</td>
+    </tr>
+    <tr>
+      <th>637</th>
+      <td>d.m.</td>
+      <td>lamers</td>
+    </tr>
+    <tr>
+      <th>638</th>
+      <td>r.g.f.</td>
+      <td>lammers</td>
+    </tr>
+    <tr>
+      <th>639</th>
+      <td>d.j.m.</td>
+      <td>lange</td>
+    </tr>
+    <tr>
+      <th>640</th>
+      <td>p.a.</td>
+      <td>lange</td>
+    </tr>
+    <tr>
+      <th>641</th>
+      <td>w.j.a.</td>
+      <td>lansing</td>
+    </tr>
+    <tr>
+      <th>642</th>
+      <td>h.a.</td>
+      <td>lanting</td>
+    </tr>
+    <tr>
+      <th>643</th>
+      <td>j.a.n.</td>
+      <td>lap</td>
+    </tr>
+    <tr>
+      <th>644</th>
+      <td>h.d.s.</td>
+      <td>lasonder</td>
+    </tr>
+    <tr>
+      <th>645</th>
+      <td>r.v.</td>
+      <td>lauwere</td>
+    </tr>
+    <tr>
+      <th>646</th>
+      <td>m.a.</td>
+      <td>le belle</td>
+    </tr>
+    <tr>
+      <th>647</th>
+      <td>r.</td>
+      <td>le grand</td>
+    </tr>
+    <tr>
+      <th>648</th>
+      <td>m.e.</td>
+      <td>lee-klein rot</td>
+    </tr>
+    <tr>
+      <th>649</th>
+      <td>s.c.</td>
+      <td>leer</td>
+    </tr>
+    <tr>
+      <th>650</th>
+      <td>g.</td>
+      <td>leeuw</td>
+    </tr>
+    <tr>
+      <th>651</th>
+      <td>b.</td>
+      <td>leeuwen</td>
+    </tr>
+    <tr>
+      <th>652</th>
+      <td>l.e.</td>
+      <td>leeuwen</td>
+    </tr>
+    <tr>
+      <th>653</th>
+      <td>n.j.h.</td>
+      <td>leferink</td>
+    </tr>
+    <tr>
+      <th>655</th>
+      <td>r.</td>
+      <td>lemmens</td>
+    </tr>
+    <tr>
+      <th>656</th>
+      <td>j.h.</td>
+      <td>lemstra</td>
+    </tr>
+    <tr>
+      <th>657</th>
+      <td>r.m.a.</td>
+      <td>lensen</td>
+    </tr>
+    <tr>
+      <th>658</th>
+      <td>j.</td>
+      <td>lensink</td>
+    </tr>
+    <tr>
+      <th>659</th>
+      <td>e.c.</td>
+      <td>lent</td>
+    </tr>
+    <tr>
+      <th>660</th>
+      <td>p.</td>
+      <td>lettinga</td>
+    </tr>
+    <tr>
+      <th>661</th>
+      <td>w.</td>
+      <td>leuveren</td>
+    </tr>
+    <tr>
+      <th>664</th>
+      <td>n.</td>
+      <td>levitus</td>
+    </tr>
+    <tr>
+      <th>665</th>
+      <td>f.</td>
+      <td>lewis</td>
+    </tr>
+    <tr>
+      <th>666</th>
+      <td>f.j.</td>
+      <td>lewis</td>
+    </tr>
+    <tr>
+      <th>667</th>
+      <td>d.y.</td>
+      <td>li</td>
+    </tr>
+    <tr>
+      <th>668</th>
+      <td>s.k.</td>
+      <td>li</td>
+    </tr>
+    <tr>
+      <th>669</th>
+      <td>e.a.e.g.j.</td>
+      <td>libosan</td>
+    </tr>
+    <tr>
+      <th>670</th>
+      <td>c.m.</td>
+      <td>liere</td>
+    </tr>
+    <tr>
+      <th>671</th>
+      <td>g.j.</td>
+      <td>ligtenberg</td>
+    </tr>
+    <tr>
+      <th>672</th>
+      <td>w.m.</td>
+      <td>limberger</td>
+    </tr>
+    <tr>
+      <th>673</th>
+      <td>s.c.</td>
+      <td>lin</td>
+    </tr>
+    <tr>
+      <th>674</th>
+      <td>r.j.</td>
+      <td>lindeboom</td>
+    </tr>
+    <tr>
+      <th>675</th>
+      <td>s.</td>
+      <td>linden</td>
+    </tr>
+    <tr>
+      <th>676</th>
+      <td>f.w.</td>
+      <td>linders</td>
+    </tr>
+    <tr>
+      <th>677</th>
+      <td>a.j.c.</td>
+      <td>linssen</td>
+    </tr>
+    <tr>
+      <th>678</th>
+      <td>h.e.c.</td>
+      <td>lisman</td>
+    </tr>
+    <tr>
+      <th>679</th>
+      <td>m.</td>
+      <td>loef</td>
+    </tr>
+    <tr>
+      <th>680</th>
+      <td>p.a.</td>
+      <td>loeff</td>
+    </tr>
+    <tr>
+      <th>681</th>
+      <td>a.</td>
+      <td>lof</td>
+    </tr>
+    <tr>
+      <th>682</th>
+      <td>l.b.a.</td>
+      <td>logtestijn</td>
+    </tr>
+    <tr>
+      <th>683</th>
+      <td>l.t.</td>
+      <td>lonis</td>
+    </tr>
+    <tr>
+      <th>684</th>
+      <td>e.m.m.</td>
+      <td>loo</td>
+    </tr>
+    <tr>
+      <th>685</th>
+      <td>e.r.</td>
+      <td>looijen</td>
+    </tr>
+    <tr>
+      <th>686</th>
+      <td>a.</td>
+      <td>loon</td>
+    </tr>
+    <tr>
+      <th>687</th>
+      <td>e.r.</td>
+      <td>looyen</td>
+    </tr>
+    <tr>
+      <th>688</th>
+      <td>b.f.</td>
+      <td>louwerier</td>
+    </tr>
+    <tr>
+      <th>689</th>
+      <td>b.k.</td>
+      <td>louws</td>
+    </tr>
+    <tr>
+      <th>690</th>
+      <td>l.j.m.</td>
+      <td>luchtman</td>
+    </tr>
+    <tr>
+      <th>691</th>
+      <td>r.w.e.j.</td>
+      <td>luijten</td>
+    </tr>
+    <tr>
+      <th>692</th>
+      <td>r.g.a.</td>
+      <td>luinstra</td>
+    </tr>
+    <tr>
+      <th>693</th>
+      <td>h.c.</td>
+      <td>lunter</td>
+    </tr>
+    <tr>
+      <th>694</th>
+      <td>e.j.</td>
+      <td>luten</td>
+    </tr>
+    <tr>
+      <th>695</th>
+      <td>a.p.k.</td>
+      <td>luttikhuis</td>
+    </tr>
+    <tr>
+      <th>696</th>
+      <td>c.a.m.</td>
+      <td>luttikhuis</td>
+    </tr>
+    <tr>
+      <th>697</th>
+      <td>c.h.l.j.r.</td>
+      <td>luckers</td>
+    </tr>
+    <tr>
+      <th>699</th>
+      <td>g.p.</td>
+      <td>jongeneel</td>
+    </tr>
+    <tr>
+      <th>700</th>
+      <td>c.h.j.</td>
+      <td>as</td>
+    </tr>
+    <tr>
+      <th>701</th>
+      <td>j.r.</td>
+      <td>as</td>
+    </tr>
+    <tr>
+      <th>702</th>
+      <td>j.v.</td>
+      <td>duro</td>
+    </tr>
+    <tr>
+      <th>703</th>
+      <td>m.j.</td>
+      <td>essen</td>
+    </tr>
+    <tr>
+      <th>704</th>
+      <td>m.</td>
+      <td>lycha</td>
+    </tr>
+    <tr>
+      <th>705</th>
+      <td>a.w.</td>
+      <td>n</td>
+    </tr>
+    <tr>
+      <th>706</th>
+      <td>p.a.m.</td>
+      <td>nning</td>
+    </tr>
+    <tr>
+      <th>707</th>
+      <td>k.a.</td>
+      <td>rtijnse</td>
+    </tr>
+    <tr>
+      <th>708</th>
+      <td>c.a.</td>
+      <td>scini</td>
+    </tr>
+    <tr>
+      <th>709</th>
+      <td>m.f.</td>
+      <td>sman</td>
+    </tr>
+    <tr>
+      <th>710</th>
+      <td>s.j.m.</td>
+      <td>sselink</td>
+    </tr>
+    <tr>
+      <th>711</th>
+      <td>j.h.</td>
+      <td>stenbroek</td>
+    </tr>
+    <tr>
+      <th>712</th>
+      <td>c.g.a.</td>
+      <td>ttheussens</td>
+    </tr>
+    <tr>
+      <th>713</th>
+      <td>a.w.</td>
+      <td>meegdenburg</td>
+    </tr>
+    <tr>
+      <th>714</th>
+      <td>k.p.</td>
+      <td>meegdes</td>
+    </tr>
+    <tr>
+      <th>715</th>
+      <td>k.c.s.</td>
+      <td>meekes</td>
+    </tr>
+    <tr>
+      <th>716</th>
+      <td>c.</td>
+      <td>meent</td>
+    </tr>
+    <tr>
+      <th>718</th>
+      <td>a.k.m.</td>
+      <td>meer</td>
+    </tr>
+    <tr>
+      <th>719</th>
+      <td>j.a.</td>
+      <td>meer</td>
+    </tr>
+    <tr>
+      <th>720</th>
+      <td>j.d.</td>
+      <td>meerburg</td>
+    </tr>
+    <tr>
+      <th>721</th>
+      <td>t.</td>
+      <td>meeren</td>
+    </tr>
+    <tr>
+      <th>722</th>
+      <td>j.</td>
+      <td>meerkerk</td>
+    </tr>
+    <tr>
+      <th>723</th>
+      <td>j.b.</td>
+      <td>meester</td>
+    </tr>
+    <tr>
+      <th>724</th>
+      <td>s.</td>
+      <td>meeuwsen</td>
+    </tr>
+    <tr>
+      <th>725</th>
+      <td>m.</td>
+      <td>meffert</td>
+    </tr>
+    <tr>
+      <th>726</th>
+      <td>l.d.</td>
+      <td>meggelen</td>
+    </tr>
+    <tr>
+      <th>727</th>
+      <td>g.t.</td>
+      <td>meiden</td>
+    </tr>
+    <tr>
+      <th>728</th>
+      <td>e.t.</td>
+      <td>meijer</td>
+    </tr>
+    <tr>
+      <th>730</th>
+      <td>h.j.</td>
+      <td>meijer</td>
+    </tr>
+    <tr>
+      <th>731</th>
+      <td>h.t.</td>
+      <td>meijer</td>
+    </tr>
+    <tr>
+      <th>732</th>
+      <td>m.l.j.</td>
+      <td>meijer</td>
+    </tr>
+    <tr>
+      <th>733</th>
+      <td>t.j.a.</td>
+      <td>meijer</td>
+    </tr>
+    <tr>
+      <th>734</th>
+      <td>d.v.</td>
+      <td>meijers</td>
+    </tr>
+    <tr>
+      <th>735</th>
+      <td>d.v.</td>
+      <td>meijers-ploegmakers</td>
+    </tr>
+    <tr>
+      <th>737</th>
+      <td>m.e.</td>
+      <td>meijnhardt</td>
+    </tr>
+    <tr>
+      <th>738</th>
+      <td>b.w.g.p.</td>
+      <td>meijs</td>
+    </tr>
+    <tr>
+      <th>739</th>
+      <td>c.</td>
+      <td>meines</td>
+    </tr>
+    <tr>
+      <th>740</th>
+      <td>a.i.</td>
+      <td>mekes</td>
+    </tr>
+    <tr>
+      <th>741</th>
+      <td>b.j.</td>
+      <td>mekkelholt</td>
+    </tr>
+    <tr>
+      <th>742</th>
+      <td>k.c.</td>
+      <td>mensink</td>
+    </tr>
+    <tr>
+      <th>743</th>
+      <td>w.</td>
+      <td>metz</td>
+    </tr>
+    <tr>
+      <th>744</th>
+      <td>j.h.</td>
+      <td>meulen</td>
+    </tr>
+    <tr>
+      <th>745</th>
+      <td>d.</td>
+      <td>meulenberg</td>
+    </tr>
+    <tr>
+      <th>746</th>
+      <td>r.</td>
+      <td>meulenberg</td>
+    </tr>
+    <tr>
+      <th>747</th>
+      <td>j.h.</td>
+      <td>meurs</td>
+    </tr>
+    <tr>
+      <th>748</th>
+      <td>r.c.m.</td>
+      <td>michielsen</td>
+    </tr>
+    <tr>
+      <th>749</th>
+      <td>p.</td>
+      <td>miedema</td>
+    </tr>
+    <tr>
+      <th>751</th>
+      <td>p.j.</td>
+      <td>mijnssen</td>
+    </tr>
+    <tr>
+      <th>752</th>
+      <td>r.b.</td>
+      <td>milo</td>
+    </tr>
+    <tr>
+      <th>753</th>
+      <td>a.g.</td>
+      <td>moeijes</td>
+    </tr>
+    <tr>
+      <th>754</th>
+      <td>j.j.</td>
+      <td>molen</td>
+    </tr>
+    <tr>
+      <th>755</th>
+      <td>c.m.</td>
+      <td>molhuysen</td>
+    </tr>
+    <tr>
+      <th>756</th>
+      <td>j.m.</td>
+      <td>molkenboer</td>
+    </tr>
+    <tr>
+      <th>757</th>
+      <td>y.a.w.m.</td>
+      <td>molkenboer</td>
+    </tr>
+    <tr>
+      <th>758</th>
+      <td>w.</td>
+      <td>mollema</td>
+    </tr>
+    <tr>
+      <th>759</th>
+      <td>r.</td>
+      <td>mons</td>
+    </tr>
+    <tr>
+      <th>760</th>
+      <td>w.e.</td>
+      <td>mooijen</td>
+    </tr>
+    <tr>
+      <th>761</th>
+      <td>m.</td>
+      <td>mooijweer</td>
+    </tr>
+    <tr>
+      <th>762</th>
+      <td>w.e.</td>
+      <td>moojen</td>
+    </tr>
+    <tr>
+      <th>763</th>
+      <td>m.j.</td>
+      <td>mookhram</td>
+    </tr>
+    <tr>
+      <th>764</th>
+      <td>o.f.j.</td>
+      <td>moorman van kappen</td>
+    </tr>
+    <tr>
+      <th>765</th>
+      <td>r.c.m.</td>
+      <td>moorsel</td>
+    </tr>
+    <tr>
+      <th>766</th>
+      <td>m.</td>
+      <td>mos</td>
+    </tr>
+    <tr>
+      <th>767</th>
+      <td>a.a.s.</td>
+      <td>mosele</td>
+    </tr>
+    <tr>
+      <th>768</th>
+      <td>s.m.</td>
+      <td>mosterd-de wit</td>
+    </tr>
+    <tr>
+      <th>769</th>
+      <td>m.j.a.m.</td>
+      <td>muijres</td>
+    </tr>
+    <tr>
+      <th>770</th>
+      <td>a.e.</td>
+      <td>mulder</td>
+    </tr>
+    <tr>
+      <th>771</th>
+      <td>c.f.</td>
+      <td>mulder</td>
+    </tr>
+    <tr>
+      <th>772</th>
+      <td>j.a.</td>
+      <td>mulder</td>
+    </tr>
+    <tr>
+      <th>774</th>
+      <td>r.</td>
+      <td>mulder</td>
+    </tr>
+    <tr>
+      <th>775</th>
+      <td>m.f.g.</td>
+      <td>mulders</td>
+    </tr>
+    <tr>
+      <th>776</th>
+      <td>e.n.</td>
+      <td>muller</td>
+    </tr>
+    <tr>
+      <th>777</th>
+      <td>l.</td>
+      <td>muller</td>
+    </tr>
+    <tr>
+      <th>779</th>
+      <td>b.w.a.</td>
+      <td>muurmans</td>
+    </tr>
+    <tr>
+      <th>780</th>
+      <td>r.c.c.m.</td>
+      <td>nadaud</td>
+    </tr>
+    <tr>
+      <th>781</th>
+      <td>b.j.</td>
+      <td>nauta</td>
+    </tr>
+    <tr>
+      <th>782</th>
+      <td>a.j.</td>
+      <td>nederhoed</td>
+    </tr>
+    <tr>
+      <th>783</th>
+      <td>p.j.</td>
+      <td>neijt</td>
+    </tr>
+    <tr>
+      <th>784</th>
+      <td>t.l.p.</td>
+      <td>nguyen</td>
+    </tr>
+    <tr>
+      <th>785</th>
+      <td>j.c.</td>
+      <td>nie</td>
+    </tr>
+    <tr>
+      <th>786</th>
+      <td>w.j.b.</td>
+      <td>nielen</td>
+    </tr>
+    <tr>
+      <th>787</th>
+      <td>j.h.</td>
+      <td>niemans</td>
+    </tr>
+    <tr>
+      <th>788</th>
+      <td>a.h.</td>
+      <td>nierman</td>
+    </tr>
+    <tr>
+      <th>789</th>
+      <td>a.w.</td>
+      <td>niesert</td>
+    </tr>
+    <tr>
+      <th>790</th>
+      <td>m.</td>
+      <td>nieuwenburg</td>
+    </tr>
+    <tr>
+      <th>791</th>
+      <td>p.c.</td>
+      <td>nieuwenhuizen</td>
+    </tr>
+    <tr>
+      <th>792</th>
+      <td>p.j.a.</td>
+      <td>nieuwland</td>
+    </tr>
+    <tr>
+      <th>793</th>
+      <td>e.</td>
+      <td>nijdam</td>
+    </tr>
+    <tr>
+      <th>794</th>
+      <td>e.</td>
+      <td>nijhoff</td>
+    </tr>
+    <tr>
+      <th>795</th>
+      <td>c.a.m.</td>
+      <td>nijhuis</td>
+    </tr>
+    <tr>
+      <th>796</th>
+      <td>d.d.</td>
+      <td>nijkamp</td>
+    </tr>
+    <tr>
+      <th>797</th>
+      <td>m.w.m.</td>
+      <td>nijland-van oorsouw</td>
+    </tr>
+    <tr>
+      <th>799</th>
+      <td>r.p.r.</td>
+      <td>nolten</td>
+    </tr>
+    <tr>
+      <th>800</th>
+      <td>b.f.</td>
+      <td>noort</td>
+    </tr>
+    <tr>
+      <th>802</th>
+      <td>m.j.</td>
+      <td>noteboom</td>
+    </tr>
+    <tr>
+      <th>803</th>
+      <td>j.w.m.g.</td>
+      <td>noten</td>
+    </tr>
+    <tr>
+      <th>804</th>
+      <td>f.a.m.</td>
+      <td>nowee</td>
+    </tr>
+    <tr>
+      <th>806</th>
+      <td>c.t.e.</td>
+      <td>nuis</td>
+    </tr>
+    <tr>
+      <th>807</th>
+      <td>p.j.e.m.</td>
+      <td>nuiten</td>
+    </tr>
+    <tr>
+      <th>808</th>
+      <td>r.a.m.l.</td>
+      <td>oeijen</td>
+    </tr>
+    <tr>
+      <th>809</th>
+      <td>j.</td>
+      <td>oijen</td>
+    </tr>
+    <tr>
+      <th>810</th>
+      <td>f.r.</td>
+      <td>omta</td>
+    </tr>
+    <tr>
+      <th>811</th>
+      <td>m.c.j.</td>
+      <td>oonk-pallandt</td>
+    </tr>
+    <tr>
+      <th>813</th>
+      <td>f.h.m.</td>
+      <td>oorschot</td>
+    </tr>
+    <tr>
+      <th>814</th>
+      <td>o.a.</td>
+      <td>oorschot</td>
+    </tr>
+    <tr>
+      <th>815</th>
+      <td>a.g.m.</td>
+      <td>oort</td>
+    </tr>
+    <tr>
+      <th>816</th>
+      <td>c.</td>
+      <td>oosten</td>
+    </tr>
+    <tr>
+      <th>817</th>
+      <td>d.j.q.</td>
+      <td>oostenbroek</td>
+    </tr>
+    <tr>
+      <th>818</th>
+      <td>t.d.j.</td>
+      <td>oosterink</td>
+    </tr>
+    <tr>
+      <th>819</th>
+      <td>a.l.</td>
+      <td>op 't hoog</td>
+    </tr>
+    <tr>
+      <th>820</th>
+      <td>t.a.</td>
+      <td>opbroek-booij</td>
+    </tr>
+    <tr>
+      <th>822</th>
+      <td>j.</td>
+      <td>opstroom</td>
+    </tr>
+    <tr>
+      <th>823</th>
+      <td>f.</td>
+      <td>ortiz aldana</td>
+    </tr>
+    <tr>
+      <th>824</th>
+      <td>f.a.m.</td>
+      <td>os</td>
+    </tr>
+    <tr>
+      <th>825</th>
+      <td>a.j.</td>
+      <td>oskam</td>
+    </tr>
+    <tr>
+      <th>826</th>
+      <td>r.a.</td>
+      <td>oskamp</td>
+    </tr>
+    <tr>
+      <th>827</th>
+      <td>f.b.a.m.</td>
+      <td>oss</td>
+    </tr>
+    <tr>
+      <th>828</th>
+      <td>m.e.w.</td>
+      <td>otten</td>
+    </tr>
+    <tr>
+      <th>829</th>
+      <td>t.h.</td>
+      <td>otten</td>
+    </tr>
+    <tr>
+      <th>830</th>
+      <td>m.g.</td>
+      <td>oud-elfferich</td>
+    </tr>
+    <tr>
+      <th>831</th>
+      <td>j.d.m.</td>
+      <td>oude grote bevelsborg</td>
+    </tr>
+    <tr>
+      <th>832</th>
+      <td>m.j.</td>
+      <td>oudman</td>
+    </tr>
+    <tr>
+      <th>833</th>
+      <td>j.l.</td>
+      <td>oudshoorn</td>
+    </tr>
+    <tr>
+      <th>834</th>
+      <td>p.c.m.</td>
+      <td>ouwens</td>
+    </tr>
+    <tr>
+      <th>835</th>
+      <td>h.j.</td>
+      <td>overes</td>
+    </tr>
+    <tr>
+      <th>836</th>
+      <td>k.</td>
+      <td>overloop</td>
+    </tr>
+    <tr>
+      <th>837</th>
+      <td>i.t.w.</td>
+      <td>overvliet</td>
+    </tr>
+    <tr>
+      <th>838</th>
+      <td>r.</td>
+      <td>pas</td>
+    </tr>
+    <tr>
+      <th>839</th>
+      <td>k.</td>
+      <td>peppel</td>
+    </tr>
+    <tr>
+      <th>840</th>
+      <td>j.a.h.</td>
+      <td>padberg</td>
+    </tr>
+    <tr>
+      <th>841</th>
+      <td>e.p.</td>
+      <td>pandelitschka</td>
+    </tr>
+    <tr>
+      <th>842</th>
+      <td>m.</td>
+      <td>pannevis</td>
+    </tr>
+    <tr>
+      <th>844</th>
+      <td>h.</td>
+      <td>pasman</td>
+    </tr>
+    <tr>
+      <th>845</th>
+      <td>j.</td>
+      <td>paulissen</td>
+    </tr>
+    <tr>
+      <th>846</th>
+      <td>j.j.t.</td>
+      <td>paulissen</td>
+    </tr>
+    <tr>
+      <th>847</th>
+      <td>l.y.</td>
+      <td>pawlikowski</td>
+    </tr>
+    <tr>
+      <th>848</th>
+      <td>m.</td>
+      <td>peeters</td>
+    </tr>
+    <tr>
+      <th>849</th>
+      <td>m.c.j.</td>
+      <td>peeters</td>
+    </tr>
+    <tr>
+      <th>850</th>
+      <td>p.t.</td>
+      <td>pel</td>
+    </tr>
+    <tr>
+      <th>851</th>
+      <td>f.</td>
+      <td>penders</td>
+    </tr>
+    <tr>
+      <th>852</th>
+      <td>a.f.g.</td>
+      <td>pennino</td>
+    </tr>
+    <tr>
+      <th>853</th>
+      <td>j.</td>
+      <td>peppel</td>
+    </tr>
+    <tr>
+      <th>855</th>
+      <td>b.w.h.</td>
+      <td>pepping</td>
+    </tr>
+    <tr>
+      <th>856</th>
+      <td>p.j.</td>
+      <td>peters</td>
+    </tr>
+    <tr>
+      <th>857</th>
+      <td>t.h.i.m.</td>
+      <td>pierik</td>
+    </tr>
+    <tr>
+      <th>858</th>
+      <td>r.</td>
+      <td>pijls</td>
+    </tr>
+    <tr>
+      <th>859</th>
+      <td>r.j.w.</td>
+      <td>pijls</td>
+    </tr>
+    <tr>
+      <th>860</th>
+      <td>a.m.t.c.</td>
+      <td>plantaz</td>
+    </tr>
+    <tr>
+      <th>861</th>
+      <td>j.a.</td>
+      <td>platteeuw</td>
+    </tr>
+    <tr>
+      <th>862</th>
+      <td>j.g.</td>
+      <td>plet</td>
+    </tr>
+    <tr>
+      <th>863</th>
+      <td>w.</td>
+      <td>ploeg</td>
+    </tr>
+    <tr>
+      <th>864</th>
+      <td>e.</td>
+      <td>poelenije</td>
+    </tr>
+    <tr>
+      <th>865</th>
+      <td>d.c.</td>
+      <td>poiesz</td>
+    </tr>
+    <tr>
+      <th>866</th>
+      <td>j.m.</td>
+      <td>pol</td>
+    </tr>
+    <tr>
+      <th>867</th>
+      <td>w.m.</td>
+      <td>pol</td>
+    </tr>
+    <tr>
+      <th>868</th>
+      <td>h.g.</td>
+      <td>pomper</td>
+    </tr>
+    <tr>
+      <th>869</th>
+      <td>n.h.m.</td>
+      <td>poort</td>
+    </tr>
+    <tr>
+      <th>870</th>
+      <td>a.j.h.m.</td>
+      <td>poorten</td>
+    </tr>
+    <tr>
+      <th>871</th>
+      <td>o.b.j.</td>
+      <td>poorthuis</td>
+    </tr>
+    <tr>
+      <th>872</th>
+      <td>j.m.</td>
+      <td>poortinga</td>
+    </tr>
+    <tr>
+      <th>873</th>
+      <td>s.m.</td>
+      <td>postma</td>
+    </tr>
+    <tr>
+      <th>874</th>
+      <td>j.n.</td>
+      <td>pouw kraan</td>
+    </tr>
+    <tr>
+      <th>875</th>
+      <td>a.</td>
+      <td>prascevic</td>
+    </tr>
+    <tr>
+      <th>876</th>
+      <td>l.</td>
+      <td>prickartz</td>
+    </tr>
+    <tr>
+      <th>877</th>
+      <td>l.s.e.</td>
+      <td>prickartz</td>
+    </tr>
+    <tr>
+      <th>878</th>
+      <td>j.g.</td>
+      <td>princen</td>
+    </tr>
+    <tr>
+      <th>880</th>
+      <td>l.l.m.</td>
+      <td>prinsen</td>
+    </tr>
+    <tr>
+      <th>881</th>
+      <td>a.t.</td>
+      <td>putter</td>
+    </tr>
+    <tr>
+      <th>882</th>
+      <td>t.f.</td>
+      <td>quaars</td>
+    </tr>
+    <tr>
+      <th>883</th>
+      <td>h.r.</td>
+      <td>quint</td>
+    </tr>
+    <tr>
+      <th>884</th>
+      <td>a.</td>
+      <td>quispel</td>
+    </tr>
+    <tr>
+      <th>885</th>
+      <td>m.c.</td>
+      <td>schmitz</td>
+    </tr>
+    <tr>
+      <th>886</th>
+      <td>j.m.</td>
+      <td>aijen</td>
+    </tr>
+    <tr>
+      <th>887</th>
+      <td>r.</td>
+      <td>aijmakers</td>
+    </tr>
+    <tr>
+      <th>888</th>
+      <td>n.s.</td>
+      <td>reerink</td>
+    </tr>
+    <tr>
+      <th>889</th>
+      <td>j.</td>
+      <td>regeling</td>
+    </tr>
+    <tr>
+      <th>890</th>
+      <td>m.j.</td>
+      <td>reijt</td>
+    </tr>
+    <tr>
+      <th>891</th>
+      <td>h.</td>
+      <td>reitsma</td>
+    </tr>
+    <tr>
+      <th>892</th>
+      <td>j.j.</td>
+      <td>reiziger</td>
+    </tr>
+    <tr>
+      <th>893</th>
+      <td>m.w.</td>
+      <td>renzen</td>
+    </tr>
+    <tr>
+      <th>894</th>
+      <td>r.</td>
+      <td>reumkens</td>
+    </tr>
+    <tr>
+      <th>895</th>
+      <td>j.a.m.</td>
+      <td>reuser</td>
+    </tr>
+    <tr>
+      <th>896</th>
+      <td>j.p.c.m.</td>
+      <td>riet</td>
+    </tr>
+    <tr>
+      <th>897</th>
+      <td>m.w.</td>
+      <td>riezebosch</td>
+    </tr>
+    <tr>
+      <th>898</th>
+      <td>a.</td>
+      <td>rigters</td>
+    </tr>
+    <tr>
+      <th>899</th>
+      <td>p.c.</td>
+      <td>rijken</td>
+    </tr>
+    <tr>
+      <th>900</th>
+      <td>h.</td>
+      <td>rijken van olst</td>
+    </tr>
+    <tr>
+      <th>901</th>
+      <td>r.p.m.j.</td>
+      <td>rijppaert</td>
+    </tr>
+    <tr>
+      <th>902</th>
+      <td>b.k.a.</td>
+      <td>rijsbergen</td>
+    </tr>
+    <tr>
+      <th>903</th>
+      <td>m.</td>
+      <td>rijswijk</td>
+    </tr>
+    <tr>
+      <th>904</th>
+      <td>l.</td>
+      <td>rijzewijk</td>
+    </tr>
+    <tr>
+      <th>905</th>
+      <td>m.</td>
+      <td>rikken</td>
+    </tr>
+    <tr>
+      <th>906</th>
+      <td>s.g.</td>
+      <td>rissik</td>
+    </tr>
+    <tr>
+      <th>907</th>
+      <td>r.g.</td>
+      <td>roeffen</td>
+    </tr>
+    <tr>
+      <th>908</th>
+      <td>j.m.m.</td>
+      <td>roefs</td>
+    </tr>
+    <tr>
+      <th>909</th>
+      <td>e.p.h.</td>
+      <td>roelofs</td>
+    </tr>
+    <tr>
+      <th>911</th>
+      <td>g.w.</td>
+      <td>roest</td>
+    </tr>
+    <tr>
+      <th>912</th>
+      <td>m.</td>
+      <td>roest crollius</td>
+    </tr>
+    <tr>
+      <th>913</th>
+      <td>m.j.</td>
+      <td>roest crollius</td>
+    </tr>
+    <tr>
+      <th>914</th>
+      <td>g.</td>
+      <td>rol</td>
+    </tr>
+    <tr>
+      <th>915</th>
+      <td>m.m.h.j.</td>
+      <td>rompelberg</td>
+    </tr>
+    <tr>
+      <th>917</th>
+      <td>j.m.</td>
+      <td>rongen</td>
+    </tr>
+    <tr>
+      <th>919</th>
+      <td>g.</td>
+      <td>rooijen</td>
+    </tr>
+    <tr>
+      <th>920</th>
+      <td>m.</td>
+      <td>rooimans</td>
+    </tr>
+    <tr>
+      <th>921</th>
+      <td>w.b.</td>
+      <td>rookhuijzen</td>
+    </tr>
+    <tr>
+      <th>922</th>
+      <td>d.a.j.</td>
+      <td>roomberg</td>
+    </tr>
+    <tr>
+      <th>923</th>
+      <td>h.e.g.p.</td>
+      <td>rootselaar</td>
+    </tr>
+    <tr>
+      <th>924</th>
+      <td>r.j.m.c.</td>
+      <td>rosbeek</td>
+    </tr>
+    <tr>
+      <th>925</th>
+      <td>r.m.j.c.</td>
+      <td>rosbeek</td>
+    </tr>
+    <tr>
+      <th>927</th>
+      <td>j.c.</td>
+      <td>rosenberg polak</td>
+    </tr>
+    <tr>
+      <th>928</th>
+      <td>p.</td>
+      <td>rossum</td>
+    </tr>
+    <tr>
+      <th>929</th>
+      <td>e.j.</td>
+      <td>rotshuizen</td>
+    </tr>
+    <tr>
+      <th>930</th>
+      <td>j.w.h.</td>
+      <td>rouers</td>
+    </tr>
+    <tr>
+      <th>931</th>
+      <td>b.w.j.m.</td>
+      <td>roy van zuidewijn</td>
+    </tr>
+    <tr>
+      <th>932</th>
+      <td>p.h.k.</td>
+      <td>ruding</td>
+    </tr>
+    <tr>
+      <th>933</th>
+      <td>h.j.</td>
+      <td>ruijter</td>
+    </tr>
+    <tr>
+      <th>934</th>
+      <td>h.</td>
+      <td>ruis</td>
+    </tr>
+    <tr>
+      <th>935</th>
+      <td>h.g.</td>
+      <td>ruis</td>
+    </tr>
+    <tr>
+      <th>936</th>
+      <td>r.e.a.</td>
+      <td>ruiter</td>
+    </tr>
+    <tr>
+      <th>937</th>
+      <td>s.v.</td>
+      <td>rutgers</td>
+    </tr>
+    <tr>
+      <th>938</th>
+      <td>e.h.j.m.</td>
+      <td>rutten</td>
+    </tr>
+    <tr>
+      <th>939</th>
+      <td>m.c.c.</td>
+      <td>stoove</td>
+    </tr>
+    <tr>
+      <th>940</th>
+      <td>w.m.j.</td>
+      <td>saes</td>
+    </tr>
+    <tr>
+      <th>941</th>
+      <td>m.</td>
+      <td>samsen</td>
+    </tr>
+    <tr>
+      <th>942</th>
+      <td>g.p.m.</td>
+      <td>sanders</td>
+    </tr>
+    <tr>
+      <th>943</th>
+      <td>h.e.c.</td>
+      <td>savelkoul</td>
+    </tr>
+    <tr>
+      <th>944</th>
+      <td>p.r.w.</td>
+      <td>schaink</td>
+    </tr>
+    <tr>
+      <th>945</th>
+      <td>d.p.</td>
+      <td>schalken</td>
+    </tr>
+    <tr>
+      <th>946</th>
+      <td>p.j.</td>
+      <td>schambergen</td>
+    </tr>
+    <tr>
+      <th>947</th>
+      <td>a.</td>
+      <td>schee</td>
+    </tr>
+    <tr>
+      <th>948</th>
+      <td>m.</td>
+      <td>schelhaas</td>
+    </tr>
+    <tr>
+      <th>949</th>
+      <td>j.j.</td>
+      <td>schelling</td>
+    </tr>
+    <tr>
+      <th>950</th>
+      <td>k.l.</td>
+      <td>schellingerhout</td>
+    </tr>
+    <tr>
+      <th>952</th>
+      <td>h.c.</td>
+      <td>scheltema</td>
+    </tr>
+    <tr>
+      <th>953</th>
+      <td>p.f.</td>
+      <td>schepel</td>
+    </tr>
+    <tr>
+      <th>954</th>
+      <td>r.j.</td>
+      <td>schimmelpenninck</td>
+    </tr>
+    <tr>
+      <th>957</th>
+      <td>j.f.c.</td>
+      <td>schnitzler</td>
+    </tr>
+    <tr>
+      <th>958</th>
+      <td>p.e.m.</td>
+      <td>schol</td>
+    </tr>
+    <tr>
+      <th>959</th>
+      <td>m.j.w.</td>
+      <td>schollen</td>
+    </tr>
+    <tr>
+      <th>960</th>
+      <td>p.m.</td>
+      <td>scholtes</td>
+    </tr>
+    <tr>
+      <th>961</th>
+      <td>h.j.</td>
+      <td>school</td>
+    </tr>
+    <tr>
+      <th>962</th>
+      <td>f.j.</td>
+      <td>schop</td>
+    </tr>
+    <tr>
+      <th>963</th>
+      <td>s.i.p.</td>
+      <td>schouten</td>
+    </tr>
+    <tr>
+      <th>964</th>
+      <td>h.</td>
+      <td>schouw</td>
+    </tr>
+    <tr>
+      <th>965</th>
+      <td>g.j.</td>
+      <td>schras</td>
+    </tr>
+    <tr>
+      <th>966</th>
+      <td>t.m.</td>
+      <td>schraven</td>
+    </tr>
+    <tr>
+      <th>967</th>
+      <td>a.o.c.a.</td>
+      <td>schravendijk</td>
+    </tr>
+    <tr>
+      <th>968</th>
+      <td>c.a.</td>
+      <td>schreuder</td>
+    </tr>
+    <tr>
+      <th>969</th>
+      <td>p.w.</td>
+      <td>schreurs</td>
+    </tr>
+    <tr>
+      <th>970</th>
+      <td>p.h.w.</td>
+      <td>schreurs</td>
+    </tr>
+    <tr>
+      <th>972</th>
+      <td>m.c.j.a.</td>
+      <td>schroeder-van waes</td>
+    </tr>
+    <tr>
+      <th>973</th>
+      <td>h.</td>
+      <td>schuppen</td>
+    </tr>
+    <tr>
+      <th>974</th>
+      <td>m.</td>
+      <td>schuring</td>
+    </tr>
+    <tr>
+      <th>975</th>
+      <td>h.</td>
+      <td>schuurbiers</td>
+    </tr>
+    <tr>
+      <th>976</th>
+      <td>r.w.j.m.</td>
+      <td>schuurman</td>
+    </tr>
+    <tr>
+      <th>977</th>
+      <td>e.j.</td>
+      <td>schuurs</td>
+    </tr>
+    <tr>
+      <th>978</th>
+      <td>m.w.</td>
+      <td>schuller</td>
+    </tr>
+    <tr>
+      <th>979</th>
+      <td>j.h.</td>
+      <td>seters</td>
+    </tr>
+    <tr>
+      <th>980</th>
+      <td>s.k.</td>
+      <td>setz</td>
+    </tr>
+    <tr>
+      <th>981</th>
+      <td>r.f.w.</td>
+      <td>seumeren</td>
+    </tr>
+    <tr>
+      <th>982</th>
+      <td>m.m.j.</td>
+      <td>severiens</td>
+    </tr>
+    <tr>
+      <th>983</th>
+      <td>s.</td>
+      <td>shenbar</td>
+    </tr>
+    <tr>
+      <th>984</th>
+      <td>j.c.e.</td>
+      <td>siebenga-moggre</td>
+    </tr>
+    <tr>
+      <th>985</th>
+      <td>j.c.</td>
+      <td>siebert</td>
+    </tr>
+    <tr>
+      <th>986</th>
+      <td>i.p.</td>
+      <td>sigmond</td>
+    </tr>
+    <tr>
+      <th>987</th>
+      <td>j.h.</td>
+      <td>sigtenhorst</td>
+    </tr>
+    <tr>
+      <th>988</th>
+      <td>b.a.p.</td>
+      <td>sijben</td>
+    </tr>
+    <tr>
+      <th>989</th>
+      <td>m.l.</td>
+      <td>sijes</td>
+    </tr>
+    <tr>
+      <th>990</th>
+      <td>j.c.m.</td>
+      <td>silvius</td>
+    </tr>
+    <tr>
+      <th>991</th>
+      <td>r.</td>
+      <td>sinke</td>
+    </tr>
+    <tr>
+      <th>992</th>
+      <td>i.m.</td>
+      <td>sinnige</td>
+    </tr>
+    <tr>
+      <th>993</th>
+      <td>m.</td>
+      <td>sintmaartensdijk</td>
+    </tr>
+    <tr>
+      <th>994</th>
+      <td>r.j.m.</td>
+      <td>sintnicolaas</td>
+    </tr>
+    <tr>
+      <th>995</th>
+      <td>l.</td>
+      <td>sjoerts</td>
+    </tr>
+    <tr>
+      <th>996</th>
+      <td>d.</td>
+      <td>sjouke</td>
+    </tr>
+    <tr>
+      <th>997</th>
+      <td>c.w.m.</td>
+      <td>slegers</td>
+    </tr>
+    <tr>
+      <th>998</th>
+      <td>r.</td>
+      <td>slotboom</td>
+    </tr>
+    <tr>
+      <th>999</th>
+      <td>p.j.g.g.</td>
+      <td>sluijter</td>
+    </tr>
+    <tr>
+      <th>1000</th>
+      <td>d.</td>
+      <td>sluis</td>
+    </tr>
+    <tr>
+      <th>1001</th>
+      <td>l.t.</td>
+      <td>sluis</td>
+    </tr>
+    <tr>
+      <th>1002</th>
+      <td>p.</td>
+      <td>sluis</td>
+    </tr>
+    <tr>
+      <th>1003</th>
+      <td>p.g.g.j.</td>
+      <td>sluyter</td>
+    </tr>
+    <tr>
+      <th>1004</th>
+      <td>p.j.g.g.</td>
+      <td>sluyter</td>
+    </tr>
+    <tr>
+      <th>1005</th>
+      <td>j.</td>
+      <td>smael</td>
+    </tr>
+    <tr>
+      <th>1006</th>
+      <td>j.h.</td>
+      <td>smeets</td>
+    </tr>
+    <tr>
+      <th>1007</th>
+      <td>f.f.a.</td>
+      <td>smetsers</td>
+    </tr>
+    <tr>
+      <th>1008</th>
+      <td>g.h.</td>
+      <td>smink</td>
+    </tr>
+    <tr>
+      <th>1009</th>
+      <td>r.h.</td>
+      <td>smink</td>
+    </tr>
+    <tr>
+      <th>1010</th>
+      <td>e.</td>
+      <td>smit</td>
+    </tr>
+    <tr>
+      <th>1011</th>
+      <td>m.a.</td>
+      <td>smits</td>
+    </tr>
+    <tr>
+      <th>1012</th>
+      <td>w.j.g.</td>
+      <td>smits</td>
+    </tr>
+    <tr>
+      <th>1013</th>
+      <td>f.g.h.</td>
+      <td>snippers</td>
+    </tr>
+    <tr>
+      <th>1015</th>
+      <td>f.j.h.</td>
+      <td>somers</td>
+    </tr>
+    <tr>
+      <th>1016</th>
+      <td>j.c.</td>
+      <td>sorbi</td>
+    </tr>
+    <tr>
+      <th>1017</th>
+      <td>m.w.m.</td>
+      <td>souren</td>
+    </tr>
+    <tr>
+      <th>1018</th>
+      <td>m.</td>
+      <td>spaa</td>
+    </tr>
+    <tr>
+      <th>1019</th>
+      <td>w.</td>
+      <td>spaa</td>
+    </tr>
+    <tr>
+      <th>1020</th>
+      <td>r.s.</td>
+      <td>spek</td>
+    </tr>
+    <tr>
+      <th>1021</th>
+      <td>m.a.a.</td>
+      <td>spekhorst</td>
+    </tr>
+    <tr>
+      <th>1022</th>
+      <td>c.a.</td>
+      <td>spekschoor</td>
+    </tr>
+    <tr>
+      <th>1023</th>
+      <td>a.a.m.</td>
+      <td>spliet</td>
+    </tr>
+    <tr>
+      <th>1024</th>
+      <td>a.m.m.</td>
+      <td>spliet</td>
+    </tr>
+    <tr>
+      <th>1025</th>
+      <td>a.p.h.</td>
+      <td>spoor</td>
+    </tr>
+    <tr>
+      <th>1026</th>
+      <td>h.g.a.m.</td>
+      <td>spoormans</td>
+    </tr>
+    <tr>
+      <th>1027</th>
+      <td>j.m.</td>
+      <td>sprangers</td>
+    </tr>
+    <tr>
+      <th>1028</th>
+      <td>c.f.m.p.</td>
+      <td>spreksel</td>
+    </tr>
+    <tr>
+      <th>1029</th>
+      <td>c.f.p.m.</td>
+      <td>spreksel</td>
+    </tr>
+    <tr>
+      <th>1030</th>
+      <td>j.e.</td>
+      <td>stadig</td>
+    </tr>
+    <tr>
+      <th>1031</th>
+      <td>j.s.</td>
+      <td>staijen</td>
+    </tr>
+    <tr>
+      <th>1032</th>
+      <td>j.a.</td>
+      <td>stal</td>
+    </tr>
+    <tr>
+      <th>1033</th>
+      <td>e.j.m.</td>
+      <td>stals</td>
+    </tr>
+    <tr>
+      <th>1034</th>
+      <td>r.</td>
+      <td>stam</td>
+    </tr>
+    <tr>
+      <th>1035</th>
+      <td>f.c.h.m.</td>
+      <td>stap</td>
+    </tr>
+    <tr>
+      <th>1036</th>
+      <td>m.d.b.</td>
+      <td>stap</td>
+    </tr>
+    <tr>
+      <th>1037</th>
+      <td>h.j.m.</td>
+      <td>stassen</td>
+    </tr>
+    <tr>
+      <th>1038</th>
+      <td>j.g.m.</td>
+      <td>stassen</td>
+    </tr>
+    <tr>
+      <th>1039</th>
+      <td>m.h.j.m.</td>
+      <td>stassen</td>
+    </tr>
+    <tr>
+      <th>1040</th>
+      <td>p.j.</td>
+      <td>steen</td>
+    </tr>
+    <tr>
+      <th>1041</th>
+      <td>l.j.</td>
+      <td>steenbergen</td>
+    </tr>
+    <tr>
+      <th>1042</th>
+      <td>a.j.</td>
+      <td>steenderen</td>
+    </tr>
+    <tr>
+      <th>1043</th>
+      <td>r.c.</td>
+      <td>steenhoek</td>
+    </tr>
+    <tr>
+      <th>1044</th>
+      <td>a.h.m.</td>
+      <td>steenhoven</td>
+    </tr>
+    <tr>
+      <th>1045</th>
+      <td>w.p.</td>
+      <td>steenhuisen</td>
+    </tr>
+    <tr>
+      <th>1046</th>
+      <td>w.p.h.</td>
+      <td>steenhuisen</td>
+    </tr>
+    <tr>
+      <th>1047</th>
+      <td>m.w.</td>
+      <td>steenpoorte</td>
+    </tr>
+    <tr>
+      <th>1048</th>
+      <td>e.h.</td>
+      <td>steentjes</td>
+    </tr>
+    <tr>
+      <th>1049</th>
+      <td>d.</td>
+      <td>steffens</td>
+    </tr>
+    <tr>
+      <th>1050</th>
+      <td>t.</td>
+      <td>steffens</td>
+    </tr>
+    <tr>
+      <th>1051</th>
+      <td>a.l.</td>
+      <td>stegeman</td>
+    </tr>
+    <tr>
+      <th>1052</th>
+      <td>j.t.</td>
+      <td>stekelenburg</td>
+    </tr>
+    <tr>
+      <th>1053</th>
+      <td>w.c.g.j.</td>
+      <td>sterk</td>
+    </tr>
+    <tr>
+      <th>1054</th>
+      <td>j.h.</td>
+      <td>steverink</td>
+    </tr>
+    <tr>
+      <th>1055</th>
+      <td>f.f.</td>
+      <td>stiekema</td>
+    </tr>
+    <tr>
+      <th>1056</th>
+      <td>j.</td>
+      <td>stoker</td>
+    </tr>
+    <tr>
+      <th>1057</th>
+      <td>a.j.</td>
+      <td>stokkers</td>
+    </tr>
+    <tr>
+      <th>1058</th>
+      <td>j.e.</td>
+      <td>stokx</td>
+    </tr>
+    <tr>
+      <th>1059</th>
+      <td>i.</td>
+      <td>stolting</td>
+    </tr>
+    <tr>
+      <th>1061</th>
+      <td>c.h.</td>
+      <td>strijkert</td>
+    </tr>
+    <tr>
+      <th>1062</th>
+      <td>c.m.</td>
+      <td>stroo</td>
+    </tr>
+    <tr>
+      <th>1063</th>
+      <td>w.m.</td>
+      <td>sturms</td>
+    </tr>
+    <tr>
+      <th>1064</th>
+      <td>h.j.</td>
+      <td>suijver</td>
+    </tr>
+    <tr>
+      <th>1065</th>
+      <td>j.a.w.</td>
+      <td>suijver</td>
+    </tr>
+    <tr>
+      <th>1066</th>
+      <td>a.j.j.</td>
+      <td>sweens</td>
+    </tr>
+    <tr>
+      <th>1067</th>
+      <td>e.c.n.</td>
+      <td>sweep</td>
+    </tr>
+    <tr>
+      <th>1068</th>
+      <td>i.</td>
+      <td>swennen</td>
+    </tr>
+    <tr>
+      <th>1069</th>
+      <td>y.h.</td>
+      <td>talstra</td>
+    </tr>
+    <tr>
+      <th>1070</th>
+      <td>j.</td>
+      <td>tanger</td>
+    </tr>
+    <tr>
+      <th>1071</th>
+      <td>r.o.</td>
+      <td>tefij</td>
+    </tr>
+    <tr>
+      <th>1072</th>
+      <td>a.j.</td>
+      <td>tekstra</td>
+    </tr>
+    <tr>
+      <th>1073</th>
+      <td>m.</td>
+      <td>telderman</td>
+    </tr>
+    <tr>
+      <th>1074</th>
+      <td>e.i.</td>
+      <td>terborg-wijnaldum</td>
+    </tr>
+    <tr>
+      <th>1076</th>
+      <td>v.</td>
+      <td>terlouw</td>
+    </tr>
+    <tr>
+      <th>1077</th>
+      <td>a.s.k.</td>
+      <td>terng</td>
+    </tr>
+    <tr>
+      <th>1078</th>
+      <td>n.c.</td>
+      <td>teubel</td>
+    </tr>
+    <tr>
+      <th>1079</th>
+      <td>a.</td>
+      <td>teune</td>
+    </tr>
+    <tr>
+      <th>1080</th>
+      <td>m.g.i.w.</td>
+      <td>teunis</td>
+    </tr>
+    <tr>
+      <th>1081</th>
+      <td>j.</td>
+      <td>thiele</td>
+    </tr>
+    <tr>
+      <th>1082</th>
+      <td>j.m.a.j.</td>
+      <td>thielen</td>
+    </tr>
+    <tr>
+      <th>1083</th>
+      <td>r.j.h.</td>
+      <td>thijssen</td>
+    </tr>
+    <tr>
+      <th>1084</th>
+      <td>m.j.</td>
+      <td>thoenes</td>
+    </tr>
+    <tr>
+      <th>1085</th>
+      <td>b.j.</td>
+      <td>tideman</td>
+    </tr>
+    <tr>
+      <th>1086</th>
+      <td>j.a.</td>
+      <td>tiesing</td>
+    </tr>
+    <tr>
+      <th>1087</th>
+      <td>f.h.</td>
+      <td>tiethoff</td>
+    </tr>
+    <tr>
+      <th>1088</th>
+      <td>c.j.</td>
+      <td>tijman</td>
+    </tr>
+    <tr>
+      <th>1089</th>
+      <td>m.f.j.j.m.</td>
+      <td>tijssen</td>
+    </tr>
+    <tr>
+      <th>1090</th>
+      <td>c.l.</td>
+      <td>tilburg</td>
+    </tr>
+    <tr>
+      <th>1091</th>
+      <td>b.p.j.</td>
+      <td>tillemans</td>
+    </tr>
+    <tr>
+      <th>1092</th>
+      <td>s.b.m.</td>
+      <td>tilman</td>
+    </tr>
+    <tr>
+      <th>1093</th>
+      <td>c.w.</td>
+      <td>timmer</td>
+    </tr>
+    <tr>
+      <th>1094</th>
+      <td>m.</td>
+      <td>timmer</td>
+    </tr>
+    <tr>
+      <th>1095</th>
+      <td>b.p.</td>
+      <td>togt</td>
+    </tr>
+    <tr>
+      <th>1096</th>
+      <td>y.c.</td>
+      <td>tonino</td>
+    </tr>
+    <tr>
+      <th>1097</th>
+      <td>j.l.f.</td>
+      <td>tooren</td>
+    </tr>
+    <tr>
+      <th>1098</th>
+      <td>m.j.</td>
+      <td>tops</td>
+    </tr>
+    <tr>
+      <th>1099</th>
+      <td>l.a.</td>
+      <td>tricomi</td>
+    </tr>
+    <tr>
+      <th>1100</th>
+      <td>p.</td>
+      <td>trip</td>
+    </tr>
+    <tr>
+      <th>1101</th>
+      <td>m.p.</td>
+      <td>tuijl</td>
+    </tr>
+    <tr>
+      <th>1102</th>
+      <td>j.w.p.</td>
+      <td>tulfer</td>
+    </tr>
+    <tr>
+      <th>1103</th>
+      <td>j.b.c.</td>
+      <td>tummers</td>
+    </tr>
+    <tr>
+      <th>1104</th>
+      <td>m.j.</td>
+      <td>ubbens</td>
+    </tr>
+    <tr>
+      <th>1105</th>
+      <td>m.c.</td>
+      <td>udink</td>
+    </tr>
+    <tr>
+      <th>1106</th>
+      <td>f.w.</td>
+      <td>udo</td>
+    </tr>
+    <tr>
+      <th>1107</th>
+      <td>m.</td>
+      <td>uijen</td>
+    </tr>
+    <tr>
+      <th>1108</th>
+      <td>c.w.h.m.</td>
+      <td>uitdehaag</td>
+    </tr>
+    <tr>
+      <th>1109</th>
+      <td>j.w.</td>
+      <td>uiterlinden</td>
+    </tr>
+    <tr>
+      <th>1110</th>
+      <td>j.p.</td>
+      <td>uittenbroek</td>
+    </tr>
+    <tr>
+      <th>1111</th>
+      <td>g.e.r.</td>
+      <td>ummelen</td>
+    </tr>
+    <tr>
+      <th>1112</th>
+      <td>c.</td>
+      <td>van den bergh</td>
+    </tr>
+    <tr>
+      <th>1113</th>
+      <td>r.c.m.</td>
+      <td>van moorsel</td>
+    </tr>
+    <tr>
+      <th>1114</th>
+      <td>a.j.</td>
+      <td>veen-janz</td>
+    </tr>
+    <tr>
+      <th>1115</th>
+      <td>m.m.e.</td>
+      <td>veen-oudenaarden</td>
+    </tr>
+    <tr>
+      <th>1116</th>
+      <td>a.</td>
+      <td>veenstra</td>
+    </tr>
+    <tr>
+      <th>1117</th>
+      <td>a.e.</td>
+      <td>veerman</td>
+    </tr>
+    <tr>
+      <th>1118</th>
+      <td>j.h.t.</td>
+      <td>veldman</td>
+    </tr>
+    <tr>
+      <th>1120</th>
+      <td>j.a.</td>
+      <td>velenturf</td>
+    </tr>
+    <tr>
+      <th>1121</th>
+      <td>g.f.h.</td>
+      <td>velthuizen</td>
+    </tr>
+    <tr>
+      <th>1122</th>
+      <td>g.c.</td>
+      <td>verburg</td>
+    </tr>
+    <tr>
+      <th>1123</th>
+      <td>a.j.</td>
+      <td>verdaas</td>
+    </tr>
+    <tr>
+      <th>1124</th>
+      <td>r.</td>
+      <td>verdonk</td>
+    </tr>
+    <tr>
+      <th>1126</th>
+      <td>p.p.h.</td>
+      <td>verheijden</td>
+    </tr>
+    <tr>
+      <th>1127</th>
+      <td>m.</td>
+      <td>verhoeff</td>
+    </tr>
+    <tr>
+      <th>1128</th>
+      <td>f.</td>
+      <td>verhoeven</td>
+    </tr>
+    <tr>
+      <th>1129</th>
+      <td>m.w.</td>
+      <td>verhoeven</td>
+    </tr>
+    <tr>
+      <th>1130</th>
+      <td>e.w.m.</td>
+      <td>verkooijen</td>
+    </tr>
+    <tr>
+      <th>1131</th>
+      <td>f.f.p.m.</td>
+      <td>vermeer</td>
+    </tr>
+    <tr>
+      <th>1132</th>
+      <td>m.j.h.</td>
+      <td>vermeeren</td>
+    </tr>
+    <tr>
+      <th>1133</th>
+      <td>m.v.</td>
+      <td>vermeij</td>
+    </tr>
+    <tr>
+      <th>1134</th>
+      <td>a.h.h.</td>
+      <td>vermeulen</td>
+    </tr>
+    <tr>
+      <th>1135</th>
+      <td>p.j.w.</td>
+      <td>vermunt</td>
+    </tr>
+    <tr>
+      <th>1136</th>
+      <td>m.j.l.</td>
+      <td>versantvoort</td>
+    </tr>
+    <tr>
+      <th>1137</th>
+      <td>m.j.l.</td>
+      <td>versantwoort</td>
+    </tr>
+    <tr>
+      <th>1138</th>
+      <td>j.a.a.m.</td>
+      <td>verschure</td>
+    </tr>
+    <tr>
+      <th>1139</th>
+      <td>g.j.w.</td>
+      <td>verschuur</td>
+    </tr>
+    <tr>
+      <th>1140</th>
+      <td>m.w.g.</td>
+      <td>versendaal</td>
+    </tr>
+    <tr>
+      <th>1141</th>
+      <td>h.</td>
+      <td>versluis</td>
+    </tr>
+    <tr>
+      <th>1142</th>
+      <td>m.j.g.h.</td>
+      <td>verviers</td>
+    </tr>
+    <tr>
+      <th>1143</th>
+      <td>v.l.m.</td>
+      <td>verweijen</td>
+    </tr>
+    <tr>
+      <th>1144</th>
+      <td>e.j.r.</td>
+      <td>verwey</td>
+    </tr>
+    <tr>
+      <th>1145</th>
+      <td>j.l.g.m.</td>
+      <td>verwiel</td>
+    </tr>
+    <tr>
+      <th>1146</th>
+      <td>p.h.</td>
+      <td>vestiens</td>
+    </tr>
+    <tr>
+      <th>1147</th>
+      <td>n.</td>
+      <td>vinke</td>
+    </tr>
+    <tr>
+      <th>1148</th>
+      <td>c.</td>
+      <td>visser</td>
+    </tr>
+    <tr>
+      <th>1149</th>
+      <td>j.a.</td>
+      <td>visser</td>
+    </tr>
+    <tr>
+      <th>1150</th>
+      <td>p.a.</td>
+      <td>visser</td>
+    </tr>
+    <tr>
+      <th>1151</th>
+      <td>s.</td>
+      <td>visser</td>
+    </tr>
+    <tr>
+      <th>1152</th>
+      <td>w.t.n.</td>
+      <td>vlasveld</td>
+    </tr>
+    <tr>
+      <th>1153</th>
+      <td>j.i.</td>
+      <td>vlijmen</td>
+    </tr>
+    <tr>
+      <th>1154</th>
+      <td>s.a.</td>
+      <td>voermans</td>
+    </tr>
+    <tr>
+      <th>1155</th>
+      <td>g.m.</td>
+      <td>volkerink</td>
+    </tr>
+    <tr>
+      <th>1156</th>
+      <td>d.s.</td>
+      <td>volleberg</td>
+    </tr>
+    <tr>
+      <th>1157</th>
+      <td>w.b.m.</td>
+      <td>vondenhoff</td>
+    </tr>
+    <tr>
+      <th>1158</th>
+      <td>f.t.p.</td>
+      <td>voorst</td>
+    </tr>
+    <tr>
+      <th>1159</th>
+      <td>r.a.</td>
+      <td>voort</td>
+    </tr>
+    <tr>
+      <th>1160</th>
+      <td>f.j.p.f.</td>
+      <td>vos</td>
+    </tr>
+    <tr>
+      <th>1161</th>
+      <td>s.</td>
+      <td>vos</td>
+    </tr>
+    <tr>
+      <th>1162</th>
+      <td>s.w.</td>
+      <td>vos</td>
+    </tr>
+    <tr>
+      <th>1163</th>
+      <td>j.f.l.p.m.</td>
+      <td>vrancken peeters</td>
+    </tr>
+    <tr>
+      <th>1164</th>
+      <td>e.h.</td>
+      <td>vries</td>
+    </tr>
+    <tr>
+      <th>1165</th>
+      <td>h.j.w.</td>
+      <td>vries</td>
+    </tr>
+    <tr>
+      <th>1166</th>
+      <td>l.j.a.</td>
+      <td>vries</td>
+    </tr>
+    <tr>
+      <th>1167</th>
+      <td>m.</td>
+      <td>vries</td>
+    </tr>
+    <tr>
+      <th>1168</th>
+      <td>m.h.</td>
+      <td>vries</td>
+    </tr>
+    <tr>
+      <th>1169</th>
+      <td>s.j.</td>
+      <td>vries</td>
+    </tr>
+    <tr>
+      <th>1170</th>
+      <td>m.a.m.</td>
+      <td>vries-meijer</td>
+    </tr>
+    <tr>
+      <th>1172</th>
+      <td>m.</td>
+      <td>vriezekolk</td>
+    </tr>
+    <tr>
+      <th>1173</th>
+      <td>r.j.</td>
+      <td>vriezen</td>
+    </tr>
+    <tr>
+      <th>1174</th>
+      <td>d.j.j.</td>
+      <td>vrijbergen</td>
+    </tr>
+    <tr>
+      <th>1175</th>
+      <td>r.a.</td>
+      <td>weelderen</td>
+    </tr>
+    <tr>
+      <th>1176</th>
+      <td>n.</td>
+      <td>wilderink</td>
+    </tr>
+    <tr>
+      <th>1177</th>
+      <td>i.j.</td>
+      <td>woltman</td>
+    </tr>
+    <tr>
+      <th>1178</th>
+      <td>h.j.d.</td>
+      <td>waarbeek</td>
+    </tr>
+    <tr>
+      <th>1179</th>
+      <td>j.a.</td>
+      <td>waard</td>
+    </tr>
+    <tr>
+      <th>1180</th>
+      <td>e.c.m.</td>
+      <td>wagemakers</td>
+    </tr>
+    <tr>
+      <th>1181</th>
+      <td>j.a.</td>
+      <td>wagenaar</td>
+    </tr>
+    <tr>
+      <th>1182</th>
+      <td>m.</td>
+      <td>waijers</td>
+    </tr>
+    <tr>
+      <th>1183</th>
+      <td>e.</td>
+      <td>walinga</td>
+    </tr>
+    <tr>
+      <th>1184</th>
+      <td>l.a.</td>
+      <td>walree-brascamp</td>
+    </tr>
+    <tr>
+      <th>1186</th>
+      <td>m.h.c.</td>
+      <td>wammes</td>
+    </tr>
+    <tr>
+      <th>1187</th>
+      <td>i.m.m.</td>
+      <td>warmerdam</td>
+    </tr>
+    <tr>
+      <th>1188</th>
+      <td>d.</td>
+      <td>warnink</td>
+    </tr>
+    <tr>
+      <th>1189</th>
+      <td>s.a.h.j.</td>
+      <td>warringa</td>
+    </tr>
+    <tr>
+      <th>1191</th>
+      <td>g.w.</td>
+      <td>weenink</td>
+    </tr>
+    <tr>
+      <th>1192</th>
+      <td>p.</td>
+      <td>weenink</td>
+    </tr>
+    <tr>
+      <th>1193</th>
+      <td>c.a.</td>
+      <td>weerdt</td>
+    </tr>
+    <tr>
+      <th>1194</th>
+      <td>a.m.t.</td>
+      <td>weersink</td>
+    </tr>
+    <tr>
+      <th>1195</th>
+      <td>j.h.</td>
+      <td>weide</td>
+    </tr>
+    <tr>
+      <th>1196</th>
+      <td>r.j.</td>
+      <td>weijden</td>
+    </tr>
+    <tr>
+      <th>1197</th>
+      <td>r.j.</td>
+      <td>weijs</td>
+    </tr>
+    <tr>
+      <th>1198</th>
+      <td>h.a.w.</td>
+      <td>wel</td>
+    </tr>
+    <tr>
+      <th>1199</th>
+      <td>w.m.</td>
+      <td>welage</td>
+    </tr>
+    <tr>
+      <th>1200</th>
+      <td>t.r.m.</td>
+      <td>welling</td>
+    </tr>
+    <tr>
+      <th>1201</th>
+      <td>e.c.</td>
+      <td>welmerink</td>
+    </tr>
+    <tr>
+      <th>1202</th>
+      <td>f.m.y.</td>
+      <td>wertenbroek</td>
+    </tr>
+    <tr>
+      <th>1203</th>
+      <td>m.h.j.a.</td>
+      <td>wesselink</td>
+    </tr>
+    <tr>
+      <th>1204</th>
+      <td>j.</td>
+      <td>westerhof</td>
+    </tr>
+    <tr>
+      <th>1205</th>
+      <td>w.h.z.</td>
+      <td>westerhof</td>
+    </tr>
+    <tr>
+      <th>1206</th>
+      <td>m.</td>
+      <td>wevers</td>
+    </tr>
+    <tr>
+      <th>1207</th>
+      <td>h.m.</td>
+      <td>wiechers</td>
+    </tr>
+    <tr>
+      <th>1208</th>
+      <td>j.h.m.</td>
+      <td>wiel</td>
+    </tr>
+    <tr>
+      <th>1209</th>
+      <td>f.k.</td>
+      <td>wieland</td>
+    </tr>
+    <tr>
+      <th>1210</th>
+      <td>l.</td>
+      <td>wieringa</td>
+    </tr>
+    <tr>
+      <th>1211</th>
+      <td>h.a.</td>
+      <td>wiggers</td>
+    </tr>
+    <tr>
+      <th>1212</th>
+      <td>p.</td>
+      <td>wijbrands</td>
+    </tr>
+    <tr>
+      <th>1213</th>
+      <td>r.a.</td>
+      <td>wijk</td>
+    </tr>
+    <tr>
+      <th>1214</th>
+      <td>r.h.h.</td>
+      <td>wijk</td>
+    </tr>
+    <tr>
+      <th>1215</th>
+      <td>s.</td>
+      <td>wijk</td>
+    </tr>
+    <tr>
+      <th>1216</th>
+      <td>r.</td>
+      <td>wijn</td>
+    </tr>
+    <tr>
+      <th>1217</th>
+      <td>b.j.</td>
+      <td>wijnckel</td>
+    </tr>
+    <tr>
+      <th>1218</th>
+      <td>j.h.a.</td>
+      <td>wildenberg</td>
+    </tr>
+    <tr>
+      <th>1220</th>
+      <td>j.j.c.m.</td>
+      <td>willemen</td>
+    </tr>
+    <tr>
+      <th>1221</th>
+      <td>h.m.</td>
+      <td>willems</td>
+    </tr>
+    <tr>
+      <th>1222</th>
+      <td>i.j.m.</td>
+      <td>willems</td>
+    </tr>
+    <tr>
+      <th>1223</th>
+      <td>m.a.l.m.</td>
+      <td>willems</td>
+    </tr>
+    <tr>
+      <th>1224</th>
+      <td>b.</td>
+      <td>willemse</td>
+    </tr>
+    <tr>
+      <th>1225</th>
+      <td>b.p.</td>
+      <td>willemse</td>
+    </tr>
+    <tr>
+      <th>1226</th>
+      <td>k.j.</td>
+      <td>willemse</td>
+    </tr>
+    <tr>
+      <th>1227</th>
+      <td>j.</td>
+      <td>wind</td>
+    </tr>
+    <tr>
+      <th>1228</th>
+      <td>m.</td>
+      <td>windt</td>
+    </tr>
+    <tr>
+      <th>1230</th>
+      <td>m.c.h.g.</td>
+      <td>winkels</td>
+    </tr>
+    <tr>
+      <th>1231</th>
+      <td>s.</td>
+      <td>winkels-koerselman</td>
+    </tr>
+    <tr>
+      <th>1232</th>
+      <td>d.</td>
+      <td>winters</td>
+    </tr>
+    <tr>
+      <th>1233</th>
+      <td>g.a.</td>
+      <td>wit</td>
+    </tr>
+    <tr>
+      <th>1234</th>
+      <td>r.p.a.</td>
+      <td>wit</td>
+    </tr>
+    <tr>
+      <th>1235</th>
+      <td>o.e.</td>
+      <td>witt wijnen</td>
+    </tr>
+    <tr>
+      <th>1236</th>
+      <td>j.j.</td>
+      <td>wittekamp</td>
+    </tr>
+    <tr>
+      <th>1237</th>
+      <td>b.s.</td>
+      <td>witteveen</td>
+    </tr>
+    <tr>
+      <th>1238</th>
+      <td>h.j.g.m.</td>
+      <td>woerd</td>
+    </tr>
+    <tr>
+      <th>1239</th>
+      <td>l.l.</td>
+      <td>wolde</td>
+    </tr>
+    <tr>
+      <th>1240</th>
+      <td>j.m.</td>
+      <td>wolfs</td>
+    </tr>
+    <tr>
+      <th>1241</th>
+      <td>t.e.</td>
+      <td>wolfswinkel</td>
+    </tr>
+    <tr>
+      <th>1243</th>
+      <td>g.w.</td>
+      <td>wullink</td>
+    </tr>
+    <tr>
+      <th>1244</th>
+      <td>j.m.</td>
+      <td>wulp</td>
+    </tr>
+    <tr>
+      <th>1245</th>
+      <td>p.s.</td>
+      <td>zandbergen</td>
+    </tr>
+    <tr>
+      <th>1247</th>
+      <td>m.r.</td>
+      <td>zanten</td>
+    </tr>
+    <tr>
+      <th>1248</th>
+      <td>e.l.</td>
+      <td>zetteler</td>
+    </tr>
+    <tr>
+      <th>1249</th>
+      <td>m.j.f.</td>
+      <td>zoeteweij</td>
+    </tr>
+    <tr>
+      <th>1250</th>
+      <td>c.m.</td>
+      <td>zuiden</td>
+    </tr>
+    <tr>
+      <th>1251</th>
+      <td>t.h.j.</td>
+      <td>zwiers</td>
+    </tr>
+    <tr>
+      <th>1252</th>
+      <td>t.j.h.</td>
+      <td>zwiers</td>
+    </tr>
+    <tr>
+      <th>1254</th>
+      <td>m.</td>
+      <td>de bakker</td>
+    </tr>
+    <tr>
+      <th>1255</th>
+      <td>g.j.</td>
+      <td>de bock</td>
+    </tr>
+    <tr>
+      <th>1256</th>
+      <td>l.l.</td>
+      <td>de boef</td>
+    </tr>
+    <tr>
+      <th>1257</th>
+      <td>c.r.n.</td>
+      <td>de boer</td>
+    </tr>
+    <tr>
+      <th>1258</th>
+      <td>e.a.</td>
+      <td>de boer</td>
+    </tr>
+    <tr>
+      <th>1259</th>
+      <td>h.</td>
+      <td>de boer</td>
+    </tr>
+    <tr>
+      <th>1260</th>
+      <td>i.</td>
+      <td>de boer</td>
+    </tr>
+    <tr>
+      <th>1261</th>
+      <td>r.j.r.m.</td>
+      <td>de bok</td>
+    </tr>
+    <tr>
+      <th>1262</th>
+      <td>c.w.j.</td>
+      <td>de bont</td>
+    </tr>
+    <tr>
+      <th>1263</th>
+      <td>c.m.</td>
+      <td>de breet</td>
+    </tr>
+    <tr>
+      <th>1264</th>
+      <td>c.a.m.</td>
+      <td>de bruijn</td>
+    </tr>
+    <tr>
+      <th>1265</th>
+      <td>r.p.</td>
+      <td>de bruin</td>
+    </tr>
+    <tr>
+      <th>1266</th>
+      <td>j.l.</td>
+      <td>de crom</td>
+    </tr>
+    <tr>
+      <th>1267</th>
+      <td>p.</td>
+      <td>de graaf</td>
+    </tr>
+    <tr>
+      <th>1268</th>
+      <td>a.</td>
+      <td>de greef</td>
+    </tr>
+    <tr>
+      <th>1269</th>
+      <td>a.</td>
+      <td>de groot</td>
+    </tr>
+    <tr>
+      <th>1270</th>
+      <td>h.j.</td>
+      <td>de groot</td>
+    </tr>
+    <tr>
+      <th>1271</th>
+      <td>m.n.</td>
+      <td>de groot</td>
+    </tr>
+    <tr>
+      <th>1272</th>
+      <td>d.h.</td>
+      <td>de haan</td>
+    </tr>
+    <tr>
+      <th>1273</th>
+      <td>e.l.</td>
+      <td>de haan</td>
+    </tr>
+    <tr>
+      <th>1274</th>
+      <td>c.</td>
+      <td>de jong</td>
+    </tr>
+    <tr>
+      <th>1275</th>
+      <td>l.c.</td>
+      <td>de jong</td>
+    </tr>
+    <tr>
+      <th>1276</th>
+      <td>m.</td>
+      <td>de jong</td>
+    </tr>
+    <tr>
+      <th>1277</th>
+      <td>j.a.m.</td>
+      <td>de kerf</td>
+    </tr>
+    <tr>
+      <th>1278</th>
+      <td>p.j.f.m.</td>
+      <td>de kerf</td>
+    </tr>
+    <tr>
+      <th>1279</th>
+      <td>k.e.h.</td>
+      <td>de klerk</td>
+    </tr>
+    <tr>
+      <th>1280</th>
+      <td>j.m.</td>
+      <td>de koning</td>
+    </tr>
+    <tr>
+      <th>1281</th>
+      <td>p.</td>
+      <td>de koning</td>
+    </tr>
+    <tr>
+      <th>1282</th>
+      <td>r.e.p.</td>
+      <td>de koning</td>
+    </tr>
+    <tr>
+      <th>1283</th>
+      <td>p.a.</td>
+      <td>de lange</td>
+    </tr>
+    <tr>
+      <th>1284</th>
+      <td>r.v.</td>
+      <td>de lauwere</td>
+    </tr>
+    <tr>
+      <th>1285</th>
+      <td>j.b.</td>
+      <td>de meester</td>
+    </tr>
+    <tr>
+      <th>1286</th>
+      <td>a.t.</td>
+      <td>de putter</td>
+    </tr>
+    <tr>
+      <th>1287</th>
+      <td>c.j.</td>
+      <td>de vries</td>
+    </tr>
+    <tr>
+      <th>1288</th>
+      <td>e.h.</td>
+      <td>de vries</td>
+    </tr>
+    <tr>
+      <th>1289</th>
+      <td>l.j.a.</td>
+      <td>de vries</td>
+    </tr>
+    <tr>
+      <th>1290</th>
+      <td>m.</td>
+      <td>de vries</td>
+    </tr>
+    <tr>
+      <th>1291</th>
+      <td>m.h.</td>
+      <td>de vries</td>
+    </tr>
+    <tr>
+      <th>1292</th>
+      <td>s.j.</td>
+      <td>de vries</td>
+    </tr>
+    <tr>
+      <th>1293</th>
+      <td>m.a.m.</td>
+      <td>de vries-meijer</td>
+    </tr>
+    <tr>
+      <th>1294</th>
+      <td>a.r.</td>
+      <td>de vries-oosterveld</td>
+    </tr>
+    <tr>
+      <th>1295</th>
+      <td>j.a.</td>
+      <td>de waard</td>
+    </tr>
+    <tr>
+      <th>1296</th>
+      <td>c.a.</td>
+      <td>de weerdt</td>
+    </tr>
+    <tr>
+      <th>1297</th>
+      <td>j.p.</td>
+      <td>de wilde</td>
+    </tr>
+    <tr>
+      <th>1298</th>
+      <td>g.a.</td>
+      <td>de wit</td>
+    </tr>
+    <tr>
+      <th>1299</th>
+      <td>r.p.a.</td>
+      <td>de wit</td>
+    </tr>
+    <tr>
+      <th>1300</th>
+      <td>o.e.</td>
+      <td>de witt wijnen</td>
+    </tr>
+    <tr>
+      <th>1303</th>
+      <td></td>
+      <td>van bunge</td>
+    </tr>
+    <tr>
+      <th>1304</th>
+      <td></td>
+      <td>de roy van zuidewijn</td>
+    </tr>
+    <tr>
+      <th>1305</th>
+      <td></td>
+      <td>boddaert</td>
+    </tr>
+    <tr>
+      <th>1306</th>
+      <td>g.</td>
+      <td>te biesebeek</td>
+    </tr>
+    <tr>
+      <th>1307</th>
+      <td>a.y.</td>
+      <td>te kiefte</td>
+    </tr>
+    <tr>
+      <th>1308</th>
+      <td>h.j.g.m.</td>
+      <td>te woerd</td>
+    </tr>
+    <tr>
+      <th>1309</th>
+      <td>e.a.h.</td>
+      <td>ten berge</td>
+    </tr>
+    <tr>
+      <th>1310</th>
+      <td>s.f.m.</td>
+      <td>ten berge</td>
+    </tr>
+    <tr>
+      <th>1311</th>
+      <td>g.j.</td>
+      <td>ten hagen</td>
+    </tr>
+    <tr>
+      <th>1312</th>
+      <td>l.l.</td>
+      <td>ten wolde</td>
+    </tr>
+    <tr>
+      <th>1313</th>
+      <td>m.g.e.</td>
+      <td>ter hart</td>
+    </tr>
+    <tr>
+      <th>1314</th>
+      <td>m.k.</td>
+      <td>ter horst</td>
+    </tr>
+    <tr>
+      <th>1315</th>
+      <td>h.j.d.</td>
+      <td>ter waarbeek</td>
+    </tr>
+    <tr>
+      <th>1316</th>
+      <td>f.b.m.</td>
+      <td>van aanhold</td>
+    </tr>
+    <tr>
+      <th>1317</th>
+      <td>w.j.m.</td>
+      <td>van andel</td>
+    </tr>
+    <tr>
+      <th>1318</th>
+      <td>g.t.c.</td>
+      <td>van apeldoorn</td>
+    </tr>
+    <tr>
+      <th>1319</th>
+      <td>l.j.</td>
+      <td>van apeldoorn</td>
+    </tr>
+    <tr>
+      <th>1320</th>
+      <td>j.g.c.</td>
+      <td>van baar</td>
+    </tr>
+    <tr>
+      <th>1321</th>
+      <td>h.a.</td>
+      <td>van beilen</td>
+    </tr>
+    <tr>
+      <th>1322</th>
+      <td>a.j.</td>
+      <td>van bergen</td>
+    </tr>
+    <tr>
+      <th>1323</th>
+      <td>r.j.</td>
+      <td>van betten</td>
+    </tr>
+    <tr>
+      <th>1324</th>
+      <td>j.p.w.</td>
+      <td>van bohemen</td>
+    </tr>
+    <tr>
+      <th>1325</th>
+      <td>m.</td>
+      <td>van bommel</td>
+    </tr>
+    <tr>
+      <th>1326</th>
+      <td>r.p.</td>
+      <td>van boven</td>
+    </tr>
+    <tr>
+      <th>1327</th>
+      <td>b.p.w.</td>
+      <td>van brink</td>
+    </tr>
+    <tr>
+      <th>1328</th>
+      <td>m.a.a.m.</td>
+      <td>van brunschot-van der sanden</td>
+    </tr>
+    <tr>
+      <th>1329</th>
+      <td>j.s.</td>
+      <td>van burg</td>
+    </tr>
+    <tr>
+      <th>1330</th>
+      <td>a.d.</td>
+      <td>van dalen</td>
+    </tr>
+    <tr>
+      <th>1331</th>
+      <td>j.a.m.</td>
+      <td>van dieren</td>
+    </tr>
+    <tr>
+      <th>1332</th>
+      <td>b.j.</td>
+      <td>van dijen</td>
+    </tr>
+    <tr>
+      <th>1333</th>
+      <td>r.</td>
+      <td>van dijk</td>
+    </tr>
+    <tr>
+      <th>1334</th>
+      <td>w.t.</td>
+      <td>van dijk</td>
+    </tr>
+    <tr>
+      <th>1335</th>
+      <td>v.</td>
+      <td>van dijken</td>
+    </tr>
+    <tr>
+      <th>1336</th>
+      <td>d.j.</td>
+      <td>van dongen</td>
+    </tr>
+    <tr>
+      <th>1337</th>
+      <td>d.t.</td>
+      <td>van donk</td>
+    </tr>
+    <tr>
+      <th>1338</th>
+      <td>s.m.m.</td>
+      <td>van dooren</td>
+    </tr>
+    <tr>
+      <th>1339</th>
+      <td>j.p.</td>
+      <td>van dyck</td>
+    </tr>
+    <tr>
+      <th>1340</th>
+      <td>m.p.</td>
+      <td>van eeden-van harskamp</td>
+    </tr>
+    <tr>
+      <th>1341</th>
+      <td>j.j.j.a.m.</td>
+      <td>van emstede</td>
+    </tr>
+    <tr>
+      <th>1342</th>
+      <td>w.j.a.</td>
+      <td>van es</td>
+    </tr>
+    <tr>
+      <th>1343</th>
+      <td>e.f.e.</td>
+      <td>van essen</td>
+    </tr>
+    <tr>
+      <th>1344</th>
+      <td>m.c.g.</td>
+      <td>van essen</td>
+    </tr>
+    <tr>
+      <th>1345</th>
+      <td>e.g.m.</td>
+      <td>van ewijk</td>
+    </tr>
+    <tr>
+      <th>1346</th>
+      <td>j.r.</td>
+      <td>van faassen</td>
+    </tr>
+    <tr>
+      <th>1347</th>
+      <td>r.j.</td>
+      <td>van galen</td>
+    </tr>
+    <tr>
+      <th>1348</th>
+      <td>l.v.</td>
+      <td>van gardingen</td>
+    </tr>
+    <tr>
+      <th>1349</th>
+      <td>d.m.</td>
+      <td>van geel</td>
+    </tr>
+    <tr>
+      <th>1350</th>
+      <td>m.c.</td>
+      <td>van genugten</td>
+    </tr>
+    <tr>
+      <th>1351</th>
+      <td>s.</td>
+      <td>van gessel</td>
+    </tr>
+    <tr>
+      <th>1352</th>
+      <td>h.l.j.m.</td>
+      <td>van grinsven</td>
+    </tr>
+    <tr>
+      <th>1353</th>
+      <td>e.</td>
+      <td>van gruijthuijsen</td>
+    </tr>
+    <tr>
+      <th>1354</th>
+      <td>a.</td>
+      <td>van hees</td>
+    </tr>
+    <tr>
+      <th>1355</th>
+      <td>a.s.</td>
+      <td>van hilten</td>
+    </tr>
+    <tr>
+      <th>1356</th>
+      <td>j.e.p.a.</td>
+      <td>van hooff</td>
+    </tr>
+    <tr>
+      <th>1357</th>
+      <td>f.a.m.</td>
+      <td>van hooft</td>
+    </tr>
+    <tr>
+      <th>1358</th>
+      <td>s.a.</td>
+      <td>van ierssel</td>
+    </tr>
+    <tr>
+      <th>1359</th>
+      <td>m.j.w.</td>
+      <td>van ingen</td>
+    </tr>
+    <tr>
+      <th>1360</th>
+      <td>w.</td>
+      <td>van kesteren</td>
+    </tr>
+    <tr>
+      <th>1361</th>
+      <td>b.</td>
+      <td>van leeuwen</td>
+    </tr>
+    <tr>
+      <th>1362</th>
+      <td>l.e.</td>
+      <td>van leeuwen</td>
+    </tr>
+    <tr>
+      <th>1363</th>
+      <td>e.c.</td>
+      <td>van lent</td>
+    </tr>
+    <tr>
+      <th>1364</th>
+      <td>w.</td>
+      <td>van leuveren</td>
+    </tr>
+    <tr>
+      <th>1365</th>
+      <td>c.m.</td>
+      <td>van liere</td>
+    </tr>
+    <tr>
+      <th>1366</th>
+      <td>l.b.a.</td>
+      <td>van logtestijn</td>
+    </tr>
+    <tr>
+      <th>1367</th>
+      <td>a.w.</td>
+      <td>van meegdenburg</td>
+    </tr>
+    <tr>
+      <th>1368</th>
+      <td>j.</td>
+      <td>van meerkerk</td>
+    </tr>
+    <tr>
+      <th>1369</th>
+      <td>c.</td>
+      <td>van meines</td>
+    </tr>
+    <tr>
+      <th>1371</th>
+      <td>j.c.</td>
+      <td>van nie</td>
+    </tr>
+    <tr>
+      <th>1372</th>
+      <td>w.j.b.</td>
+      <td>van nielen</td>
+    </tr>
+    <tr>
+      <th>1373</th>
+      <td>b.f.</td>
+      <td>van noort</td>
+    </tr>
+    <tr>
+      <th>1374</th>
+      <td>r.a.m.l.</td>
+      <td>van oeijen</td>
+    </tr>
+    <tr>
+      <th>1375</th>
+      <td>j.</td>
+      <td>van oijen</td>
+    </tr>
+    <tr>
+      <th>1376</th>
+      <td>f.h.m.</td>
+      <td>van oorschot</td>
+    </tr>
+    <tr>
+      <th>1377</th>
+      <td>f.b.a.m.</td>
+      <td>van oss</td>
+    </tr>
+    <tr>
+      <th>1378</th>
+      <td>w.a.</td>
+      <td>van overbeek de meyer</td>
+    </tr>
+    <tr>
+      <th>1379</th>
+      <td>k.</td>
+      <td>van overloop</td>
+    </tr>
+    <tr>
+      <th>1380</th>
+      <td>a.j.h.m.</td>
+      <td>van poorten</td>
+    </tr>
+    <tr>
+      <th>1381</th>
+      <td>j.m.</td>
+      <td>van raaijen</td>
+    </tr>
+    <tr>
+      <th>1382</th>
+      <td>b.k.a.</td>
+      <td>van rijsbergen</td>
+    </tr>
+    <tr>
+      <th>1383</th>
+      <td>j.m.</td>
+      <td>van rongen</td>
+    </tr>
+    <tr>
+      <th>1384</th>
+      <td>g.</td>
+      <td>van rooijen</td>
+    </tr>
+    <tr>
+      <th>1385</th>
+      <td>w.b.</td>
+      <td>van rookhuijzen</td>
+    </tr>
+    <tr>
+      <th>1386</th>
+      <td>p.</td>
+      <td>van rossum</td>
+    </tr>
+    <tr>
+      <th>1387</th>
+      <td>a.o.c.a.</td>
+      <td>van schravendijk</td>
+    </tr>
+    <tr>
+      <th>1388</th>
+      <td>j.h.</td>
+      <td>van seters</td>
+    </tr>
+    <tr>
+      <th>1389</th>
+      <td>r.f.w.</td>
+      <td>van seumeren</td>
+    </tr>
+    <tr>
+      <th>1390</th>
+      <td>m.</td>
+      <td>van sintmaartensdijk</td>
+    </tr>
+    <tr>
+      <th>1391</th>
+      <td>c.l.</td>
+      <td>van tilburg</td>
+    </tr>
+    <tr>
+      <th>1392</th>
+      <td>m.p.</td>
+      <td>van tuijl</td>
+    </tr>
+    <tr>
+      <th>1393</th>
+      <td>m.m.e.</td>
+      <td>van veen-oudenaarden</td>
+    </tr>
+    <tr>
+      <th>1394</th>
+      <td>k.s.l.</td>
+      <td>van vliet</td>
+    </tr>
+    <tr>
+      <th>1395</th>
+      <td>j.i.</td>
+      <td>van vlijmen</td>
+    </tr>
+    <tr>
+      <th>1396</th>
+      <td>f.t.p.</td>
+      <td>van voorst</td>
+    </tr>
+    <tr>
+      <th>1397</th>
+      <td>l.a.</td>
+      <td>van walree-brascamp</td>
+    </tr>
+    <tr>
+      <th>1398</th>
+      <td>r.a.</td>
+      <td>van weelderen</td>
+    </tr>
+    <tr>
+      <th>1399</th>
+      <td>h.a.w.</td>
+      <td>van wel</td>
+    </tr>
+    <tr>
+      <th>1400</th>
+      <td>r.a.</td>
+      <td>van wijk</td>
+    </tr>
+    <tr>
+      <th>1401</th>
+      <td>r.h.h.</td>
+      <td>van wijk</td>
+    </tr>
+    <tr>
+      <th>1402</th>
+      <td>s.</td>
+      <td>van wijk</td>
+    </tr>
+    <tr>
+      <th>1403</th>
+      <td>l.p.j.m.</td>
+      <td>van woensel</td>
+    </tr>
+    <tr>
+      <th>1404</th>
+      <td>p.s.</td>
+      <td>van zandbergen</td>
+    </tr>
+    <tr>
+      <th>1405</th>
+      <td>g.j.j.a.</td>
+      <td>van zeijl</td>
+    </tr>
+    <tr>
+      <th>1406</th>
+      <td>s.d.</td>
+      <td>van de kant</td>
+    </tr>
+    <tr>
+      <th>1407</th>
+      <td>i.c.j.c.</td>
+      <td>van de klundert</td>
+    </tr>
+    <tr>
+      <th>1408</th>
+      <td>e.m.m.</td>
+      <td>van de loo</td>
+    </tr>
+    <tr>
+      <th>1409</th>
+      <td>c.</td>
+      <td>van de meent</td>
+    </tr>
+    <tr>
+      <th>1410</th>
+      <td>k.</td>
+      <td>van de peppel</td>
+    </tr>
+    <tr>
+      <th>1411</th>
+      <td>j.h.m.</td>
+      <td>van de wiel</td>
+    </tr>
+    <tr>
+      <th>1412</th>
+      <td>b.j.</td>
+      <td>van de wijnckel</td>
+    </tr>
+    <tr>
+      <th>1413</th>
+      <td>d.</td>
+      <td>van den berg</td>
+    </tr>
+    <tr>
+      <th>1414</th>
+      <td>g.f.</td>
+      <td>van den berg</td>
+    </tr>
+    <tr>
+      <th>1415</th>
+      <td>j.a.t.</td>
+      <td>van den berg</td>
+    </tr>
+    <tr>
+      <th>1416</th>
+      <td>p.c.</td>
+      <td>van den berg</td>
+    </tr>
+    <tr>
+      <th>1417</th>
+      <td>p.e.</td>
+      <td>van den berg</td>
+    </tr>
+    <tr>
+      <th>1418</th>
+      <td>r.</td>
+      <td>van den berg jeths</td>
+    </tr>
+    <tr>
+      <th>1420</th>
+      <td>r.</td>
+      <td>van den bos</td>
+    </tr>
+    <tr>
+      <th>1421</th>
+      <td>v.</td>
+      <td>van den bos</td>
+    </tr>
+    <tr>
+      <th>1422</th>
+      <td>k.t.w.h.</td>
+      <td>van den dungen</td>
+    </tr>
+    <tr>
+      <th>1423</th>
+      <td>j.d.e.</td>
+      <td>van den heuvel</td>
+    </tr>
+    <tr>
+      <th>1424</th>
+      <td>j.l.</td>
+      <td>van den heuvel</td>
+    </tr>
+    <tr>
+      <th>1425</th>
+      <td>r.</td>
+      <td>van den heuvel</td>
+    </tr>
+    <tr>
+      <th>1426</th>
+      <td>r.r.m.</td>
+      <td>van den heuvel</td>
+    </tr>
+    <tr>
+      <th>1427</th>
+      <td>j.h.a.</td>
+      <td>van den wildenberg</td>
+    </tr>
+    <tr>
+      <th>1428</th>
+      <td>a.j.</td>
+      <td>van der duijn schouten</td>
+    </tr>
+    <tr>
+      <th>1430</th>
+      <td>j.m.j.</td>
+      <td>van der grinten</td>
+    </tr>
+    <tr>
+      <th>1431</th>
+      <td>a.j.j.</td>
+      <td>van der heiden</td>
+    </tr>
+    <tr>
+      <th>1432</th>
+      <td>j.</td>
+      <td>van der hel</td>
+    </tr>
+    <tr>
+      <th>1433</th>
+      <td>r.</td>
+      <td>van der hooft</td>
+    </tr>
+    <tr>
+      <th>1434</th>
+      <td>s.g.a.</td>
+      <td>van der horst</td>
+    </tr>
+    <tr>
+      <th>1435</th>
+      <td>a.j.</td>
+      <td>van der knijff</td>
+    </tr>
+    <tr>
+      <th>1436</th>
+      <td>e.</td>
+      <td>van der kolk</td>
+    </tr>
+    <tr>
+      <th>1437</th>
+      <td>w.</td>
+      <td>van der kolk</td>
+    </tr>
+    <tr>
+      <th>1438</th>
+      <td>m.</td>
+      <td>van der laarse</td>
+    </tr>
+    <tr>
+      <th>1439</th>
+      <td>m.e.</td>
+      <td>van der lee-klein rot</td>
+    </tr>
+    <tr>
+      <th>1440</th>
+      <td>c.h.j.</td>
+      <td>van der maas</td>
+    </tr>
+    <tr>
+      <th>1441</th>
+      <td>j.a.</td>
+      <td>van der meer</td>
+    </tr>
+    <tr>
+      <th>1442</th>
+      <td>t.</td>
+      <td>van der meeren</td>
+    </tr>
+    <tr>
+      <th>1443</th>
+      <td>j.h.</td>
+      <td>van der meulen</td>
+    </tr>
+    <tr>
+      <th>1444</th>
+      <td>j.j.</td>
+      <td>van der molen</td>
+    </tr>
+    <tr>
+      <th>1445</th>
+      <td>r.</td>
+      <td>van der pas</td>
+    </tr>
+    <tr>
+      <th>1446</th>
+      <td>j.n.</td>
+      <td>van der pouw kraan</td>
+    </tr>
+    <tr>
+      <th>1447</th>
+      <td>a.</td>
+      <td>van der schee</td>
+    </tr>
+    <tr>
+      <th>1449</th>
+      <td>h.</td>
+      <td>van der schouw</td>
+    </tr>
+    <tr>
+      <th>1450</th>
+      <td>l.t.</td>
+      <td>van der sluis</td>
+    </tr>
+    <tr>
+      <th>1451</th>
+      <td>p.</td>
+      <td>van der sluis</td>
+    </tr>
+    <tr>
+      <th>1452</th>
+      <td>r.s.</td>
+      <td>van der spek</td>
+    </tr>
+    <tr>
+      <th>1454</th>
+      <td>f.c.h.m.</td>
+      <td>van der stap</td>
+    </tr>
+    <tr>
+      <th>1455</th>
+      <td>b.p.</td>
+      <td>van der togt</td>
+    </tr>
+    <tr>
+      <th>1456</th>
+      <td>a.j.</td>
+      <td>van der veen-janz</td>
+    </tr>
+    <tr>
+      <th>1457</th>
+      <td>r.j.</td>
+      <td>van der weijden</td>
+    </tr>
+    <tr>
+      <th>1458</th>
+      <td>j.m.</td>
+      <td>van der wulp</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Results---Administrator-Names">Results - Administrator Names<a class="anchor-link" href="#Results---Administrator-Names">&#182;</a></h2><h3 id="Deduplication">Deduplication<a class="anchor-link" href="#Deduplication">&#182;</a></h3><p>The data consisted of administrator names of active cases on [17-7-2018].<br>
+Number of unique names (initials, middle part, family name): X<br>
+After moving the middle part to the family name: X<br>
+After normalizing the names (initials, family name): X<br></p>
+<p>Total number of dedups: [X] - [X] = [X]</p>
+<p>Remaining duplicates:</p>
+<p>Inspect!</p>
+<p>Are due to:</p>
+<ul>
+<li>typo's</li>
+</ul>
+<p>1008    p.j.g.g.    sluijter<br>
+1010    p.g.g.j.    sluyter<br>
+1011    p.j.g.g.    sluyter<br></p>
+<p>802 a.a.m.      spliet<br>
+803 a.m.m.      spliet<br></p>
+<p>39  n.p.    barska-gelling<br>
+40  n.p.    barske-gelling<br></p>
+<p>1658    m.w.w.  van schaijck<br>
+1660    m.w.w.  van schaik<br></p>
+<p>solution: if no matches are found suggest the nearest administrator name using fuzzy matching.</p>
+<ul>
+<li>missende initialen</li>
+</ul>
+<p>4           aertssen<br>
+5   d.e.a.f.        aertssen<br>
+664 r.      pijls<br>
+665 r.j.w.      pijls<br>
+679 l.      prickartz<br>
+680 l.s.e.      prickartz<br>
+820 w.p.        steenhuisen<br>
+821 w.p.h.      steenhuisen<br></p>
+<p>solutions:<br>
+all missing &amp; one other family name -&gt; use that<br>
+only subpart, usually first, initial compared to other name -&gt; use that<br></p>
+<ul>
+<li>wel of geen meisjesnaam</li>
+</ul>
+<p>562 d.v.        meijers<br>
+563 d.v.        meijers-ploegmakers<br></p>
+<p>solution: remove maiden name and compare</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[53]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># maiden names</span>
+<span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">family_name</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[53]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>initials</th>
+      <th>middle_part</th>
+      <th>family_name</th>
+      <th>normalized_initials</th>
+      <th>normalized_family_name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>21</th>
+      <td>E.</td>
+      <td>van</td>
+      <td>Asselt- Pronk</td>
+      <td>e.</td>
+      <td>asselt-pronk</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>N.P.</td>
+      <td>None</td>
+      <td>Barské-Gelling</td>
+      <td>n.p.</td>
+      <td>barske-gelling</td>
+    </tr>
+    <tr>
+      <th>56</th>
+      <td>J.</td>
+      <td>None</td>
+      <td>Benavente Prieto-Lachheb</td>
+      <td>j.</td>
+      <td>benavente prieto-lachheb</td>
+    </tr>
+    <tr>
+      <th>113</th>
+      <td>W.M.</td>
+      <td>None</td>
+      <td>Bond-Stroek</td>
+      <td>w.m.</td>
+      <td>bond-stroek</td>
+    </tr>
+    <tr>
+      <th>136</th>
+      <td>A.J.W.</td>
+      <td>None</td>
+      <td>Bovenmars-Wilmink</td>
+      <td>a.j.w.</td>
+      <td>bovenmars-wilmink</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[54]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">remove_maiden_name</span><span class="p">(</span><span class="n">family_name</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;-.*&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">family_name</span><span class="p">)</span>
+    
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;without_maiden&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">r</span><span class="p">:</span> <span class="n">remove_maiden_name</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;family_name&#39;</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">family_name</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[54]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>initials</th>
+      <th>middle_part</th>
+      <th>family_name</th>
+      <th>normalized_initials</th>
+      <th>normalized_family_name</th>
+      <th>without_maiden</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>21</th>
+      <td>E.</td>
+      <td>van</td>
+      <td>Asselt- Pronk</td>
+      <td>e.</td>
+      <td>asselt-pronk</td>
+      <td>Asselt</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>N.P.</td>
+      <td>None</td>
+      <td>Barské-Gelling</td>
+      <td>n.p.</td>
+      <td>barske-gelling</td>
+      <td>Barské</td>
+    </tr>
+    <tr>
+      <th>56</th>
+      <td>J.</td>
+      <td>None</td>
+      <td>Benavente Prieto-Lachheb</td>
+      <td>j.</td>
+      <td>benavente prieto-lachheb</td>
+      <td>Benavente Prieto</td>
+    </tr>
+    <tr>
+      <th>113</th>
+      <td>W.M.</td>
+      <td>None</td>
+      <td>Bond-Stroek</td>
+      <td>w.m.</td>
+      <td>bond-stroek</td>
+      <td>Bond</td>
+    </tr>
+    <tr>
+      <th>136</th>
+      <td>A.J.W.</td>
+      <td>None</td>
+      <td>Bovenmars-Wilmink</td>
+      <td>a.j.w.</td>
+      <td>bovenmars-wilmink</td>
+      <td>Bovenmars</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[63]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_dedup_maiden</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;initials&#39;</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">normalized_initials</span><span class="p">,</span> <span class="s1">&#39;family_name&#39;</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">without_maiden</span><span class="p">},</span> 
+                             <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;initials&#39;</span><span class="p">,</span> <span class="s1">&#39;family_name&#39;</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;before dedup: </span><span class="si">%d</span><span class="s1"> items&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_dedup_maiden</span><span class="p">))</span>
+<span class="n">df_dedup_maiden</span> <span class="o">=</span> <span class="n">df_dedup_maiden</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;after dedup: </span><span class="si">%d</span><span class="s1"> items&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_dedup_maiden</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>before dedup: 1459 items
+after dedup: 1406 items
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Results">Results<a class="anchor-link" href="#Results">&#182;</a></h3><p>Adding maiden name removal to the normalization function reduces the amount of names further with 53/1459 = 3.6%.
+But the register names to which the normalized names are resolved carry the maiden name. Therefor we choose to keep the maiden name as it brings extra information to the resolution function.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Administrator-Entity-Resolution">Administrator Entity Resolution<a class="anchor-link" href="#Administrator-Entity-Resolution">&#182;</a></h1><p>We do not have an complete lawyer set to match the normalized name against.</p>
+<p>If a normalized names has no exact match we:</p>
+<ul>
+<li>[do a fuzzy match against the master data records] and if score is good use the match</li>
+<li>use the NOvA online register to find a match</li>
+</ul>
+<p>The NOvA register is searchable but instead of scraping the entire register of lawyers we use NOvA's search functionality with the application of filters to come up with a best match.</p>
+<p>Instead of using the web form we can directly use the underlying JSON REST API to find the corresponding lawyer. We start with the most precise filter, if no results are found we widen the net with a less precise filter in three steps:</p>
+<ul>
+<li>step 1: filter on specialty curator,</li>
+<li>step 2: filter branch insolvency law,</li>
+<li>step 3: no filter,</li>
+</ul>
+<p>if multiple results are returned we pick the most relevant. NOvA supplies relevancy on name and total query.</p>
+<p>Issues:</p>
+<ul>
+<li>queries on simple terms, still return 100+ results.</li>
+</ul>
+<p>The two lawyer entities, cir administrator and NOvA lawyer are joined together in an association table where an exact match can be looked up when needed without going to the NOvA webservice. The association table can also be post-processed or manually altered to reach a 100% resolution.</p>
+<p>The results of the initial resolution process is detailed below.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[52]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">select at.*, l.full_name</span>
+<span class="s2">from nova_lawyer_cir_administrator_associations at join nova_lawyers l on at.nova_lawyer_id = l.id</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[52]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>cir_initials</th>
+      <th>cir_full_family_name</th>
+      <th>nova_lawyer_id</th>
+      <th>is_verified</th>
+      <th>full_name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>534</td>
+      <td>m.e.</td>
+      <td>meijnhardt</td>
+      <td>422</td>
+      <td>False</td>
+      <td>mevrouw mr. M.E. Meijnhardt</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>535</td>
+      <td>h.m.l.</td>
+      <td>dings</td>
+      <td>423</td>
+      <td>False</td>
+      <td>de heer mr. H.M.L. Dings</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>536</td>
+      <td>r.a.m.l.</td>
+      <td>van oeijen</td>
+      <td>424</td>
+      <td>False</td>
+      <td>de heer mr. R.A.M.L. van Oeijen</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>537</td>
+      <td>l.a.</td>
+      <td>van walree-brascamp</td>
+      <td>425</td>
+      <td>False</td>
+      <td>mevrouw mr. L.A. van Walree- Brascamp</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>538</td>
+      <td>j.c.</td>
+      <td>dorrepaal</td>
+      <td>426</td>
+      <td>False</td>
+      <td>de heer mr. J.C. Dorrepaal</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>539</td>
+      <td>n.n.</td>
+      <td>boonstra</td>
+      <td>427</td>
+      <td>False</td>
+      <td>mevrouw mr. N.N. Boonstra</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>540</td>
+      <td>m.</td>
+      <td>mos</td>
+      <td>428</td>
+      <td>False</td>
+      <td>de heer mr. M. Mos</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>541</td>
+      <td>f.a.m.</td>
+      <td>van hooft</td>
+      <td>429</td>
+      <td>False</td>
+      <td>de heer mr. F.A.M. van Hooft</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>542</td>
+      <td>j.g.c.</td>
+      <td>van baar</td>
+      <td>430</td>
+      <td>False</td>
+      <td>de heer mr. J.G.C. van Baar</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>543</td>
+      <td>j.a.</td>
+      <td>wagenaar</td>
+      <td>431</td>
+      <td>False</td>
+      <td>de heer mr. J.A. Wagenaar</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>544</td>
+      <td>c.j.</td>
+      <td>tijman</td>
+      <td>432</td>
+      <td>False</td>
+      <td>de heer mr. C.J. Tijman</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>545</td>
+      <td>c.</td>
+      <td>den besten</td>
+      <td>421</td>
+      <td>False</td>
+      <td>ONBEKEND</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>546</td>
+      <td>v.j.</td>
+      <td>groot</td>
+      <td>433</td>
+      <td>False</td>
+      <td>de heer mr. V.J. Groot</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>547</td>
+      <td>h.c.</td>
+      <td>brandsma</td>
+      <td>421</td>
+      <td>False</td>
+      <td>ONBEKEND</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>548</td>
+      <td>j.m.t.</td>
+      <td>coffeng</td>
+      <td>434</td>
+      <td>False</td>
+      <td>de heer mr. J.M.T. Coffeng</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[32]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;total no distinct administrators </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;total no recalled administrators </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">full_name</span> <span class="o">!=</span> <span class="s1">&#39;ONBEKEND&#39;</span><span class="p">])))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;total no precise administrators [inspect]&#39;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>total no distinct administrators 1106
+total no recalled administrators 844
+total no precise administrators [inspect]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[45]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># distribution of active cases over the (busiest) administrators</span>
+<span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">select l.full_name, count(*)</span>
+<span class="s2">from administrators_receivers ar</span>
+<span class="s2">  join insolvents i on ar.insolvent_id = i.id</span>
+<span class="s2">  join nova_lawyers l on ar.nova_lawyer_id = l.id</span>
+<span class="s2">where i.person_legal_personality = &#39;rechtspersoon&#39;</span>
+<span class="s2">  and is_removed is FALSE</span>
+<span class="s2">  and (end_findability is NULL or end_findability &gt; current_date)</span>
+<span class="s2">  and ar.type=&#39;C&#39; -- curator</span>
+<span class="s2">  and ar.date_end is NULL -- still on case</span>
+<span class="s2">  and full_name != &#39;ONBEKEND&#39;</span>
+<span class="s2">group by 1</span>
+<span class="s2">order by 2 desc;</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[45]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>full_name</th>
+      <th>count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>mevrouw mr. A. van der Schee</td>
+      <td>168</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>de heer mr. W.J.P. Jongepier</td>
+      <td>161</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>de heer mr. R.A.M.L. van Oeijen</td>
+      <td>156</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>de heer mr. J. Westerhof</td>
+      <td>141</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>de heer mr. J.A.D.M. Daniels</td>
+      <td>126</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>de heer mr. W.H.M. Cnossen</td>
+      <td>119</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>de heer mr. K.T.W.H. van den Dungen</td>
+      <td>112</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>de heer mr. H.J. de Groot</td>
+      <td>107</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>de heer mr. M.C. Udink</td>
+      <td>104</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>de heer mr. R.G.B. Hermsen</td>
+      <td>103</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[48]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[48]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>16.0</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[49]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[49]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>20.055079559363524</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Law-Firms">Law Firms<a class="anchor-link" href="#Law-Firms">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[68]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># distribution of active cases over the busiest firms</span>
+<span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">select f.full_name, count(*)</span>
+<span class="s2">from administrators_receivers ar</span>
+<span class="s2">  join active_company_bankrupt_insolvents_view i on ar.insolvent_id = i.id</span>
+<span class="s2">  join nova_lawyers l on ar.nova_lawyer_id = l.id</span>
+<span class="s2">  join nova_law_firms f on l.law_firm_id = f.id</span>
+<span class="s2">where --ar.type=&#39;C&#39; and -- curator</span>
+<span class="s2">  ar.date_end is NULL -- still on case</span>
+<span class="s2">group by 1</span>
+<span class="s2">order by 2 desc;</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[68]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>full_name</th>
+      <th>count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Van Benthem &amp; Keulen B.V.</td>
+      <td>284</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Holla Advocaten</td>
+      <td>282</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Van Iersel Luchtman N.V.</td>
+      <td>258</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Cees Advocaten N.V.</td>
+      <td>244</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>De Voort Advocaten|Mediators</td>
+      <td>214</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Dentons Boekel N.V.</td>
+      <td>201</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Dommerholt Advocaten N.V.</td>
+      <td>192</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>HVG Law LLP</td>
+      <td>188</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Aben &amp; Slag Advocaten</td>
+      <td>180</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>CMS</td>
+      <td>173</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[51]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># firms with no of employed curators (on active cases)</span>
+
+<span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">select f.full_name, count(*)</span>
+<span class="s2">  from nova_lawyers l</span>
+<span class="s2">  join nova_law_firms f on l.law_firm_id = f.id</span>
+<span class="s2">group by 1</span>
+<span class="s2">order by 2 desc;</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">con</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt output_prompt">Out[51]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>full_name</th>
+      <th>count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Van Diepen Van der Kroef Advocaten</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Cees Advocaten N.V.</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Dommerholt Advocaten N.V.</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Boels Zanders Advocaten</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>La Gro Advocaten</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Florent</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Van Iersel Luchtman N.V.</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>AKD</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Hoens &amp; Souren Keereweer Advocaten</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Okkerse &amp; Schop Advocaten</td>
+      <td>6</td>
     </tr>
   </tbody>
 </table>
