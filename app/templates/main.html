@@ -1,0 +1,22 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}Insolvency Information System{% endblock %}
+
+{% block navbar %}
+    <div class="navbar navbar-fixed-top"></div>
+{% endblock %}
+
+{% block content %}
+    <h1>Insolvency Information System</h1>
+    <h2>General</h2>
+    <table class="table">
+        <tr><th>Last case update</th><td>{{ data['last_case_update'] }}</td></tr>
+        <tr><th>Last report update</th><td>{{ data['last_report_update'] }}</td></tr>
+        <tr><th>No. of insolvents</th><td>{{ data['no_insolvents'] }}</td></tr>
+        <tr><th>No. of reports</th><td>{{ data['no_reports'] }}</td></tr>
+        <tr><th>No. of publications</th><td>{{ data['no_publications'] }}</td></tr>
+        <tr><th>No. of judges</th><td>{{ data['no_judges'] }}</td></tr>
+        <tr><th>No. of administrators</th><td>{{ data['no_administrators'] }}</td></tr>
+        <tr><th>No. of courts</th><td>{{ data['no_courts'] }}</td></tr>
+    </table>
+
+{% endblock %}
