@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{10}
+\begin{thebibliography}{12}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -50,25 +50,37 @@
 
 
 \bibitem[\protect\citeauthoryear{??}{rec}{[n. d.]b}]%
-        {rechtspraak:3}
- \bibinfo{year}{[n. d.]}\natexlab{b}.
-\newblock \bibinfo{title}{Beroepsgegevens en nevenfuncties van rechters}.
-\newblock
-\newblock
-\urldef\tempurl%
-\url{https://www.rechtspraak.nl/Voor-advocaten-en-juristen/Reglementen-procedures-en-formulieren/Civiel/Insolventierecht/Paginas/Recofa-richtlijnen.aspx}
-\showURL{%
-\tempurl}
-
-
-\bibitem[\protect\citeauthoryear{??}{rec}{[n. d.]c}]%
         {rechtspraak:1}
- \bibinfo{year}{[n. d.]}\natexlab{c}.
+ \bibinfo{year}{[n. d.]}\natexlab{b}.
 \newblock \bibinfo{title}{Centraal Insolventieregister}.
 \newblock
 \newblock
 \urldef\tempurl%
 \url{https://insolventies.rechtspraak.nl}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{??}{law}{[n. d.]a}]%
+        {law:1}
+ \bibinfo{year}{[n. d.]}\natexlab{a}.
+\newblock \bibinfo{title}{Insolvency Law - Faillissementswet}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{http://wetten.overheid.nl/BWBR0001860/2018-07-01}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{??}{law}{[n. d.]b}]%
+        {law:2}
+ \bibinfo{year}{[n. d.]}\natexlab{b}.
+\newblock \bibinfo{title}{Lawyer Law - Advocatenwet}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{http://wetten.overheid.nl/BWBR0002093/2018-07-25}
 \showURL{%
 \tempurl}
 
@@ -81,6 +93,18 @@
 \newblock
 \urldef\tempurl%
 \url{https://www.advocatenorde.nl/over-de-nova}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{??}{rec}{[n. d.]c}]%
+        {rechtspraak:3}
+ \bibinfo{year}{[n. d.]}\natexlab{c}.
+\newblock \bibinfo{title}{Recofa-richtlijnen}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://www.rechtspraak.nl/Voor-advocaten-en-juristen/Reglementen-procedures-en-formulieren/Civiel/Insolventierecht/Paginas/Recofa-richtlijnen.aspx}
 \showURL{%
 \tempurl}
 

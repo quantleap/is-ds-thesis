@@ -1,21 +1,14 @@
 \section{Related Work}
-\begin{itemize}
-	\item Open Data within the government and armchair auditing
-	\item Classification using Natural Language Processing
-	\item GUI design
-	\item Open data and Linked Data, Resource Description Framework [optional]
-\end{itemize}
+[todo]
 
 \subsection{Research Questions}
 
 The main research question is:
-\textbf{Is is possible to build a useful, complete and correct structured information system based on unstructured CIR data}
+\textbf{Is is possible to build a useful, complete and correct structured information system based on unstructured CIR data?}
 
-To answer this question we define so-called Persona to represent archetypical users of the information system to answer specific questions. The questions are distilled from the insolvency law, news articles, research papers, court cases [refs]. The system will be useful if it can answer those questions within certain bounds for their correctness and completeness. 
+The information system is useful when it answers questions of the parties involved. We define so-called Persona to represent archetypical users of the information system and define specific questions they have. These questions are distilled from the insolvency law, news articles, research papers, court cases [refs] and interviews.
 
 \subsubsection{Persona}
-
-
 The main Persona are: 
 \begin{itemize}
 \item \textbf{The Judge} representing the side of Recofa, \textit{Raad van de Rechtspraak} and The Bankruptcy Judge (\textit{Rechter-Commissaris})
@@ -99,15 +92,9 @@ The Persona of Creditor is interested in the recovery rate of its claim and the 
 \end{itemize}
 
 \subsubsection{The Journalist}
-The Persona of Journalist is interested in searching for cases on the basis of a faceted search on keywords and indicator ranges. It is also interested on current trends and periodic reports
+The Persona of Journalist is writing an article on a certain insolvency phenomenon. An economic journalist might periodically write the same story on say the number of defaults in the last quarter compares to a previous period, usually for business readers. The investigative journalist writes for a wide audience, therefore the article contains both general trends as well as the personal individual story. For this the investigative journalist needs query functionality to dig for evidence and pull individual records.
 
 \begin{itemize}
-	\item How well does faceted search on progress reports perform
-	\item How many defaults occurred over a recent period
-	\begin{itemize}
-		\item Total number of employees
-		\item Total turnover
-		\item .. per region (using company address)
-	\end{itemize}
-
+	\item J2: (topic: incapable administrators) Which administrators have often been taken of their cases by the judge.
+	\item J1: How many defaults occurred over the last three months compared to a year earlier. [viz:cumulative lines of two periods]
 \end{itemize}
