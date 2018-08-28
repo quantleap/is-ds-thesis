@@ -14,8 +14,6 @@ __pycache__
 .scrapy
 
 # ignored folders for now
-/abbyy_cloud_ocr
-/data
 /literature
 /issues
 
