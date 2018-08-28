@@ -16,7 +16,8 @@ __pycache__
 # ignored folders for now
 /abbyy_cloud_ocr
 /data
-/literatuur
+/literature
+/issues
 
 
 # latex intermediate produced files
