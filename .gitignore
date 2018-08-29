@@ -10,22 +10,18 @@ __pycache__
 # pytest
 .cache
 
-# scrapy
-.scrapy
-
 # ignored folders for now
 /literature
 /issues
-
+/docs
 
 # latex intermediate produced files
-**/thesis_tex/**/*.synctex.gz
-**/thesis_tex/**/*.log
-**/thesis_tex/**/*.out
-**/thesis_tex/**/*.pdf
-**/thesis_tex/**/comment.cut
-**/thesis_tex/**/*.blg
-**/thesis_tex/**/*.aux
+/thesis/*.synctex.gz
+/thesis/*.log
+/thesis/*.out
+/thesis/comment.cut
+/thesis/*.blg
+/thesis/*.aux
 
 # folders
 /docs/IMG/*
