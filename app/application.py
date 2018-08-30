@@ -1,22 +1,30 @@
 # -*- coding: utf-8 -*
+import logging
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_bootstrap import Bootstrap
-
 from app.filters import set_jinja_filters
+from app.model import session
+from app.model.process import refresh_insolvency_start_date_count_figure
 from cir.models import TimeStamp
-from judges_register.associate_judge import get_unknown_judge
-from model import session
 
+from judges_register.associate_judge import get_unknown_judge
 
 application = Flask(__name__)
 Bootstrap(application)
 set_jinja_filters(application)
 
+logger = logging.getLogger(__name__)
+
 
 @application.route('/')
 def home():
-    """ displays general information and links to the individual information retrieval items. """
+    return render_template('home.html')
+
+
+@application.route('/entities/')
+def entities():
+    """ Displays general information over the loaded and linked entities. """
 
     last_case_update = session.query(TimeStamp.last_cir_case_extraction).one()[0]
     last_report_update = session.query(TimeStamp.last_cir_report_extraction).one()[0]
@@ -42,11 +50,14 @@ def home():
             'no_courts': no_courts
             }
 
-    return render_template('main.html', data=data)
+    return render_template('entities.html', data=data)
 
 
-@application.route('/process/')
+@application.route('/process/', methods=['POST', 'GET'])
 def process():
+    if request.method == 'POST':
+        logger.info('refreshing insolvency start date histogram')
+        refresh_insolvency_start_date_count_figure()
     return render_template('process.html')
 
 

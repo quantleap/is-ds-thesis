@@ -1,9 +1,8 @@
 {% extends "layout.html" %}
-{% set active_page = "home" %}
+{% set active_page = "entities" %}
 
 {% block content %}
-    <h1>Insolvency Information System</h1>
-    <h2>General</h2>
+    <h1>Loaded Entities</h1>
     <table class="table">
         <tr><th>Last case update</th><td>{{ data['last_case_update']|datetime }}</td></tr>
         <tr><th>Last report update</th><td>{{ data['last_report_update']|datetime }}</td></tr>
@@ -14,4 +13,5 @@
         <tr><th>No. of judges</th><td>{{ data['no_judges'] }}</td></tr>
         <tr><th>No. of courts</th><td>{{ data['no_courts'] }}</td></tr>
     </table>
+    <p>all numbers based on active company bankruptcy cases.</p>
 {% endblock %}
