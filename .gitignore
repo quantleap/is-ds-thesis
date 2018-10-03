@@ -11,7 +11,12 @@ __pycache__
 .cache
 
 # ignored folders for now
-/literature
+# note unignore first
+!literature/
+literature/*
+!literature/cited/
+!literature/information system success measures/
+!literature/dedupe and resolution/
 /issues
 /docs
 

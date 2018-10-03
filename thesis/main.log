@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.6.13)  29 AUG 2018 12:15
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.6.13)  2 OCT 2018 09:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1396,12 +1396,12 @@ File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/b/n' will be
 (Font)              scaled to size 9.0pt on input line 40.
-<logo-uva.png, id=74, 894.34125pt x 411.5375pt>
+<logo-uva.png, id=90, 894.34125pt x 411.5375pt>
 File: logo-uva.png Graphic file (type png)
 <use logo-uva.png>
 Package pdftex.def Info: logo-uva.png  used on input line 55.
 (pdftex.def)             Requested size: 122.85712pt x 56.52849pt.
-<ads.png, id=76, 440.64626pt x 200.75pt>
+<ads.png, id=92, 440.64626pt x 200.75pt>
 File: ads.png Graphic file (type png)
 <use ads.png>
 Package pdftex.def Info: ads.png  used on input line 55.
@@ -1462,55 +1462,25 @@ Package hyperref Warning: Option `pdfdisplaydoctitle' has already been used,
 
 (./body.tex (./introduction.tex
 LaTeX Font Info:    Font shape `T1/LinuxLibertineT-TLF/m/n' will be
-(Font)              scaled to size 10.95pt on input line 10.
+(Font)              scaled to size 10.95pt on input line 17.
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/n' will be
-(Font)              scaled to size 9.0pt on input line 18.
+(Font)              scaled to size 9.0pt on input line 21.
 LaTeX Font Info:    Font shape `T1/LinuxBiolinumT-TLF/m/it' will be
-(Font)              scaled to size 9.0pt on input line 18.
+(Font)              scaled to size 9.0pt on input line 21.
  [2.3
 
-]) (./related_work.tex
-Overfull \hbox (2.12112pt too wide) in paragraph at lines 14--15
-\T1/LinuxLibertineT-TLF/m/it/9 (-20) Recht-spraak \T1/LinuxLibertineT-TLF/m/n/9
- (-20) and The Bank-ruptcy Judge (\T1/LinuxLibertineT-TLF/m/it/9 (-20) Rechter-
-Commissaris\T1/LinuxLibertineT-TLF/m/n/9 (-20) ) 
- []
-
-
-Overfull \hbox (4.48647pt too wide) in paragraph at lines 15--16
-[]\T1/LinuxLibertineT-TLF/b/n/9 The Ad-min-is-tra-tor \T1/LinuxLibertineT-TLF/m
-/n/9 (-20) rep-re-sent-ing the side of In-so-lad (Verenig-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 60--61
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 62--68
-
- []
-
-
-Underfull \vbox (badness 2426) has occurred while \output is active []
-
- [3.4])
-(./methodology.tex
-<cir_erd.png, id=139, 1769.61125pt x 1053.9375pt>
-File: cir_erd.png Graphic file (type png)
-<use cir_erd.png>
-Package pdftex.def Info: cir_erd.png  used on input line 29.
-(pdftex.def)             Requested size: 241.14749pt x 143.6102pt.
+]) (./related_work.tex) (./methodology.tex
+<cir_erd_2.png, id=144, 424.7067pt x 252.945pt>
+File: cir_erd_2.png Graphic file (type png)
+<use cir_erd_2.png>
+Package pdftex.def Info: cir_erd_2.png  used on input line 29.
+(pdftex.def)             Requested size: 241.14749pt x 143.6205pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[4.5 <./cir_erd.png>]
-<system_overview.png, id=172, 433.62pt x 195.129pt>
+[3.4 <./cir_erd_2.png>]
+<system_overview.png, id=174, 433.62pt x 195.129pt>
 File: system_overview.png Graphic file (type png)
 <use system_overview.png>
 Package pdftex.def Info: system_overview.png  used on input line 98.
@@ -1520,7 +1490,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 126--129
 
  []
 
-[5.6 <./system_overview.png>]) (./entity_resolution.tex)
+[4.5 <./system_overview.png>]) (./entity_resolution.tex)
 Overfull \hbox (11.02596pt too wide) in paragraph at lines 9--11
 \T1/LinuxLibertineT-TLF/m/n/9 (-20) is-a-good-algorithm-service-for-fuzzy-match
 ing-of-companies-names-
@@ -1546,10 +1516,33 @@ ten-[]procedures-[]en-[]formulieren /
 
 LaTeX Info: Redefining \tempurl on input line 139.
 LaTeX Info: Redefining \tempurl on input line 154.
+[5.6]
 LaTeX Info: Redefining \tempurl on input line 172.
-[6.7]
 LaTeX Info: Redefining \tempurl on input line 184.
-) [7.8
+) (./appendix.tex
+Overfull \hbox (2.12112pt too wide) in paragraph at lines 4--5
+\T1/LinuxLibertineT-TLF/m/it/9 (-20) Recht-spraak \T1/LinuxLibertineT-TLF/m/n/9
+ (-20) and The Bank-ruptcy Judge (\T1/LinuxLibertineT-TLF/m/it/9 (-20) Rechter-
+Commissaris\T1/LinuxLibertineT-TLF/m/n/9 (-20) ) 
+ []
+
+
+Overfull \hbox (4.48647pt too wide) in paragraph at lines 5--6
+[]\T1/LinuxLibertineT-TLF/b/n/9 The Ad-min-is-tra-tor \T1/LinuxLibertineT-TLF/m
+/n/9 (-20) rep-re-sent-ing the side of In-so-lad (Verenig-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 50--51
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 52--58
+
+ []
+
+[6.7]) [7.8
 
 ]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 55.
@@ -1558,16 +1551,20 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 55.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 55.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 55.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 1086CC81DBBD73A222E98332E4383E87;2673.
+(rerunfilecheck)             Checksum: 463064B7D8F1753CAE19AA7495F5D129;3115.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
  ) 
 Here is how much of TeX's memory you used:
- 29662 strings out of 492649
- 532879 string characters out of 6129622
- 621738 words of memory out of 5000000
- 32414 multiletter control sequences out of 15000+600000
- 172094 words of font info for 298 fonts, out of 8000000 for 9000
+ 29657 strings out of 492649
+ 532686 string characters out of 6129622
+ 622741 words of memory out of 5000000
+ 32418 multiletter control sequences out of 15000+600000
+ 171150 words of font info for 292 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
- 60i,11n,94p,795b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,11n,94p,805b,603s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/libertine/lbtn_25tcsq.enc
 }{/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/libertine/lbtn_7grukw.enc}
 {/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/libertine/lbtn_naooyc.enc}{
@@ -1582,10 +1579,10 @@ rtineT.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/libertine/Lin
 LibertineTB.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/libertin
 e/LinLibertineTI.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/new
 tx/txsys.pfb>
-Output written on main.pdf (8 pages, 571687 bytes).
+Output written on main.pdf (8 pages, 562219 bytes).
 PDF statistics:
- 306 PDF objects out of 1000 (max. 8388607)
- 267 compressed objects within 3 object streams
- 92 named destinations out of 1000 (max. 500000)
- 57005 words of extra memory for PDF output out of 61914 (max. 10000000)
+ 314 PDF objects out of 1000 (max. 8388607)
+ 276 compressed objects within 3 object streams
+ 90 named destinations out of 1000 (max. 500000)
+ 57037 words of extra memory for PDF output out of 61914 (max. 10000000)
 
