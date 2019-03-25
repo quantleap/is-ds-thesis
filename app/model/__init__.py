@@ -18,7 +18,7 @@ Session = sessionmaker(bind=engine)
 # create a Session
 session = Session()
 
-
 # set logging
-FORMAT = '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
-logging.basicConfig(format=FORMAT, level=logging.DEBUG, stream=sys.stdout)
+logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]',
+                    level=logging.DEBUG,
+                    stream=sys.stdout)

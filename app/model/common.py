@@ -2,7 +2,7 @@
 from datetime import date
 from operator import or_
 
-from cir.models import Insolvent
+from cir.models import Insolvent, Publication
 from app.model import session
 
 
@@ -10,6 +10,19 @@ from app.model import session
 def query_insolvents(select_entities=Insolvent, only_active=True):
 
     query = session.query(*select_entities)\
+        .filter(Insolvent.person_legal_personality == 'rechtspersoon') #\
+        #.filter(Insolvent.insolvency_type == 'F')
+
+    if only_active:
+        query = query.filter(Insolvent.is_removed.is_(False)) \
+            .filter(or_(Insolvent.end_findability.is_(None),
+                        Insolvent.end_findability > date.today()))
+    return query
+
+
+# noinspection PyUnresolvedReferences
+def query_publications(select_entities=Publication, only_active=True):
+    query = session.query(*select_entities).join(Insolvent)\
         .filter(Insolvent.person_legal_personality == 'rechtspersoon') \
         .filter(Insolvent.insolvency_type == 'F')
 
@@ -17,7 +30,6 @@ def query_insolvents(select_entities=Insolvent, only_active=True):
         query = query.filter(Insolvent.is_removed.is_(False)) \
             .filter(or_(Insolvent.end_findability.is_(None),
                         Insolvent.end_findability > date.today()))
-
     return query
 
 

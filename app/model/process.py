@@ -4,10 +4,12 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
-from sqlalchemy import func
-from app.model.common import query_insolvents
-from cir.models import Insolvent
+from sqlalchemy import func, desc
+from app.model.common import query_insolvents, query_publications
+from cir.models import Insolvent, Publication
 from datetime import date
+
+from cir.publication import publication_type_dict, insolvency_F_start_codes
 
 logger = logging.getLogger(__name__)
 
@@ -68,5 +70,27 @@ def refresh_insolvency_start_date_count_figure():
     _save_figure(fig, 'insolvency_start_date_count.png')
 
 
+def publication_type_codes_count():
+    """ Returns a histogram of court publication category counts. """
+    select_items = (Publication.type_code, func.count().label('count'))
+    publication_code_histo = query_publications(select_items, only_active=False)\
+        .group_by(Publication.type_code).order_by(desc('count')).all()
+
+    df = pd.DataFrame(data=publication_code_histo, columns=['type_code', 'count'])
+    df['description'] = df.type_code.apply(lambda x: publication_type_dict[x])
+    return df
+
+
+def insolvency_flows():
+    """ Determine insolvency in and out flows using publications. """
+    df = publication_type_codes_count()
+
+    # in flows:
+    flows = []
+    df_in = df[df['type_code'].isin(insolvency_F_start_codes)].apply(lambda r: flows.append(r.count))
+    return df
+
+
 if __name__ == "__main__":
-    refresh_insolvency_start_date_count_figure()
+    #refresh_insolvency_start_date_count_figure()
+    insolvency_flows()

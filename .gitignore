@@ -3,6 +3,8 @@
 *.json
 __pycache__
 .env
+*.pkl
+*.txt
 
 # notebooks
 .ipynb_checkpoints
@@ -16,9 +18,7 @@ __pycache__
 literature/*
 !literature/cited/
 !literature/information system success measures/
-!literature/dedupe and resolution/
-/issues
-/docs
+#!literature/dedupe and resolution/
 
 # latex intermediate produced files
 /thesis/*.synctex.gz
@@ -29,9 +29,17 @@ literature/*
 /thesis/*.aux
 
 # folders
+issues/
+docs/
 /docs/IMG/*
 **/acmart-master
 **/ThesisTemplate
 
-
+# latex files
+*.log
+*.aux
+*.synctex.*
+*.bbl
+*.blg
+*.out
 
