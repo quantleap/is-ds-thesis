@@ -5,6 +5,7 @@ __pycache__
 .env
 *.pkl
 *.txt
+*.md
 
 # notebooks
 .ipynb_checkpoints
@@ -17,7 +18,7 @@ __pycache__
 !literature/
 literature/*
 !literature/cited/
-!literature/information system success measures/
+#!literature/information system success measures/
 #!literature/dedupe and resolution/
 
 # latex intermediate produced files
