@@ -5,6 +5,7 @@ import psycopg2
 # create session
 from sqlalchemy.engine.url import URL
 
+
 con = str(URL(drivername='postgresql',
               username='dbusr',  # os.environ['DB_QIR_USERNAME'],
               password='dbpw',  # os.environ['DB_QIR_PASSWORD'],
@@ -12,7 +13,6 @@ con = str(URL(drivername='postgresql',
               database='qir'))
 conn = psycopg2.connect(con)
 cur = conn.cursor()
-
 
 class ProgressReportSectionExtractor:
     """ Class to extract sections from a progress report.
