@@ -1,0 +1,36 @@
+% extracts insolvency process flow information.
+% extracts a fully linked and cleaned entity structure of insolvents, administrators, judges, courts as well as administrator reports and court publications.
+% extracts the text of administrator reports and indexes sections and parameters by imposing structure on the content.
+
+\subsection{Parties involved in the insolvency process}
+There are many parties involved in the insolvency process. Directly involved are the the administrator, the insolvent, the judge and the creditors. Indirectly involved but highly interested are a.o. the organisations of Recofa and Insolad and journalists. 
+
+\subsubsection{The Administrator (\textit{De Curator})}
+The administrator's task is to liquidate the bankrupt firm by selling the assets and from the proceeds pay off the creditors. A second task is to investigate the default and see if there is a case of mismanagement or fraud.
+
+\subsubsection{The Insolvent} (\textit{De Failliet})
+The insolvent is declared bankrupt by a creditor or declared himself bankrupt. He might be interested in continuing the business and would not want to be persecuted for fraud or malpractice.
+
+\subsubsection{The Supervisory Judge (\textit{De Rechter-Commissaris})}
+The supervisory judge exercises supervision over the administrator which is appointed by the court and is entitled to grant him or her permissions for certain actions.
+
+\subsubsection{The Creditors}( \textit{De Schuldeisers})
+The creditor has a claim on the insolvent. There is a ranking of creditors from preferred creditors to unsecured creditors.
+
+\subsubsection{Insolad}
+Insolad is the association of lawyers in insolvency law (administrators). It provides up-to-date knowledge on the insolvency practise and the development of laws and regulations in the field.
+
+\subsubsection{\textit{Rechters-Commissarissen Insolventies} (Recofa)}
+Recofa is the consultative body under the council of justice, \textit{raad van de rechtspraak}, specifically for judges working in insolvency law. It sets out policy guidelines for the courts and instructions (e.g. on reporting) for the administrators. The council of the justice system is tasked with improving the quality and efficacy of the jurisdiction. It performs research and shares research findings. It also supplies IT resources.
+
+\subsubsection{The Investigative Journalist}
+The investigative journalist is interested in informing the public on the balance of powers with the insolvency law and typically writes critically about cases where this balance is disrupted.
+
+\subsubsection{The Economic Journalist}
+The economic journalist is interested on the impact of the insolvencies and trends therein on the economy .
+
+
+
+% system components
+The Entity Linker
+It does this by normalization of the CIR names and resolving them to the register entities using similarity functions. Unresolved entities can be linked manually to guarantee completeness. Established links are stored in an association table. After an initial run, the register scrapers are called upon only when new judges or administrators entries appear in CIR.

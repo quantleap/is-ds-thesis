@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{12}
+\begin{thebibliography}{13}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -105,6 +105,18 @@
 \newblock
 \urldef\tempurl%
 \url{https://www.rechtspraak.nl/Voor-advocaten-en-juristen/Reglementen-procedures-en-formulieren/Civiel/Insolventierecht/Paginas/Recofa-richtlijnen.aspx}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{??}{rec}{[n. d.]d}]%
+        {rechtspraak:4}
+ \bibinfo{year}{[n. d.]}\natexlab{d}.
+\newblock \bibinfo{title}{Zoeken in het Centraal Insolventieregister}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://insolventies.rechtspraak.nl/#!/zoeken/index}
 \showURL{%
 \tempurl}
 

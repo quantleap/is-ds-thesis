@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.6.13)  12 JUL 2018 09:47
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.6.13)  24 MAR 2019 17:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -37,8 +37,8 @@ Overfull \hbox (20.0pt too wide) in paragraph at lines 2--2
  []
 
 ! Undefined control sequence.
-<recently read> \Armchair 
-                          
+<recently read> \Large 
+                       
 l.4 ...rmchair Auditing of Insolvency Procedures }
                                                   
 The control sequence at the end of the top line
@@ -48,8 +48,23 @@ spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
 
-Overfull \hbox (44.72475pt too wide) in paragraph at lines 4--5
- \OT1/cmr/m/sc/10 Auditing 
+Overfull \hbox (48.84975pt too wide) in paragraph at lines 4--5
+ \OT1/cmr/m/sc/10 Armchair 
+ []
+
+
+Overfull \hbox (17.7582pt too wide) in paragraph at lines 4--5
+ \OT1/cmr/m/sc/10 Au- 
+ []
+
+
+Overfull \hbox (18.95544pt too wide) in paragraph at lines 4--5
+ \OT1/cmr/m/sc/10 dit- 
+ []
+
+
+Overfull \hbox (15.56659pt too wide) in paragraph at lines 4--5
+ \OT1/cmr/m/sc/10 ing 
  []
 
 
@@ -124,8 +139,8 @@ Overfull \hbox (20.3999pt too wide) in paragraph at lines 28--28
  []
 
 
-Overfull \hbox (22.42209pt too wide) in paragraph at lines 28--28
- \OT1/cmr/m/sc/10 fill- 
+Overfull \hbox (17.28879pt too wide) in paragraph at lines 28--28
+ \OT1/cmr/m/sc/10 fil- 
  []
 
 
@@ -305,28 +320,28 @@ Overfull \hbox (19.62215pt too wide) in paragraph at lines 28--28
 
 
 Overfull \hbox (25.88864pt too wide) in paragraph at lines 28--29
- []\OT1/cmr/m/sc/10 2018- 
+ []\OT1/cmr/m/sc/10 2019- 
  []
 
 
 Overfull \hbox (14.83319pt too wide) in paragraph at lines 28--29
- \OT1/cmr/m/sc/10 08- 
+ \OT1/cmr/m/sc/10 03- 
  []
 
 
 Overfull \hbox (11.05545pt too wide) in paragraph at lines 28--29
- \OT1/cmr/m/sc/10 18 
+ \OT1/cmr/m/sc/10 20 
  []
 
 
-Overfull \hbox (20.0pt too wide) in paragraph at lines 37--37
+Overfull \hbox (20.0pt too wide) in paragraph at lines 36--36
 [] 
  []
 
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 38.
+(Font)              <7> on input line 37.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 38.
+(Font)              <5> on input line 37.
 Missing character: There is no D in font nullfont!
 Missing character: There is no r in font nullfont!
 Missing character: There is no M in font nullfont!
@@ -372,20 +387,20 @@ Missing character: There is no n in font nullfont!
 Missing character: There is no l in font nullfont!
 Missing character: There is no . in font nullfont!
 
-Overfull \hbox (235.3016pt too wide) in paragraph at lines 38--47
+Overfull \hbox (235.3016pt too wide) in paragraph at lines 37--46
  [] 
  []
 
 
-Overfull \hbox (20.0pt too wide) in paragraph at lines 52--52
+Overfull \hbox (20.0pt too wide) in paragraph at lines 51--51
 [] 
  []
 
 ! Undefined control sequence.
-<argument> \includegraphics 
-                            [width=.2\paperwidth ]{logo-uva.png} \includegra...
-l.55 }
-      
+<argument>  \includegraphics 
+                             [width=.2\paperwidth ]{logo-uva.png} \includegr...
+l.55 	}
+       
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
 misspelled it (e.g., `\hobx'), type `I' and the correct
@@ -404,8 +419,8 @@ Missing character: There is no 2 in font nullfont!
 ! Missing number, treated as zero.
 <to be read again> 
                    ]
-l.55 }
-      
+l.55 	}
+       
 A number should have been here; I inserted `0'.
 (If you can't figure out why I needed to see a number,
 look up `weird error' in the index to The TeXbook.)
@@ -413,8 +428,8 @@ look up `weird error' in the index to The TeXbook.)
 ! Illegal unit of measure (pt inserted).
 <to be read again> 
                    ]
-l.55 }
-      
+l.55 	}
+       
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
 I'll assume that you meant to say pt, for printer's points.
@@ -438,8 +453,8 @@ Missing character: There is no g in font nullfont!
 ! Undefined control sequence.
 <argument> ...th ]{logo-uva.png} \includegraphics 
                                                   [width=.2\paperwidth ]{ads...
-l.55 }
-      
+l.55 	}
+       
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
 misspelled it (e.g., `\hobx'), type `I' and the correct
@@ -458,8 +473,8 @@ Missing character: There is no 2 in font nullfont!
 ! Missing number, treated as zero.
 <to be read again> 
                    ]
-l.55 }
-      
+l.55 	}
+       
 A number should have been here; I inserted `0'.
 (If you can't figure out why I needed to see a number,
 look up `weird error' in the index to The TeXbook.)
@@ -467,8 +482,8 @@ look up `weird error' in the index to The TeXbook.)
 ! Illegal unit of measure (pt inserted).
 <to be read again> 
                    ]
-l.55 }
-      
+l.55 	}
+       
 Dimensions can be in units of em, ex, in, pt, pc,
 cm, mm, dd, cc, nd, nc, bp, or sp; but yours is a new one!
 I'll assume that you meant to say pt, for printer's points.
@@ -491,7 +506,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.57 \end{titlepage}
+l.58 \end{titlepage}
                     
 Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
@@ -506,7 +521,7 @@ or  <return>  to continue without it.
  
 Here is how much of TeX's memory you used:
  16 strings out of 492649
- 254 string characters out of 6129622
+ 251 string characters out of 6129622
  59400 words of memory out of 5000000
  3997 multiletter control sequences out of 15000+600000
  4249 words of font info for 16 fonts, out of 8000000 for 9000
