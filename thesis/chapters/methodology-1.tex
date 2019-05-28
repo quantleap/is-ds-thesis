@@ -1,8 +1,7 @@
-\section{Methodology}
 \subsection{Description of Data Sources}
 \subsubsection{Central Insolvency Register}
 \paragraph{Data suppliers}
-The CIR contains company insolvency data supplied by the courts and the administrators. Courts are obliged to supply the insolvency data and free consultation thereof according to the insolvency law, article 19 \cite{law:1}. CIR contains insolvency cases from the 1st of January 2005 and retains these until six months after they end.. CIR also contains other data such as personal debt restructuring (\textit{schuldsanering}), personal insolvency and company's failure to pay (\textit{surseance}) but this data is out of scope.
+The CIR contains company insolvency data supplied by the courts and the administrators. Courts are obliged to supply the insolvency data and free consultation thereof according to the insolvency law, article 19 \cite{law:1}. CIR contains insolvency cases from the 1st of January 2005 and retains these until six months after their end date. CIR also contains other data such as personal debt restructuring (\textit{schuldsanering}), personal insolvency and company's failure to pay (\textit{surseance}) but this data is out of scope.
 
 \paragraph{Entity records}
 The CIR register contains the following entities in numbers of records (as of 2019-03-21):
@@ -42,10 +41,10 @@ Figure \ref{fig:cir-erd} below shows the relationships between the entities incl
 \end{figure}
 
 \paragraph{Administrator reports}
-A second web service operated by CIR provides administrator reports in PDF format. These reports hold much of the unstructured data. Recofa has published templates for both progress and financial attachment reports \cite{rechtspraak:3} which provide a certain structure to the contents.
+A second web service operated by CIR provides administrator reports in PDF format. These reports hold much of the unstructured data. Recofa has published templates for both progress and financial attachment reports \cite{rechtspraak:recofa} which provide a certain structure to the contents.
 
 \subsubsection{Register of lawyers, NOvA Tableau}\label{NOvA Tableau}
 The NOvA tableau is the official register for lawyers and maintained by the \textit{Nederlandse Orde van Advocaten (NOvA)}\cite{nova:1}. Lawyers are obliged to be registered in the tableau by the lawyer's law (\textit{advocatenwet}, article 1 \cite{law:2}). NOvA offers an on-line search form where keyword search and filters can be applied to search for a lawyer. This data source was chosen to collect the master data for Administrators. 
 
 \subsubsection{Register of judges, Nevenfuncties van rechters}\label{Nevenfuncties Rechters}
-The Register for ancillary positions for judges is made available by \textit{de Rechtspraak}\cite{rechtspraak:2}. It offers an on-line form and returns the name, current and historical occupation and ancillary positions. This data source was chosen to collect the master data for Judges.
+The Register for ancillary positions for judges is made available by \textit{de Rechtspraak}\cite{rechtspraak:nevenfuncties}. It offers an on-line form and returns the name, current and historical occupation and ancillary positions. This data source was chosen to collect the master data for Judges.

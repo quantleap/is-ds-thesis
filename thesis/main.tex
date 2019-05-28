@@ -1,4 +1,4 @@
-\documentclass[sigconf, natbib=false]{acmart} 
+\documentclass[sigconf, natbib=false]{acmart}
 % preamble
 \usepackage[style=numeric, backend=bibtex]{biblatex}
 \addbibresource{bibliography.bib}
@@ -29,7 +29,9 @@
 \begin{document}
 
 \input{title_page}
-\maketitle 
+\maketitle
+
+\tableofcontents
 
 % \input{chapters/abstract}
 
@@ -53,10 +55,8 @@
 
 \input{chapters/introduction}
 \input{chapters/related-work}
-\input{chapters/methodology-1}
-\input{chapters/methodology-2}
-\input{chapters/methodology-3}
-% \section{Evaluation}
+\input{chapters/methodology}
+\input{chapters/evaluation} %sectie result 
 
 %dedup lawyers: Phonetic similarity
 %https://www.quora.com/What-is-a-good-algorithm-service-for-fuzzy-matching-of-companies-names-for-de-duplication
@@ -65,12 +65,8 @@
 %\section{Conclusions}
 %\subsection{Acknowledgements}
 
-%\printbibheading
 \printbibliography
 
-%\bibliographystyle{ACM-Reference-Format}
-%\bibliographystyle{plain}
-%\bibliography{bibliography}
 % \input{appendix}
 \end{document}
 

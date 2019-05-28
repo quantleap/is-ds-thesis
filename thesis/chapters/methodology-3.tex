@@ -1,53 +1,22 @@
-\subsection{Methods}
-% beschrijf hoe je je vraag gaat beantwoorden
-\subsubsection{Constructing the entity network}
-Here we describe how each entity is cleaned, standardized, de-duplicated and identified after which it can be linked to other entities to construct the entity network. For each entity a so-called master data table is created that contains the agreed upon instance or 'golden record' of the entities that can be used as a common reference point.
+\subsection{Constructing the Entity Network}
+The requested CIR XML data will go through an Extract Transform Load (ETL) process. Here each entity data is extracted, de-duplicated and identified and linked to the other entities to construct the entity network. For each entity a so-called master data table is created that contains the unique and agreed upon instances or 'golden records' of the entities. 
 
-\paragraph{Courts}
-Courts are specified in the XML response as a free text field. A master table is created using the given names.
+\subsubsection{Insolvency Cases}
+Insolvency cases are supplied with a natural identifier (\textit{insolventienummer}), for example F.19/13/123, which consist of the insolvency type (F), a system number (19), year of insolvency ([20]13) and a serial number (123). 
 
-\begin{tabular}{lr}
-\toprule
-                     court name &  cases \\
-\midrule
-            Rechtbank Amsterdam &   4601 \\
-             Rechtbank Den Haag &   4851 \\
-           Rechtbank Gelderland &   5947 \\
-              Rechtbank Limburg &   3277 \\
-     Rechtbank Midden-Nederland &   5580 \\
-        Rechtbank Noord-Holland &   3543 \\
-      Rechtbank Noord-Nederland &   4556 \\
-         Rechtbank Oost-Brabant &   5123 \\
-           Rechtbank Overijssel &   3789 \\
-            Rechtbank Rotterdam &   5638 \\
- Rechtbank Zeeland-West-Brabant &   4459 \\
-                           None &     28 \\
-\bottomrule
-\label{tabel:court entities}
-\end{tabular}
-
-Consistency: there are no duplicates.
-Completeness: 28 records have missing data.
-
-\paragraph{Insolvency cases}
-Insolvency cases are supplied with a natural identifier (\textit{insolventienummer}), for example F.19/13/123, which consist of the insolvency type, a system number, year of insolvency and a serial number. A number of issues introduce unwanted insolvent duplicates:
+Duplicate insolvency cases exist for a number of reasons:
 \begin{enumerate}
 	\item data errors: padded zeros on the serial number, e.g. '0123'
 	\item redefinition of courts\footnote{in 2013 courts were consolidated (\textit{Herziening Gerechtelijke Kaart}, see \cite{om:1}).}: cases administered both with the new case number format as well as the old case number format without the system number.
 	\item cases handed over to another court.
 \end{enumerate}
-To solve for this data errors were corrected and duplicate cases were linked to the correct cases using scripts, annotating lineage and re-linking publications
+To de-duplicate these cases, lineage of erred or transferred cases was established and publications and reports re-linked to the correct case. The duplicate cases could then easily be filtered out.
 
-\paragraph{Judges}
-\paragraph{Administrators}
+\subsubsection{Judges}
+We define the master data of judges by scraping the names of judges found in the register of ancillary positions of judges\cite{rechtspraak:nevenfuncties}. The register names and CIR judge names are normalized after which the CIR name is linked to the most probable register judge name using the Levenshtein distance \todo[inline]{describe what happens in case of a tie}.
 
-\subsubsection{Extracting information from entity data}
-\subsubsection{Extracting information from unstructured reports}
-
-
-\begin{comment}
-\paragraph{Database normalization}
-This leads to unwanted duplication as names can be written in many different forms and typos can be introduced, e.g. one judge's name appears as:
+\paragraph{CIR judge name normalization and de-duplication}
+Judge names in the CIR data are provided as single free text field and can contain many duplicates. For example one judge's name appears as:
 
 \begin{itemize}
 \item "mr. W.J. Geurts - de Veld"
@@ -59,6 +28,42 @@ This leads to unwanted duplication as names can be written in many different for
 \item "mr W.J.Geurts-de Veld"
 \item "W.J.Geurts-de Veld"
 \end{itemize}
+
+This data needs to be de-duplicated and we do this by cleaning and normalizing the name in a number of sequential steps where the order is of importance:
+\begin{enumerate}
+\item add missing spaces between name parts
+\item change the name to lower case and strip surrounding white-space characters
+\item remove accents, academic and nobility titles, additions in brackets, periods and double spaces
+\item normalize the use of hyphens
+\end{enumerate}
+
+\paragraph{register judge normalization}
+The normalization of register judge names slight differs from the CIR name. The number of removed nobility and academic titles is larger and ...
+
+\todo[inline]{simple matching using Levenshtein distance does not place the same weight on initials and surname, describe matching}
+
+
+\paragraph{Administrators}
+
+\subsection{Measuring CIR Data Completeness}
+To measure the completeness of the data obtained from the CIR XML web service we make use of its following methods\cite{rechtspraak:tech-docs}:
+\begin{enumerate}
+\item \textbf{searchModifiedSince} (cutoff 2012-01-01 / 2005-01-01) : returns the publication ids of modified insolvents
+\item \textbf{searchReportsSince} (cutfoff 2010-07-01? / 2005-01-01) : returns the report ids of added reports.
+\end{enumerate}
+
+The publications contain the fields for the ids or names of the other entities. By checking these fields form missing values and the values against the database we measure completeness of the data.
+\todo[inline]{(re)measure completeness using dates above}
+
+\subsection{Extracting Information from Entity Data}
+\todo[inline]{write}
+\subsection{Extracting Information from Unstructured Reports}
+\todo[inline]{write}
+
+
+\begin{comment}
+\paragraph{Database normalization}
+This leads to unwanted duplication as names can be written in many different forms and typos can be introduced, 
 
 We need to define so-called master data for judges and administrators containing the real world entities. The two data sources in the sections \ref{NOvA Tableau} and \ref{Nevenfuncties Rechters} are chosen for this purpose. CIR entity names are first normalized for de-duplication and are subsequently linked to the master data records on their normalized name. 
 
