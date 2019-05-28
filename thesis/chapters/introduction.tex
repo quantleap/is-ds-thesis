@@ -1,18 +1,25 @@
 \section{Introduction}
 When a company is declared bankrupt by the court, a court committee appoints an administrator to settle the bankruptcy. The administrator's task is to liquidate the company's estate and use the proceeds to settle the creditors claims. A supervisory judge ensures that the administrator is acting in the best interest of the creditors. 
 
-The supervisory function of the judge, the conflict of interest between the administrator and creditors and the appointment process of the administrator are processes which have been the subject of research\cite{boluk_2011}, about which media articles have appeared \cite{dennis_meneer_2018:1, dennis_meneer_2017:1, jan-hein_strop_2015:1} and which have led to legal proceedings. \todo{citeer} The involved parties demand more transparency of these processes. Supervisory judges with significant work load could benefit from data driven supervision. Information access to the general public and journalists to this processes  would provide additional checks and balances. We derive so-called Personas to represent these parties and articulate their information needs.
+Involved parties have been demanding more transparency into insolvency processes. The supervisory function of the judge, the conflict of interest between the administrator and creditors and the appointment process of the administrator are processes which have been the subject of research\cite{boluk_2011}, about which media articles have appeared \cite{dennis_meneer_2018:1, dennis_meneer_2017:1, jan-hein_strop_2015:1} and which have led to legal proceedings. \todo{citeer}  
 
-In 2005 the Dutch government started a digital register of insolvency data\cite{rechtspraak:cir}. An on-line search form \cite{rechtspraak:cir-zoeken} is provided to retrieve a single insolvency case and there are web services to retrieve court publications and administrator reports in XML and PDF format. However, the information from a single insolvency case is limited as it does not provide aggregated and linked information. The administrator reports are unstructured and not searchable and not all interested parties can deal with the offered raw data APIs. 
+\begin{comment}
+Other benefits: Supervisory judges with significant work load could benefit from data driven supervision. Information access to the general public and journalists to this processes  would provide additional checks and balances.
+\end{comment}
 
-Instead of open data, there is a need for open analysis to enable 'armchair audits'\cite{o_leary_2015} of insolvency processes. In this thesis we investigate \textbf{whether it is possible to build a complete and correct structured information system (IS) based on open and public data that is useful in that it enables such audits and search for non-technical users.}
+In 2005 the Dutch government started the digital register of insolvency data\cite{rechtspraak:cir}. An on-line search form \cite{rechtspraak:cir-zoeken} is provided to retrieve a single insolvency case. Web services are provided to retrieve court publications in XML format and administrator reports in PDF format. 
 
-For this we investigate whether we can build a system that:
+However, the information from a single insolvency case is limited as it does not provide aggregated and linked information. The administrator reports are unstructured and not searchable as a collection. Furthermore most involved parties lack the technical skills to use the web services. Instead of open data, there is a need for \textbf{open analysis} to enable 'armchair audits'\cite{o_leary_2015} of insolvency processes.
+
+% main research question
+In this thesis we investigate whether [RQ] \textbf{it is possible to build a complete and correct structured information system (IS) based on provided and enriched open and public data that is able to provide the requested transparency to the parties involved}.
+
+For this we need to answer the following questions:
 \begin{itemize}
-	\item constructs a complete, cleaned and fully linked entity network of insolvency cases, administrators, judges, etc.
-	\item fully extracts the information of interest from entity data.
-	\item fully extracts the information of interest from unstructured documents.
-	\item provides the persona with easy to use functionality to answer its information need.
+	\item [RQ1] Can the IS construct a complete, cleaned and fully linked entity network of insolvency cases, administrators, judges and courts.
+	\item [RQ2] Can the IS correctly and completely label insolvency case data with state data [start/end date] in order to mine the insolvency process.
+	\item [RQ3] Can the IS correctly extract specific fields [paulianeus handelen] of interest from unstructured documents to classify insolvency cases.
+	\item [RQ4] Can involved stakeholders use the IS to provide the requested transparency on insolvency processes.
 \end{itemize}
 
-We describe the steps in building such a system that takes in large amounts of open and publicly available data in structured and unstructured data form, extracts and enriches useful facts and makes it consumable for analysis to provide insights into the insolvency processes via a web GUI.
+We describe the steps in building such a system that takes in large amounts of open and publicly available data in structured and unstructured form, extracts and enriches useful facts and makes it consumable for analysis to provide insights into the insolvency processes via a web GUI.
